@@ -1,0 +1,35 @@
+package infra
+
+import (
+	"fmt"
+	"practice-colly/domain/model"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
+)
+
+var (
+	db  *gorm.DB
+	err error
+)
+
+func Init() *gorm.DB {
+	// もし err がnilではないなら、"読み込み出来ませんでした"が出力されます。
+	if err != nil {
+		fmt.Printf("読み込み出来ませんでした: %v", err)
+	}
+	db, err = gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
+	if err != nil {
+		fmt.Println("db init error: ", err)
+	}
+	autoMigrate()
+	fmt.Println("[INFO] db setup done!")
+	return db
+}
+
+func GetDB() *gorm.DB {
+	return db
+}
+
+func autoMigrate() {
+	db.AutoMigrate(model.BusstopUrl{})
+}
