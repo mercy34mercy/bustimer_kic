@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"net/http"
+	"os"
+	"practice-colly/controller"
 	"practice-colly/domain/model"
 	"practice-colly/infra"
 	"regexp"
@@ -12,14 +15,29 @@ import (
 
 func main() {
 	infra.Init()
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	Routing()
+	e.Debug = true
+	e.Logger.Fatal(e.Start(":" + port))
 
-	// Via, Busstop := getViaandBusstop()
-	// fmt.Println(Via, Busstop)
+}
 
-	// scrapdata := scrapHTML()
-	// fmt.Println(scrapdata)
+func handler(w http.ResponseWriter, r *http.Request) {
+	busstop := "円町"
+	destination := "立命館大学行き"
+	busstoptourlCtrl := controller.BusstoToUrlController{}
+	url,err := busstoptourlCtrl.FindURL(busstop,destination)
+	if err != nil {
 
-	// getTimeTable(scrapdata,Via,Busstop)
+	}
+	timetablecontroller := controller.TimetableController{}
+	timetable := timetablecontroller.FindTimetable(url)
+
+	fmt.Printf("%v",timetable)
+	fmt.Fprint(w, timetable)
 }
 
 func scrapHTML() (scrapData []string) {

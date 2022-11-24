@@ -1,8 +1,8 @@
 package repository
 
+import "practice-colly/domain/model"
+
 type BusstopToTimetableRepository interface {
-	FindURL(busstop string,destination string,busname string)(string,error)
-	FindHolidaysTimetable(url string)()
-	FindSaturdaysTimetable(url string)()
-	FindWeekendsTimetable(url string)()
+	FindURL(busstop string,destination string)([]string,error)
+	FindTimetable(url []string)(model.TimeTable)
 }
