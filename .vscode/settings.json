@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/e708665a-2da4-42a8-bdff-f47052e72d90/AppServices/subscriptions/e708665a-2da4-42a8-bdff-f47052e72d90/resourceGroups/busdes/providers/Microsoft.Web/sites/busdes-kic",
+    "appService.deploySubpath": "."
+}
