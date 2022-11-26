@@ -21,7 +21,6 @@ func Init() *gorm.DB {
 	if err != nil {
 		fmt.Println("db init error: ", err)
 	}
-	autoMigrate()
 	fmt.Println("[INFO] db setup done!")
 	return db
 }

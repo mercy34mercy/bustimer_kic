@@ -50,7 +50,6 @@ func (timetable TimeTable) SortOneBusTime() {
 	}
 }
 
-
 func sortByMin(oneBusTimeList []OneBusTime) {
 	rex := regexp.MustCompile("[0-9]+")	
 	sort.Slice(oneBusTimeList, func(i, j int) bool {
