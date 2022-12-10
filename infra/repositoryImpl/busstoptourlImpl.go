@@ -22,7 +22,7 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURL(busstop string,desti
 	db := infra.GetDB()
 	busstopinfo := []model.BusstopUrl{}
 	var busstopurl []string
-	if err = db.Where("destination = ? AND busstop LIKE ?",destination,"%" +busstop + "%").Find(&busstopinfo).Error; err!= nil {
+	if err = db.Where("destination = ? AND busstop = ?",destination,busstop).Find(&busstopinfo).Error; err!= nil {
 		//エラーハンドリング
 		fmt.Printf("db select Error!!!! err:%v\n", err)
 	}

@@ -9,7 +9,6 @@ import (
 	"practice-colly/infra"
 	"regexp"
 	"strings"
-
 	"github.com/gocolly/colly"
 	"github.com/labstack/echo"
 )
@@ -36,9 +35,10 @@ func Routing() {
 		return c.HTML(http.StatusOK, "<h1>Busdes! Clean Architecture API</h1>")
 	})
 
-	e.GET("/timetable",func(c echo.Context) error{
-		busstop := "円町"
-		destination := "立命館大学行き"
+	e.GET("/timetable/:busstop/:destination",func(c echo.Context) error{
+		
+		busstop := c.Param("busstop")
+		destination := c.Param("destination")
 		busstoptourlCtrl := controller.BusstoToUrlController{}
 		url,err := busstoptourlCtrl.FindURL(busstop,destination)
 		if err != nil {
