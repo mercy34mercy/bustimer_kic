@@ -6,6 +6,7 @@ import (
 	"practice-colly/domain/repository"
 	"practice-colly/infra"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/gocolly/colly"
@@ -108,7 +109,7 @@ func getTimeTable(timetable model.TimeTable,scrapedata []string,via string,busst
 			if weekdaylist[a] != "" {
 				timetable.Weekdays[i+5] = append(timetable.Weekdays[i+5], model.OneBusTime{
 					Via:     Via,
-					Min:     weekdaylist[a],
+					Min:  strconv.FormatInt(toInt64(weekdaylist[a]),10) ,
 					BusStop: "1番乗り場",
 				})
 			}
@@ -119,7 +120,7 @@ func getTimeTable(timetable model.TimeTable,scrapedata []string,via string,busst
 			if holidaylist[b] != "" {
 				timetable.Holidays[i+5] =  append(timetable.Holidays[i+5], model.OneBusTime{
 					Via:     Via,
-					Min:     holidaylist[b],
+					Min:     strconv.FormatInt(toInt64(holidaylist[b]),10),
 					BusStop: "1番乗り場",
 				})
 			}
@@ -130,11 +131,22 @@ func getTimeTable(timetable model.TimeTable,scrapedata []string,via string,busst
 			if saturdaylist[c] != "" {
 				timetable.Saturdays[i+5] = append(timetable.Saturdays[i+5], model.OneBusTime{
 					Via:     Via,
-					Min:     saturdaylist[c],
+					Min:     strconv.FormatInt(toInt64(saturdaylist[c]),10),
 					BusStop: "1番乗り場",
 				})
 			}
 		}
 	}
 	return timetable
+}
+
+
+func toInt64(strVal string) int64 {
+    rex := regexp.MustCompile("[0-9]+")
+    strVal = rex.FindString(strVal)
+    intVal, err := strconv.ParseInt(strVal, 10, 64)
+    if err != nil {
+        fmt.Println(err)
+    }
+    return intVal
 }

@@ -1,7 +1,7 @@
 # 2020/10/14最新versionを取得
 FROM golang:1.19.3-buster
 # アップデートとgitのインストール！！
-RUN apt update && apt upgrade
+# RUN apt update && apt upgrade
 # appディレクトリの作成
 RUN mkdir /go/src/app
 # ワーキングディレクトリの設定

@@ -35,6 +35,38 @@ func Routing() {
 		return c.HTML(http.StatusOK, "<h1>Busdes! Clean Architecture API</h1>")
 	})
 
+	e.GET("/timetable",func(c echo.Context) error{
+		
+		busstop := "西ノ京円町《ＪＲ円町駅》"
+		destination := "立命館大学行き"
+		busstoptourlCtrl := controller.BusstoToUrlController{}
+		url,err := busstoptourlCtrl.FindURL(busstop,destination)
+		if err != nil {
+		}
+		timetablecontroller := controller.TimetableController{}
+		timetable := timetablecontroller.FindTimetable(url)
+		return c.JSON(http.StatusOK,timetable)
+	})	
+	e.GET("/timetable",func(c echo.Context) error{
+		
+		busstop := c.QueryParam("fr")
+		destination := c.QueryParam("to")
+		if len(destination) == 0 {
+			destination = "立命館大学行き"
+		}
+		if len(busstop) == 0 {
+			busstop = "西ノ京円町《ＪＲ円町駅》"
+		}
+
+		busstoptourlCtrl := controller.BusstoToUrlController{}
+		url,err := busstoptourlCtrl.FindURL(busstop,destination)
+		if err != nil {
+		}
+		timetablecontroller := controller.TimetableController{}
+		timetable := timetablecontroller.FindTimetable(url)
+		return c.JSON(http.StatusOK,timetable)
+	})
+
 	e.GET("/timetable/:busstop/:destination",func(c echo.Context) error{
 		
 		busstop := c.Param("busstop")
