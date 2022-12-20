@@ -71,18 +71,38 @@ func Routing() {
 		return c.JSON(http.StatusOK,timetable)
 	})
 
-	e.GET("/timetable/:busstop/:destination",func(c echo.Context) error{
-		
-		busstop := c.Param("busstop")
-		destination := c.Param("destination")
+	e.GET("/bus/time/v3",func(c echo.Context) error {
+		// busstop := c.QueryParam("fr")
+		// destination := c.QueryParam("to")
+		busstop := ""
+		destination := ""
+		if len(destination) == 0 {
+			destination = "立命館大学行き"
+		}
+		if len(busstop) == 0 {
+			busstop = "西ノ京円町《ＪＲ円町駅》"
+		}
 		busstoptourlCtrl := controller.BusstoToUrlController{}
 		url,err := busstoptourlCtrl.FindURL(busstop,destination)
 		if err != nil {
 		}
-		timetablecontroller := controller.TimetableController{}
-		timetable := timetablecontroller.FindTimetable(url)
-		return c.JSON(http.StatusOK,timetable)
+		approachInfoCtrl := controller.ApproachInfoController{}
+		approachinfo := approachInfoCtrl.FindApproachInfo(url)
+		return c.JSON(http.StatusOK,approachinfo)
 	})
+
+	// e.GET("/timetable/:busstop/:destination",func(c echo.Context) error{
+		
+	// 	busstop := c.Param("busstop")
+	// 	destination := c.Param("destination")
+	// 	busstoptourlCtrl := controller.BusstoToUrlController{}
+	// 	url,err := busstoptourlCtrl.FindURL(busstop,destination)
+	// 	if err != nil {
+	// 	}
+	// 	timetablecontroller := controller.TimetableController{}
+	// 	timetable := timetablecontroller.FindTimetable(url)
+	// 	return c.JSON(http.StatusOK,timetable)
+	// })
 
 }
 
