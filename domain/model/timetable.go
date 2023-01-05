@@ -18,6 +18,21 @@ type OneBusTime struct {
 	BusStop string `json:"bus_stop"`
 }
 
+type Busstop struct {
+	BusstopName []string
+}
+
+func GetM1Busstop() Busstop {
+	busstop := Busstop{
+		BusstopName: make([]string, 0),
+	}
+	busstop.BusstopName = append(busstop.BusstopName, "北大路バスターミナル《地下鉄北大路駅》")
+	busstop.BusstopName = append(busstop.BusstopName, "")
+	busstop.BusstopName = append(busstop.BusstopName, "")
+	return busstop
+
+
+}
 
 func CreateNewTimeTable() TimeTable {
 	// 初期化

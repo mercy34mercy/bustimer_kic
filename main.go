@@ -17,7 +17,6 @@ import (
 
 var e = echo.New()
 
-
 func main() {
 	infra.Init()
 	port := os.Getenv("PORT")
@@ -32,15 +31,22 @@ func main() {
 
 }
 
-
-
 func Routing() {
 	e.GET("/", func(c echo.Context) error {
 		return c.HTML(http.StatusOK, "<h1>Busdes! Clean Architecture API</h1>")
 	})
 
+	e.GET("/system/info", func(e echo.Context) error {
+		var systemInfo = &model.SystemInfo{
+			Status:  200,
+			Message: "",
+			Time:    "",
+		}
+		return e.JSON(http.StatusOK, systemInfo)
+	})
+
 	// e.GET("/timetable",func(c echo.Context) error{
-		
+
 	// 	busstop := "西ノ京円町《ＪＲ円町駅》"
 	// 	destination := "立命館大学行き"
 	// 	busstoptourlCtrl := controller.BusstoToUrlController{}
@@ -50,11 +56,10 @@ func Routing() {
 	// 	timetablecontroller := controller.TimetableController{}
 	// 	timetable := timetablecontroller.FindTimetable(url)
 	// 	return c.JSON(http.StatusOK,timetable)
-	// })	
-	e.GET("/timetable",func(c echo.Context) error{
-		
+	// })
+	e.GET("/timetable", func(c echo.Context) error {
 		busstop := c.QueryParam("fr")
-		destination := c.QueryParam("to")
+		destination := c.QueryParam("to") + "行き"
 		if len(destination) == 0 {
 			destination = "立命館大学行き"
 		}
@@ -63,19 +68,17 @@ func Routing() {
 		}
 
 		busstoptourlCtrl := controller.BusstoToUrlController{}
-		url,err := busstoptourlCtrl.FindURL(busstop,destination)
+		url, err := busstoptourlCtrl.FindURL(busstop, destination)
 		if err != nil {
 		}
 		timetablecontroller := controller.TimetableController{}
 		timetable := timetablecontroller.FindTimetable(url)
-		return c.JSON(http.StatusOK,timetable)
+		return c.JSON(http.StatusOK, timetable)
 	})
 
-	e.GET("/bus/time/v3",func(c echo.Context) error {
-		// busstop := c.QueryParam("fr")
-		// destination := c.QueryParam("to")
-		busstop := ""
-		destination := ""
+	e.GET("/bus/time/v3", func(c echo.Context) error {
+		busstop := c.QueryParam("fr")
+		destination := c.QueryParam("to") + "行き"
 		if len(destination) == 0 {
 			destination = "立命館大学行き"
 		}
@@ -83,16 +86,16 @@ func Routing() {
 			busstop = "西ノ京円町《ＪＲ円町駅》"
 		}
 		busstoptourlCtrl := controller.BusstoToUrlController{}
-		url,err := busstoptourlCtrl.FindURL(busstop,destination)
+		url, err := busstoptourlCtrl.FindURL(busstop, destination)
 		if err != nil {
 		}
 		approachInfoCtrl := controller.ApproachInfoController{}
 		approachinfo := approachInfoCtrl.FindApproachInfo(url)
-		return c.JSON(http.StatusOK,approachinfo)
+		return c.JSON(http.StatusOK, approachinfo)
 	})
 
 	// e.GET("/timetable/:busstop/:destination",func(c echo.Context) error{
-		
+
 	// 	busstop := c.Param("busstop")
 	// 	destination := c.Param("destination")
 	// 	busstoptourlCtrl := controller.BusstoToUrlController{}
@@ -106,20 +109,18 @@ func Routing() {
 
 }
 
-
-
 func handler(w http.ResponseWriter, r *http.Request) {
 	busstop := "円町"
 	destination := "立命館大学行き"
 	busstoptourlCtrl := controller.BusstoToUrlController{}
-	url,err := busstoptourlCtrl.FindURL(busstop,destination)
+	url, err := busstoptourlCtrl.FindURL(busstop, destination)
 	if err != nil {
 
 	}
 	timetablecontroller := controller.TimetableController{}
 	timetable := timetablecontroller.FindTimetable(url)
 
-	fmt.Printf("%v",timetable)
+	fmt.Printf("%v", timetable)
 	fmt.Fprint(w, timetable)
 }
 
@@ -170,7 +171,7 @@ func getViaandBusstop() (via string, busstop string) {
 	return Via, Busstop
 }
 
-func getTimeTable(scrapedata []string,via string,busstop string) {
+func getTimeTable(scrapedata []string, via string, busstop string) {
 	timetable := model.CreateNewTimeTable()
 
 	timelist := []string{}
@@ -183,7 +184,6 @@ func getTimeTable(scrapedata []string,via string,busstop string) {
 
 	Via := via
 	for i := 0; i < len(timelist)/3; i++ {
-
 
 		weekdaylist := strings.Split(timelist[i*3], " ")
 
@@ -200,7 +200,7 @@ func getTimeTable(scrapedata []string,via string,busstop string) {
 		holidaylist := strings.Split(timelist[i*3+1], " ")
 		for b := 0; b < len(holidaylist); b++ {
 			if holidaylist[b] != "" {
-				timetable.Holidays[i+5] =  append(timetable.Holidays[i+5], model.OneBusTime{
+				timetable.Holidays[i+5] = append(timetable.Holidays[i+5], model.OneBusTime{
 					Via:     Via,
 					Min:     holidaylist[b],
 					BusStop: "1番乗り場",
@@ -222,38 +222,39 @@ func getTimeTable(scrapedata []string,via string,busstop string) {
 	fmt.Printf("%v\n", timetable)
 }
 
-
-func dbcreate(){
+func dbcreate() {
 	db := infra.GetDB()
-	for i:=612211;i<700000;i++{
+	for i := 700000; i < 999999; i++ {
 		index := strconv.Itoa(i)
+	
 		length := len(index)
 		idx := ""
 
-		switch(length){
-		case 1:
-			idx = "000000" + index
-		case 2:
-			idx = "00000"  + index
-		case 3:
-			idx = "0000"   + index
-		case 4:
-			idx = "000"    + index
+		switch length {
+		// case 1:
+		// 	idx = "000000" + index
+		// case 2:
+		// 	idx = "00000"  + index
+		// case 3:
+		// 	idx = "0000"   + index
+		// case 4:
+		// 	idx = "000"    + index
 		case 5:
-			idx = "00"     + index
+			idx = "00" + index
 		case 6:
-			idx = "0"      + index
+			idx = "0" + index
+		default:
+			idx = idx
 		}
-		busname,busstop,destination,url := getViaandBusstops(idx)
-		if len(busname) != 0{
-			db.Create(&model.BusstopUrl{Busstop: busstop,Busname: busname,Destination: destination,URL: url})
+		fmt.Println(idx)
+		busname, busstop, destination, url := getViaandBusstops(idx)
+		if len(busname) != 0 {
+			db.Create(&model.BusstopUrl{Busstop: busstop, Busname: busname, Destination: destination, URL: url})
 		}
-		
+
 	}
 
 }
-
-
 
 func getViaandBusstops(index string) (busname string, busstop string, destination string, url string) {
 	c := colly.NewCollector()
@@ -269,8 +270,8 @@ func getViaandBusstops(index string) (busname string, busstop string, destinatio
 		e.Text = strings.Replace(e.Text, "-", "", -1)
 		result := rep.Split(e.Text, -1)
 
-		for i:=0;i<len(result);i++ {
-			if (strings.Contains(result[i], "行き")){
+		for i := 0; i < len(result); i++ {
+			if strings.Contains(result[i], "行き") {
 				Destination = result[i]
 			}
 		}
@@ -278,7 +279,7 @@ func getViaandBusstops(index string) (busname string, busstop string, destinatio
 		Busname = result[2]
 		Busstop = result[0]
 
-		fmt.Println("駅名 : ", Busstop, "\nバス名 : ", Busname, "\n行き先 : ", Destination,"\nurl : ",URL)
+		fmt.Println("駅名 : ", Busstop, "\nバス名 : ", Busname, "\n行き先 : ", Destination, "\nurl : ", URL)
 	})
 	// Before making a request print "Visiting URL: https://XXX"
 	c.OnRequest(func(r *colly.Request) {
@@ -286,5 +287,5 @@ func getViaandBusstops(index string) (busname string, busstop string, destinatio
 	})
 	c.Visit(URL)
 
-	return Busname,Busstop,Destination,URL
+	return Busname, Busstop, Destination, URL
 }
