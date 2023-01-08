@@ -23,14 +23,15 @@ func GetGoChache() *cache.Cache {
 }
 
 func CreateTimetableCache() {
-	for _, busname := range config.BusNameList {
-		fmt.Printf(busname)
-		//バスの名前から、そのバスの停留所と行き先のセットを取得
-		busstoplistCtrl := controller.FindBusstopListController{}
-		busstoplist, err := busstoplistCtrl.FindBusstopList(busname)
-		if err != nil {
-		}
-		for {
+	for {
+		for _, busname := range config.BusNameList {
+			fmt.Printf(busname)
+			//バスの名前から、そのバスの停留所と行き先のセットを取得
+			busstoplistCtrl := controller.FindBusstopListController{}
+			busstoplist, err := busstoplistCtrl.FindBusstopList(busname)
+			if err != nil {
+			}
+
 			for _, businfo := range busstoplist {
 				fmt.Printf(businfo.Busstop, businfo.Destination)
 				//停留所と行き先のセットからURLを取得
@@ -45,12 +46,10 @@ func CreateTimetableCache() {
 
 				c.Set(businfo.Busstop+businfo.Destination, timetable, cache.DefaultExpiration)
 			}
-			fmt.Println("キャッシュ化完了")
-			time.Sleep(config.TimeTableCacheUpdateDuration)
 		}
+		fmt.Println("キャッシュ化完了")
+		time.Sleep(config.TimeTableCacheUpdateDuration)
 
 	}
-
-
 
 }
