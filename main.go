@@ -7,10 +7,10 @@ import (
 	"practice-colly/controller"
 	"practice-colly/domain/model"
 	"practice-colly/infra"
+	"practice-colly/infra/localcache"
 	"regexp"
 	"strconv"
 	"strings"
-
 	"github.com/gocolly/colly"
 	"github.com/labstack/echo"
 )
@@ -23,6 +23,9 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
+	localcache.Init()
+	go localcache.CreateTimetableCache()
+
 	Routing()
 	e.Debug = true
 	e.Logger.Fatal(e.Start(":" + port))
@@ -58,6 +61,7 @@ func Routing() {
 	// 	return c.JSON(http.StatusOK,timetable)
 	// })
 	e.GET("/timetable", func(c echo.Context) error {
+	
 		busstop := c.QueryParam("fr")
 		destination := c.QueryParam("to") + "行き"
 		if len(destination) == 0 {
@@ -65,6 +69,13 @@ func Routing() {
 		}
 		if len(busstop) == 0 {
 			busstop = "西ノ京円町《ＪＲ円町駅》"
+		}
+
+		l := localcache.GetGoChache()
+
+		if x, found := l.Get(busstop+destination); found {
+			fmt.Println("cache exist")
+			return c.JSON(http.StatusOK,x.(model.TimeTable))
 		}
 
 		busstoptourlCtrl := controller.BusstoToUrlController{}

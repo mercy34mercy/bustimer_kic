@@ -18,6 +18,18 @@ func NewBusstopToUrlRepositoryImpl() repository.BusstopToTimetableRepository {
 	return &BusstopToTimetableRepositoryImpl{}
 }
 
+func (repository *BusstopToTimetableRepositoryImpl) FindBusstopList(busname string) ([]model.Busstop,error) {
+	var err error
+	db := infra.GetDB()
+	busstoplist := []model.Busstop{}
+	if err = db.Model(&model.BusstopUrl{}).Where("busname = ?",busname).Select("busstop","destination").Scan(&busstoplist).Error; err != nil {
+				//エラーハンドリング
+				fmt.Printf("db select Error!!!! err:%v\n", err)
+	}
+	return busstoplist,err
+
+}
+
 func (repository *BusstopToTimetableRepositoryImpl) FindURL(busstop string, destination string) ([]string, error) {
 	var err error
 	db := infra.GetDB()
