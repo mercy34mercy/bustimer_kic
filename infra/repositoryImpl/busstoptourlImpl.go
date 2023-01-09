@@ -35,6 +35,27 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURL(busstop string, dest
 	db := infra.GetDB()
 	busstopinfo := []model.BusstopUrl{}
 	var busstopurl []string
+
+	//M1と12番のコンフリクト問題解消
+	for _,bus := range config.M1and12BusstopList{
+		if(busstop == bus && destination == "立命館大学行き"){
+			var destinationList [2]string = [2]string{"原谷行き","金閣寺・立命館大学行き"}
+			for _,des := range destinationList{
+				if err = db.Where("destination = ? AND busstop = ?", des, busstop).Find(&busstopinfo).Error; err != nil {
+					//エラーハンドリング
+					fmt.Printf("db select Error!!!! err:%v\n", err)
+				}
+				// fmt.Printf("%v",busstopinfo)
+				for _, bus := range busstopinfo {
+					// fmt.Println(bus.URL)
+					busstopurl = append(busstopurl, bus.URL)
+				}
+			}
+			return busstopurl, err
+		}
+	
+	}
+
 	if err = db.Where("destination = ? AND busstop = ?", destination, busstop).Find(&busstopinfo).Error; err != nil {
 		//エラーハンドリング
 		fmt.Printf("db select Error!!!! err:%v\n", err)
