@@ -18,15 +18,30 @@ func NewBusstopToUrlRepositoryImpl() repository.BusstopToTimetableRepository {
 	return &BusstopToTimetableRepositoryImpl{}
 }
 
-func (repository *BusstopToTimetableRepositoryImpl) FindBusstopList(busname string) ([]model.Busstop,error) {
+func (repository *BusstopToTimetableRepositoryImpl) EncodeDestination(busstop string, destination string) (wrapdestination string) {
+	//M1と12番のコンフリクト問題解消
+	var destinationList [2]string = [2]string{"原谷行き", "金閣寺・立命館大学行き"}
+	for _, bus := range config.M1and12BusstopList {
+		if busstop == bus{
+			for _,des := range destinationList {
+				if destination == des {
+					return "立命館大学行き"
+				}
+			}
+		}
+	}
+	return destination
+}
+
+func (repository *BusstopToTimetableRepositoryImpl) FindBusstopList(busname string) ([]model.Busstop, error) {
 	var err error
 	db := infra.GetDB()
 	busstoplist := []model.Busstop{}
-	if err = db.Model(&model.BusstopUrl{}).Where("busname = ?",busname).Select("busstop","destination").Scan(&busstoplist).Error; err != nil {
-				//エラーハンドリング
-				fmt.Printf("db select Error!!!! err:%v\n", err)
+	if err = db.Model(&model.BusstopUrl{}).Where("busname = ?", busname).Select("busstop", "destination").Scan(&busstoplist).Error; err != nil {
+		//エラーハンドリング
+		fmt.Printf("db select Error!!!! err:%v\n", err)
 	}
-	return busstoplist,err
+	return busstoplist, err
 
 }
 
@@ -37,10 +52,10 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURL(busstop string, dest
 	var busstopurl []string
 
 	//M1と12番のコンフリクト問題解消
-	for _,bus := range config.M1and12BusstopList{
-		if(busstop == bus && destination == "立命館大学行き"){
-			var destinationList [2]string = [2]string{"原谷行き","金閣寺・立命館大学行き"}
-			for _,des := range destinationList{
+	for _, bus := range config.M1and12BusstopList {
+		if busstop == bus && destination == "立命館大学行き" {
+			var destinationList [2]string = [2]string{"原谷行き", "金閣寺・立命館大学行き"}
+			for _, des := range destinationList {
 				if err = db.Where("destination = ? AND busstop = ?", des, busstop).Find(&busstopinfo).Error; err != nil {
 					//エラーハンドリング
 					fmt.Printf("db select Error!!!! err:%v\n", err)
@@ -53,7 +68,6 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURL(busstop string, dest
 			}
 			return busstopurl, err
 		}
-	
 	}
 
 	if err = db.Where("destination = ? AND busstop = ?", destination, busstop).Find(&busstopinfo).Error; err != nil {
@@ -87,6 +101,7 @@ func scrapHTML(url string) (scrapData []string, via string, busstop string) {
 
 	Via := ""
 	Busstop := ""
+	Destination := ""
 
 	// Extract title element
 	c.OnHTML("h1", func(e *colly.HTMLElement) {
@@ -102,7 +117,13 @@ func scrapHTML(url string) (scrapData []string, via string, busstop string) {
 			}
 		}
 
-		fmt.Println("駅名 : ", result[0], "\nバス名 : ", result[2], "\n行き先 : ", result[5], "\nURL : ", result[6])
+		for i := 0; i < len(result); i++ {
+			if strings.Contains(result[i], "行き") {
+				Destination = result[i]
+			}
+		}
+
+		fmt.Println("駅名 : ", result[0], "\nバス名 : ", Via, "\n行き先 : ", Destination, "\nURL : ", result[6])
 	})
 
 	c.OnHTML(".tt-time", func(e *colly.HTMLElement) {
@@ -113,17 +134,17 @@ func scrapHTML(url string) (scrapData []string, via string, busstop string) {
 						var firstresult []string
 						result := ""
 
-						time := strings.Split(e.Text," ")
-						for _,j := range(time) {
-							if strings.Contains(j, "("){
+						time := strings.Split(e.Text, " ")
+						for _, j := range time {
+							if strings.Contains(j, "(") {
 								firstresult = append(firstresult, j)
 							}
 						}
 
-						for k,t := range(firstresult){
-							if(k == 0){
+						for k, t := range firstresult {
+							if k == 0 {
 								result += t
-							}else{
+							} else {
 								result += " "
 								result += t
 							}
@@ -136,13 +157,13 @@ func scrapHTML(url string) (scrapData []string, via string, busstop string) {
 						// timelist := strings.Split(result, "\n")
 						scrapData = append(scrapData, result)
 						break
-					}else{
+					} else {
 						result := ""
 						scrapData = append(scrapData, result)
 						break
 					}
 				}
-				if(i == len(config.M1BusstopList)-1){
+				if i == len(config.M1BusstopList)-1 {
 					result := strings.Replace(e.Text, "(", "", -1)
 					result = strings.Replace(result, ")", "", -1)
 					re := regexp.MustCompile(`.*台`)
