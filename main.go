@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"os"
@@ -89,15 +90,23 @@ func Routing() {
 
 	e.GET("/bus/time/v3", func(c echo.Context) error {
 		busstop := c.QueryParam("fr")
-		destination := c.QueryParam("to") + "行き"
-		if len(destination) == 0 {
-			destination = "立命館大学行き"
+		var destination bytes.Buffer
+		destination.WriteString(c.QueryParam("to"))
+		destination.WriteString("行き")
+
+		l := localcache.GetGoChache()
+
+		if x, found := l.Get(busstop+destination.String()); found {
+			fmt.Println("cache exist")
+			var time model.TimeTable = x.(model.TimeTable)
+			fmt.Printf(busstop,destination.String(),time)
+			approachInfoCtrl := controller.ApproachInfoFromTimeTableController{}
+			approachInfo := approachInfoCtrl.FindApproachInfoFromTimeTable(time,busstop,destination.String())
+			return c.JSON(http.StatusOK, approachInfo)
 		}
-		if len(busstop) == 0 {
-			busstop = "西ノ京円町《ＪＲ円町駅》"
-		}
+
 		busstoptourlCtrl := controller.BusstoToUrlController{}
-		url, err := busstoptourlCtrl.FindURL(busstop, destination)
+		url, err := busstoptourlCtrl.FindURL(busstop, destination.String())
 		if err != nil {
 		}
 		approachInfoCtrl := controller.ApproachInfoController{}
