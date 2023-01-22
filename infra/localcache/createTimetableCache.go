@@ -33,18 +33,10 @@ func CreateTimetableCache() {
 			}
 
 			for _, businfo := range busstoplist {
-				fmt.Printf(businfo.Busstop, businfo.Destination)
-				//停留所と行き先のセットからURLを取得
-				busstoptourlCtrl := controller.BusstoToUrlController{}
-				url, err := busstoptourlCtrl.FindURL(businfo.Busstop, businfo.Destination)
-				if err != nil {
-				}
-
-				//URLから時刻表を取得
-				timetablecontroller := controller.TimetableController{}
-				timetable := timetablecontroller.FindTimetable(url)
-
-				c.Set(businfo.Busstop+businfo.Destination, timetable, cache.DefaultExpiration)
+				//
+				timetableCtrl := controller.CacheTimetableController{}
+				timetable,busstop,destination := timetableCtrl.FindCacheTimetable(businfo)
+				c.Set(busstop+destination, timetable, cache.DefaultExpiration)
 			}
 		}
 		fmt.Println("キャッシュ化完了")

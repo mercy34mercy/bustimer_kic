@@ -6,4 +6,5 @@ type BusstopToTimetableRepository interface {
 	FindURL(busstop string,destination string)([]string,error)
 	FindTimetable(url []string)(model.TimeTable)
 	FindBusstopList(busname string)([]model.Busstop,error)
+	EncodeDestination(busstop string,destination string)(wrapdestination string)
 }
