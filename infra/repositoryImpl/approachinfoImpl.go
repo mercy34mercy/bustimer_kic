@@ -14,10 +14,10 @@ func NewApproachInfoRepositoryImpl() repository.ApproachInfoRepository {
 	return &ApproachInfoRepositoryImpl{}
 }
 
-func (repository *ApproachInfoRepositoryImpl) FindApproachInfoFromTimeTable(timetable model.TimeTable,via string,busstop string) model.ApproachInfos {
+func (repository *ApproachInfoRepositoryImpl) FindApproachInfoFromTimeTable(timetable model.TimeTable, via string, busstop string) model.ApproachInfos {
 	approachinfo := model.CreateApproachInfos()
-	
-	approachinfo = getApproachInfoFromTimetable(approachinfo,timetable,via,busstop)
+
+	approachinfo = getApproachInfoFromTimetable(approachinfo, timetable, via, busstop)
 
 	fastThree := approachinfo.GetFastThree()
 
@@ -41,48 +41,57 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 	today := time.Now().In(jst)
 	weekday := today.Weekday()
 	if weekday == 6 {
-		for hour,times := range timeTable.Holidays {
-			for _,time := range times {
-				approachInfos.ApproachInfo = append(approachInfos.ApproachInfo, model.ApproachInfo{
-					MoreMin:         "約n分後に到着",
-					RealArrivalTime: strconv.FormatInt(int64(hour), 10) + ":" + strconv.FormatInt(toInt64(time.Min), 10),
-					Direction:       Via,
-					Via:             Via,
-					ScheduledTime:   strconv.FormatInt(int64(hour), 10) + ":" + strconv.FormatInt(toInt64(time.Min), 10),
-					Delay:           "定時運行",
-					BusStop:         "1",
-					RequiredTime:    20,
-				})
+		for hour, times := range timeTable.Saturdays {
+			for _, time := range times {
+				min, _ := strconv.Atoi(time.Min)
+				if hour == today.Hour() && min > today.Minute() || hour > today.Hour() {
+					approachInfos.ApproachInfo = append(approachInfos.ApproachInfo, model.ApproachInfo{
+						MoreMin:         "約n分後に到着",
+						RealArrivalTime: strconv.FormatInt(int64(hour), 10) + ":" + strconv.FormatInt(toInt64(time.Min), 10),
+						Direction:       Via,
+						Via:             Via,
+						ScheduledTime:   strconv.FormatInt(int64(hour), 10) + ":" + strconv.FormatInt(toInt64(time.Min), 10),
+						Delay:           "定時運行",
+						BusStop:         "1",
+						RequiredTime:    20,
+					})
+				}
 			}
 		}
 	} else if weekday == 1 {
-		for time := range timeTable.Weekdays {
-			for h := range timeTable.Weekdays[time] {
-				approachInfos.ApproachInfo = append(approachInfos.ApproachInfo, model.ApproachInfo{
-					MoreMin:         "約n分後に到着",
-					RealArrivalTime: strconv.FormatInt(int64(time), 10) + ":" + strconv.FormatInt(int64(h), 10),
-					Direction:       Via,
-					Via:             Via,
-					ScheduledTime:   strconv.FormatInt(int64(time), 10) + ":" + strconv.FormatInt(int64(h), 10),
-					Delay:           "定時運行",
-					BusStop:         "1",
-					RequiredTime:    20,
-				})
+		for hour, times := range timeTable.Weekdays {
+			for _, time := range times {
+				min, _ := strconv.Atoi(time.Min)
+				if hour == today.Hour() && min > today.Minute() || hour > today.Hour() {
+					approachInfos.ApproachInfo = append(approachInfos.ApproachInfo, model.ApproachInfo{
+						MoreMin:         "約n分後に到着",
+						RealArrivalTime: strconv.FormatInt(int64(hour), 10) + ":" + strconv.FormatInt(toInt64(time.Min), 10),
+						Direction:       Via,
+						Via:             Via,
+						ScheduledTime:   strconv.FormatInt(int64(hour), 10) + ":" + strconv.FormatInt(toInt64(time.Min), 10),
+						Delay:           "定時運行",
+						BusStop:         "1",
+						RequiredTime:    20,
+					})
+				}
 			}
 		}
 	} else {
-		for time := range timeTable.Saturdays {
-			for h := range timeTable.Saturdays[time] {
-				approachInfos.ApproachInfo = append(approachInfos.ApproachInfo, model.ApproachInfo{
-					MoreMin:         "約n分後に到着",
-					RealArrivalTime: strconv.FormatInt(int64(time), 10) + ":" + strconv.FormatInt(int64(h), 10),
-					Direction:       Via,
-					Via:             Via,
-					ScheduledTime:   strconv.FormatInt(int64(time), 10) + ":" + strconv.FormatInt(int64(h), 10),
-					Delay:           "定時運行",
-					BusStop:         "1",
-					RequiredTime:    20,
-				})
+		for hour, times := range timeTable.Holidays {
+			for _, time := range times {
+				min, _ := strconv.Atoi(time.Min)
+				if hour == today.Hour() && min > today.Minute() || hour > today.Hour() {
+					approachInfos.ApproachInfo = append(approachInfos.ApproachInfo, model.ApproachInfo{
+						MoreMin:         "約n分後に到着",
+						RealArrivalTime: strconv.FormatInt(int64(hour), 10) + ":" + strconv.FormatInt(toInt64(time.Min), 10),
+						Direction:       Via,
+						Via:             Via,
+						ScheduledTime:   strconv.FormatInt(int64(hour), 10) + ":" + strconv.FormatInt(toInt64(time.Min), 10),
+						Delay:           "定時運行",
+						BusStop:         "1",
+						RequiredTime:    20,
+					})
+				}
 			}
 		}
 	}
@@ -103,7 +112,7 @@ func getApproachInfo(approachInfos model.ApproachInfos, scrapedata []string, via
 			holidaylist := strings.Split(scrapedata[i*3+1], " ")
 			for b := 0; b < len(holidaylist); b++ {
 				min, _ := strconv.Atoi(holidaylist[b])
-				if (i+5 == today.Hour() && min > today.Minute()) || i+5 > today.Hour() {
+				if i+5 == today.Hour() && min > today.Minute() || i+5 > today.Hour() {
 					hour := converthour(i + 5)
 					if holidaylist[b] != "" {
 						approachInfos.ApproachInfo = append(approachInfos.ApproachInfo, model.ApproachInfo{
@@ -126,7 +135,7 @@ func getApproachInfo(approachInfos model.ApproachInfos, scrapedata []string, via
 			saturdaylist := strings.Split(scrapedata[i*3+2], " ")
 			for a := 0; a < len(saturdaylist); a++ {
 				min, _ := strconv.Atoi(saturdaylist[a])
-				if (i+5 == today.Hour() && min > today.Minute()) || i+5 > today.Hour() {
+				if i+5 == today.Hour() && min > today.Minute() || i+5 > today.Hour() {
 					hour := converthour(i + 5)
 					if saturdaylist[a] != "" {
 						approachInfos.ApproachInfo = append(approachInfos.ApproachInfo, model.ApproachInfo{
@@ -148,7 +157,7 @@ func getApproachInfo(approachInfos model.ApproachInfos, scrapedata []string, via
 			weekdaylist := strings.Split(scrapedata[i*3], " ")
 			for a := 0; a < len(weekdaylist); a++ {
 				min, _ := strconv.Atoi(weekdaylist[a])
-				if (i+5 == today.Hour() && min > today.Minute()) || i+5 > today.Hour() {
+				if i+5 == today.Hour() && min > today.Minute() || i+5 > today.Hour() {
 					hour := converthour(i + 5)
 					if weekdaylist[a] != "" {
 						approachInfos.ApproachInfo = append(approachInfos.ApproachInfo, model.ApproachInfo{
