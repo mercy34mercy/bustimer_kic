@@ -10,7 +10,8 @@ env:
   PORT: ${{ secrets.PORT }}
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GCP_REGION: ${{ secrets.GCP_REGION }}
-  IMAGE: asia.gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.SERVICE_NAME }}:${{ github.sha }}
+  IMAGE:  ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/mashikotyan/${{ secrets.SERVICE_NAME }}:${{ github.sha }}
+
 
 jobs:
   deploy-to-cloud-run:
