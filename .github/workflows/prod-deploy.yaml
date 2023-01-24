@@ -39,9 +39,5 @@ jobs:
             gcloud run deploy $SERVICE_NAME \
               --image $IMAGE \
               --port $PORT \
-              --project $GCP_PROJECT_ID \
+              --service-account $SERVICE_ACCOUNT \
               --region $GCP_REGION \
-              --platform=managed \
-              --allow-unauthenticated \
-              --quiet \
-              --set-env-vars=ENV=PRODUCTION
