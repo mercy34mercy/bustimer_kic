@@ -40,4 +40,5 @@ jobs:
               --image $IMAGE \
               --port $PORT \
               --service-account $SERVICE_ACCOUNT \
-              --region $GCP_REGION
+              --region $GCP_REGION \
+              --memory 1024Mi
