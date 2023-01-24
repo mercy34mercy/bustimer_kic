@@ -109,8 +109,12 @@ func Routing() {
 		url, err := busstoptourlCtrl.FindURL(busstop, destination.String())
 		if err != nil {
 		}
-		approachInfoCtrl := controller.ApproachInfoController{}
-		approachinfo := approachInfoCtrl.FindApproachInfo(url)
+
+		timetablecontroller := controller.TimetableController{}
+		timetable := timetablecontroller.FindTimetable(url)
+
+		approachInfoCtrl := controller.ApproachInfoFromTimeTableController{}
+		approachinfo := approachInfoCtrl.FindApproachInfoFromTimeTable(timetable,busstop,destination.String())
 		return c.JSON(http.StatusOK, approachinfo)
 	})
 
