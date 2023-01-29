@@ -197,7 +197,6 @@ func getTimeTable(timetable model.TimeTable, scrapedata []string, via string, bu
 		timelist = append(timelist, scrapedata[i])
 	}
 
-	fmt.Println(len(timelist))
 
 	Via := via
 	for i := 0; i < len(timelist)/3; i++ {
