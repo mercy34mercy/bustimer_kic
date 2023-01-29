@@ -25,9 +25,9 @@ func (repository *ApproachInfoRepositoryImpl) FindApproachInfoFromTimeTable(time
 
 func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable model.TimeTable, via string, busstop string) model.ApproachInfos {
 	Via := via
-	// var today = time.Date(2022, 4, 1, 9, 0, 0, 0, time.Local)
-	jst := time.FixedZone("Asia/Tokyo", 9*60*60)
-	today := time.Now().In(jst)
+	// jst := time.FixedZone("Asia/Tokyo", 9*60*60)
+	var today = time.Date(2022, 4, 1, 8, 0, 0, 0, time.Local)
+	// today := time.Now().In(jst)
 	weekday := today.Weekday()
 	if weekday == 6 {
 		for hour, times := range timeTable.Saturdays {
@@ -38,7 +38,7 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 						MoreMin:         "約n分後に到着",
 						RealArrivalTime: formatHour(strconv.FormatInt(int64(hour), 10)) + ":" +formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
 						Direction:       Via,
-						Via:             time.Via,
+						Via:             Via,
 						ScheduledTime:   formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
 						Delay:           "定時運行",
 						BusStop:         "1",
@@ -56,7 +56,7 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 						MoreMin:         "約n分後に到着",
 						RealArrivalTime: formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
 						Direction:       Via,
-						Via:             time.Via,
+						Via:             Via,
 						ScheduledTime:   formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
 						Delay:           "定時運行",
 						BusStop:         "1",
@@ -74,7 +74,7 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 						MoreMin:         "約n分後に到着",
 						RealArrivalTime: formatHour(strconv.FormatInt(int64(hour), 10)) + ":" +formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
 						Direction:       Via,
-						Via:             time.Via,
+						Via:             Via,
 						ScheduledTime:   formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
 						Delay:           "定時運行",
 						BusStop:         "1",
