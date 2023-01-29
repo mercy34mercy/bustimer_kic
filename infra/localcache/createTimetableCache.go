@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"practice-colly/config"
 	"practice-colly/controller"
+	"practice-colly/domain/model"
 	"time"
 
 	"github.com/patrickmn/go-cache"
@@ -20,6 +21,10 @@ func Init() *cache.Cache {
 
 func GetGoChache() *cache.Cache {
 	return c
+}
+
+func CreateCachefromTimetable(busstop string,destination string,timetable model.TimeTable) {
+	c.Set(busstop+destination, timetable, cache.DefaultExpiration)
 }
 
 func CreateTimetableCache() {
