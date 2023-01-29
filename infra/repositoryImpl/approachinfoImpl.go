@@ -25,9 +25,8 @@ func (repository *ApproachInfoRepositoryImpl) FindApproachInfoFromTimeTable(time
 
 func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable model.TimeTable, via string, busstop string) model.ApproachInfos {
 	Via := via
-	// jst := time.FixedZone("Asia/Tokyo", 9*60*60)
-	var today = time.Date(2022, 4, 1, 8, 0, 0, 0, time.Local)
-	// today := time.Now().In(jst)
+	jst := time.FixedZone("Asia/Tokyo", 9*60*60)
+	today := time.Now().In(jst)
 	weekday := today.Weekday()
 	if weekday == 6 {
 		for hour, times := range timeTable.Saturdays {
