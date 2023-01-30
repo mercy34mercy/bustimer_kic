@@ -23,6 +23,7 @@ func (repository *ApproachInfoRepositoryImpl) FindApproachInfoFromTimeTable(time
 	return fastThree
 }
 
+
 func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable model.TimeTable, via string, busstop string) model.ApproachInfos {
 	Via := via
 	jst := time.FixedZone("Asia/Tokyo", 9*60*60)
