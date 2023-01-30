@@ -6,6 +6,10 @@ import (
 	"strconv"
 )
 
+type MultiTimeTable struct {
+	TimeTable map[string][]TimeTable `json:"timetable"`
+}
+
 type TimeTable struct {
 	Weekdays 	map[int][]OneBusTime `json:"weekdays"`
 	Saturdays 	map[int][]OneBusTime `json:"saturdays"`

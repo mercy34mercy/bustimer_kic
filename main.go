@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
@@ -9,6 +10,7 @@ import (
 	"practice-colly/domain/model"
 	"practice-colly/infra"
 	"practice-colly/infra/localcache"
+
 	"github.com/labstack/echo"
 )
 
@@ -69,6 +71,13 @@ func Routing() {
 		localcache.CreateCachefromTimetable(busstop,destination.String(),timetable);
 
 		return c.JSON(http.StatusOK, timetable)
+	})
+
+	e.GET("/timetable/multi",func(c echo.Context) error {
+		busstop := c.QueryParam("fr")
+		destination := c.QueryParam("to")
+
+		
 	})
 
 	e.GET("/bus/time/v3", func(c echo.Context) error {
