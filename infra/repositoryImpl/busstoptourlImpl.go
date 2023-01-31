@@ -18,12 +18,45 @@ func NewBusstopToUrlRepositoryImpl() repository.BusstopToTimetableRepository {
 	return &BusstopToTimetableRepositoryImpl{}
 }
 
+func (repository *BusstopToTimetableRepositoryImpl) CreateMultiTimetable(timetable []model.TimeTableandDestination,destinationlist []string) model.MultiTimeTable {
+	multitimetable := model.CreateNewMultiTimeTable(destinationlist)
+
+	for _,time := range timetable{
+		multitimetable.TimeTable[time.Destination] = time.TimeTable
+	}
+
+	return multitimetable
+}
+
+func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop string,destination string) []string {
+	var err error
+	db := infra.GetDB()
+	busstopList := []model.BusstopUrl{}
+	busstopinfo := []model.BusstopUrl{}
+	var busstopurl []string
+
+	if err = db.Where("busstop = ? AND destination = ?", destination, "立命館大学行き").Find(&busstopList).Error; err != nil {
+		//エラーハンドリング
+		fmt.Printf("db select Error!!!! err:%v\n", err)
+	}
+	for _, bus := range busstopList {
+		if err = db.Where("busname = ? AND busstop = ?", bus.Busname, bus.Busstop).Find(&busstopinfo).Error; err != nil {
+			//エラーハンドリング
+			fmt.Printf("db select Error!!!! err:%v\n", err)
+		}
+		for _, url := range busstopinfo {
+			busstopurl = append(busstopurl, url.URL)
+		}
+	}
+	return busstopurl
+}
+
 func (repository *BusstopToTimetableRepositoryImpl) EncodeDestination(busstop string, destination string) (wrapdestination string) {
 	//M1と12番のコンフリクト問題解消
 	var destinationList [2]string = [2]string{"原谷行き", "金閣寺・立命館大学行き"}
 	for _, bus := range config.M1and12BusstopList {
-		if busstop == bus{
-			for _,des := range destinationList {
+		if busstop == bus {
+			for _, des := range destinationList {
 				if destination == des {
 					return "立命館大学行き"
 				}
@@ -196,7 +229,6 @@ func getTimeTable(timetable model.TimeTable, scrapedata []string, via string, bu
 	for i := 0; i < len(scrapedata); i++ {
 		timelist = append(timelist, scrapedata[i])
 	}
-
 
 	Via := via
 	for i := 0; i < len(timelist)/3; i++ {
