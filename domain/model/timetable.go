@@ -4,33 +4,59 @@ import (
 	"regexp"
 	"sort"
 	"strconv"
+	"strings"
 )
 
-type TimeTable struct {
-	Weekdays 	map[int][]OneBusTime `json:"weekdays"`
-	Saturdays 	map[int][]OneBusTime `json:"saturdays"`
-	Holidays 	map[int][]OneBusTime `json:"holidays"`
+type MultiTimeTable struct {
+	TimeTable map[string]TimeTable `json:"timetable"`
 }
 
-type OneBusTime struct {
-	Via 	string `json:"via"`
-	Min 	string `json:"min"`
-	BusStop string `json:"bus_stop"`
-}
-
-
-type Busstop struct {
-	Busstop string
+type TimeTableandDestination struct {
+	TimeTable   TimeTable
 	Destination string
 }
 
+type TimeTable struct {
+	Weekdays  map[int][]OneBusTime `json:"weekdays"`
+	Saturdays map[int][]OneBusTime `json:"saturdays"`
+	Holidays  map[int][]OneBusTime `json:"holidays"`
+}
+
+type OneBusTime struct {
+	Via     string `json:"via"`
+	Min     string `json:"min"`
+	BusStop string `json:"bus_stop"`
+}
+
+type Busstop struct {
+	Busstop     string
+	Destination string
+}
+
+type Query struct {
+	Destination string
+	Busstop     string
+}
+
+func CreateNewMultiTimeTable(destinationList []string) MultiTimeTable {
+	multiTimeTable := MultiTimeTable{
+		TimeTable: make(map[string]TimeTable),
+	}
+
+	return multiTimeTable
+}
+
+func (query Query) SplitDestination() []string {
+	destinationlist := strings.Split(query.Destination, ",")
+	return destinationlist
+}
 
 func CreateNewTimeTable() TimeTable {
 	// 初期化
 	timetable := TimeTable{
-		Weekdays: make(map[int][]OneBusTime),
+		Weekdays:  make(map[int][]OneBusTime),
 		Saturdays: make(map[int][]OneBusTime),
-		Holidays: make(map[int][]OneBusTime),
+		Holidays:  make(map[int][]OneBusTime),
 	}
 
 	// 時刻表にあるデータを埋める
@@ -43,24 +69,24 @@ func CreateNewTimeTable() TimeTable {
 }
 
 func (timetable TimeTable) SortOneBusTime() {
-	for _,oneBusTimeHolidayList := range timetable.Holidays{
+	for _, oneBusTimeHolidayList := range timetable.Holidays {
 		sortByMin(oneBusTimeHolidayList)
 	}
 
-	for _,oneBusTImeSaturdayList := range timetable.Saturdays{
+	for _, oneBusTImeSaturdayList := range timetable.Saturdays {
 		sortByMin(oneBusTImeSaturdayList)
 	}
 
-	for _,oneBusTimeWeekdaysList := range timetable.Weekdays{
+	for _, oneBusTimeWeekdaysList := range timetable.Weekdays {
 		sortByMin(oneBusTimeWeekdaysList)
 	}
 }
 
 func sortByMin(oneBusTimeList []OneBusTime) {
-	rex := regexp.MustCompile("[0-9]+")	
+	rex := regexp.MustCompile("[0-9]+")
 	sort.Slice(oneBusTimeList, func(i, j int) bool {
 		iMin, _ := strconv.Atoi(rex.FindString(oneBusTimeList[i].Min))
-		jMin, _ := strconv.Atoi(rex.FindString(oneBusTimeList[j].Min) )
+		jMin, _ := strconv.Atoi(rex.FindString(oneBusTimeList[j].Min))
 		return iMin < jMin
 	})
 }

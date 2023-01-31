@@ -9,6 +9,7 @@ import (
 	"practice-colly/domain/model"
 	"practice-colly/infra"
 	"practice-colly/infra/localcache"
+
 	"github.com/labstack/echo"
 )
 
@@ -69,6 +70,24 @@ func Routing() {
 		localcache.CreateCachefromTimetable(busstop,destination.String(),timetable);
 
 		return c.JSON(http.StatusOK, timetable)
+	})
+
+	e.GET("/timetable/multi",func(c echo.Context) error {
+		busstop := c.QueryParam("fr")
+		destination := c.QueryParam("to")
+		var query model.Query = model.Query{
+			Destination: destination,
+			Busstop: busstop,
+		}
+
+		destinationlist := query.SplitDestination()
+
+		timetableCtrl := controller.TimetableFromBusstopController{}
+		timetable := timetableCtrl.FindTimetable(busstop,destinationlist)
+
+		return c.JSON(http.StatusOK, timetable)
+
+
 	})
 
 	e.GET("/bus/time/v3", func(c echo.Context) error {
