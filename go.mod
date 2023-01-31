@@ -33,4 +33,4 @@ require (
 	google.golang.org/appengine v1.6.7 // indirect
 	gorm.io/driver/sqlite v1.4.3 // indirect
 	gorm.io/gorm v1.24.0 // indirect
-)
+	)
