@@ -1,9 +1,6 @@
 package localcache
 
 import (
-	"fmt"
-	"practice-colly/config"
-	"practice-colly/controller"
 	"practice-colly/domain/model"
 	"time"
 
@@ -27,26 +24,25 @@ func CreateCachefromTimetable(busstop string,destination string,timetable model.
 	c.Set(busstop+destination, timetable, cache.DefaultExpiration)
 }
 
-func CreateTimetableCache() {
-	for {
-		for _, busname := range config.BusNameList {
-			fmt.Printf(busname)
-			//バスの名前から、そのバスの停留所と行き先のセットを取得
-			busstoplistCtrl := controller.FindBusstopListController{}
-			busstoplist, err := busstoplistCtrl.FindBusstopList(busname)
-			if err != nil {
-			}
+// func CreateTimetableCache() {
+// 	for {
+// 		for _, busname := range config.BusNameList {
+// 			fmt.Printf(busname)
+// 			//バスの名前から、そのバスの停留所と行き先のセットを取得
+// 			busstoplistCtrl := controller.FindBusstopListController{}
+// 			busstoplist, err := busstoplistCtrl.FindBusstopList(busname)
+// 			if err != nil {
+// 			}
 
-			for _, businfo := range busstoplist {
-				//
-				timetableCtrl := controller.CacheTimetableController{}
-				timetable,busstop,destination := timetableCtrl.FindCacheTimetable(businfo)
-				c.Set(busstop+destination, timetable, cache.DefaultExpiration)
-			}
-		}
-		fmt.Println("キャッシュ化完了")
-		time.Sleep(config.TimeTableCacheUpdateDuration)
+// 			for _, businfo := range busstoplist {
+// 				//
+// 				timetableCtrl := controller.CacheTimetableController{}
+// 				timetable,busstop,destination := timetableCtrl.FindCacheTimetable(businfo)
+// 				c.Set(busstop+destination, timetable, cache.DefaultExpiration)
+// 			}
+// 		}
+// 		fmt.Println("キャッシュ化完了")
+// 		time.Sleep(config.TimeTableCacheUpdateDuration)
 
-	}
-
-}
+// 	}
+// }

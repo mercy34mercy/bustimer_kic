@@ -18,17 +18,18 @@ func NewBusstopToUrlRepositoryImpl() repository.BusstopToTimetableRepository {
 	return &BusstopToTimetableRepositoryImpl{}
 }
 
-func (repository *BusstopToTimetableRepositoryImpl) CreateMultiTimetable(timetable []model.TimeTableandDestination,destinationlist []string) model.MultiTimeTable {
+func (repository *BusstopToTimetableRepositoryImpl) CreateMultiTimetable(timetable []model.TimeTableandDestination, destinationlist []string) model.MultiTimeTable {
 	multitimetable := model.CreateNewMultiTimeTable(destinationlist)
 
-	for _,time := range timetable{
+	for _, time := range timetable {
 		multitimetable.TimeTable[time.Destination] = time.TimeTable
 	}
 
 	return multitimetable
 }
 
-func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop string,destination string) []string {
+func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop string, destination string) []string {
+	//立命館大学からどこかへ行くとき
 	var err error
 	db := infra.GetDB()
 	busstopList := []model.BusstopUrl{}
@@ -79,6 +80,7 @@ func (repository *BusstopToTimetableRepositoryImpl) FindBusstopList(busname stri
 }
 
 func (repository *BusstopToTimetableRepositoryImpl) FindURL(busstop string, destination string) ([]string, error) {
+	//立命館大学に行く時
 	var err error
 	db := infra.GetDB()
 	busstopinfo := []model.BusstopUrl{}
