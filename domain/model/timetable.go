@@ -46,9 +46,10 @@ func CreateNewMultiTimeTable(destinationList []string) MultiTimeTable {
 	return multiTimeTable
 }
 
-func (query Query) SplitDestination() []string {
+func (query Query) SplitDestination() ([]string,[]string) {
 	destinationlist := strings.Split(query.Destination, ",")
-	return destinationlist
+	busstopolist := strings.Split(query.Busstop,",")
+	return destinationlist,busstopolist
 }
 
 func CreateNewTimeTable() TimeTable {
