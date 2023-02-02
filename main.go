@@ -80,10 +80,10 @@ func Routing() {
 			Busstop: busstop,
 		}
 
-		destinationlist := query.SplitDestination()
+		destinationlist,busstoplist := query.SplitDestination()
 
 		timetableCtrl := controller.TimetableFromBusstopController{}
-		timetable := timetableCtrl.FindTimetable(busstop,destinationlist)
+		timetable := timetableCtrl.FindTimetable(busstoplist,destinationlist)
 
 		return c.JSON(http.StatusOK, timetable)
 

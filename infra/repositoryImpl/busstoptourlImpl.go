@@ -99,7 +99,7 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURL(busstop string, dest
 	var busstopurl []string
 
 	//M1と12番のコンフリクト問題解消
-	for _, bus := range config.M1and12BusstopList {
+	for _, bus := range config.M1BusstopList {
 		if busstop == bus && destination == "立命館大学行き" {
 			var destinationList [2]string = [2]string{"原谷行き", "金閣寺・立命館大学行き"}
 			for _, des := range destinationList {
