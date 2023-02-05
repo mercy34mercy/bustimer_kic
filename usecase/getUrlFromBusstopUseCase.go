@@ -41,7 +41,7 @@ func (impl getUrlFromBusstopUseCaseImpl) FindURLFromBusstop() model.MultiTimeTab
 				var url []string
 				url = impl.BusstopToTimetableRepository.FindURLFromBusstop(impl.Busstop[0], des)
 				timetable := impl.BusstopToTimetableRepository.FindTimetable(url)
-				localcache.CreateCachefromTimetable(impl.Busstop[0], des, timetable)
+				localcache.CreateCachefromTimetable(impl.Busstop[0]+"行き", des, timetable)
 				timetableanddestination = append(timetableanddestination, model.TimeTableandDestination{
 					TimeTable:   timetable,
 					Destination: des,
@@ -62,7 +62,7 @@ func (impl getUrlFromBusstopUseCaseImpl) FindURLFromBusstop() model.MultiTimeTab
 				var url []string
 				url, _ = impl.BusstopToTimetableRepository.FindURL(bus, impl.Destination[0]+"行き")
 				timetable := impl.BusstopToTimetableRepository.FindTimetable(url)
-				localcache.CreateCachefromTimetable(bus, impl.Destination[0], timetable)
+				localcache.CreateCachefromTimetable(bus, impl.Destination[0]+"行き", timetable)
 				timetableanddestination = append(timetableanddestination, model.TimeTableandDestination{
 					TimeTable:   timetable,
 					Destination: bus,

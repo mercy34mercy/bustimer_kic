@@ -59,13 +59,8 @@ func Routing() {
 			fmt.Println("cache exist")
 			return c.JSON(http.StatusOK,x.(model.TimeTable))
 		}
-
-		busstoptourlCtrl := controller.BusstoToUrlController{}
-		url, err := busstoptourlCtrl.FindURL(busstop, destination.String())
-		if err != nil {
-		}
 		timetablecontroller := controller.TimetableController{}
-		timetable := timetablecontroller.FindTimetable(url)
+		timetable := timetablecontroller.FindTimetable(busstop,destination.String())
 
 		localcache.CreateCachefromTimetable(busstop,destination.String(),timetable);
 
@@ -106,13 +101,8 @@ func Routing() {
 			return c.JSON(http.StatusOK, approachInfo)
 		}
 
-		busstoptourlCtrl := controller.BusstoToUrlController{}
-		url, err := busstoptourlCtrl.FindURL(busstop, destination.String())
-		if err != nil {
-		}
-
 		timetablecontroller := controller.TimetableController{}
-		timetable := timetablecontroller.FindTimetable(url)
+		timetable := timetablecontroller.FindTimetable(busstop, destination.String())
 
 		localcache.CreateCachefromTimetable(busstop,destination.String(),timetable);
 

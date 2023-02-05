@@ -9,8 +9,8 @@ import (
 type TimetableController struct{}
 
 
-func (ctrl TimetableController) FindTimetable(URL []string)(model.TimeTable){
+func (ctrl TimetableController) FindTimetable(Busstop string,Destination string)(model.TimeTable){
 	busstoptourlRepository := repositoryimpl.NewBusstopToUrlRepositoryImpl()
-	timetable := usecase.NewGetTimetableUseCaseImpl(URL,busstoptourlRepository).FindTimetable()
+	timetable := usecase.NewGetTimetableUseCaseImpl(Busstop,Destination,busstoptourlRepository).FindTimetable()
 	return timetable
 }
