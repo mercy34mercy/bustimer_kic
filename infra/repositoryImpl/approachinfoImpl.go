@@ -43,7 +43,7 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 						ScheduledTime:   formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
 						Delay:           "定時運行",
 						BusStop:         "1",
-						RequiredTime:    config.GetRequiredeTime(Via,time.BusStop,time.Via),
+						RequiredTime:    config.GetRequiredeTime(Via,busstop,time.Via),
 					})
 				}
 			}
@@ -61,7 +61,7 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 						ScheduledTime:   formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
 						Delay:           "定時運行",
 						BusStop:         "1",
-						RequiredTime:    config.GetRequiredeTime(Via,time.BusStop,time.Via),
+						RequiredTime:    config.GetRequiredeTime(Via,busstop,time.Via),
 					})
 				}
 			}
@@ -79,7 +79,7 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 						ScheduledTime:   formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
 						Delay:           "定時運行",
 						BusStop:         "1",
-						RequiredTime:    config.GetRequiredeTime(Via,time.BusStop,time.Via),
+						RequiredTime:    config.GetRequiredeTime(Via,busstop,time.Via),
 					})
 				}
 			}
