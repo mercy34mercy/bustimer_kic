@@ -8,6 +8,12 @@ const Requiredtime15 = 34.0
 const Requiredtime51 = 36.0
 const Requiredtime59 = 40.0 
 const RequiredtimeRitsumei = 36.0
+const RequiredTimeM1 = 16
+const RequiredTime52 = 0
+const RequiredTime55 = 0
+const RequiredTimeRin = 17.0
+const RequiredTime204 = 0
+const RequiredTime205 = 0
 
 var M1BusstopList [8]string = [8]string{"北大路バスターミナル《地下鉄北大路駅》", "北大路新町", "北大路堀川", "大徳寺前", "建勲神社前", "船岡山", "千本北大路", "金閣寺道"}
 var M1or12BusstopList [33]string = [33]string{

@@ -6,8 +6,8 @@ import (
 )
 
 func GetRequiredeTime(fr string, to string, busname string) int {
-	fmt.Println(fr, to, busname)
 	to = strings.Replace(to, "行き", "", -1)
+	fmt.Println(fr, to, busname)
 	switch busname {
 	case "快速立命館号系統", "快速205号系統":
 		switch to {
@@ -24,15 +24,39 @@ func GetRequiredeTime(fr string, to string, busname string) int {
 			return int(float64(Requiredtime50/27.0) * float64(GetBusstop(to, busname)))
 		}
 	case "12号系統":
-		switch to{
+		switch to {
 		case "立命館大学":
 			return int(float64(Requiredtime12/30.0) * float64(30-GetBusstop(fr, busname)))
 		default:
-			return int(float64(Requiredtime12/30.0) * float64(30-GetBusstop(to, busname)))
+			return int(float64(Requiredtime12/30.0) * float64(GetBusstop(to, busname)))
 		}
 	case "15号系統":
+		switch to {
+		case "立命館大学":
+			return int(float64(Requiredtime15/22.0) * float64(22-GetBusstop(fr, busname)))
+		default:
+			return int(float64(Requiredtime15/22.0) * float64(GetBusstop(to, busname)))
+		}
 	case "51号系統":
+		switch to {
+		case "立命館大学":
+			return int(float64(Requiredtime51/23.0) * float64(23-GetBusstop(fr, busname)))
+		default:
+			return int(float64(Requiredtime51/23.0) * float64(GetBusstop(to, busname)))
+		}
 	case "59号系統":
+	case "臨号系統":
+	case "52号系統":
+	case "55号系統":
+	case "M1号系統":
+		switch to {
+		case "原谷行き", "立命館大学":
+			return int(float64(RequiredTimeM1/10.0) * float64(10-GetBusstop(fr, busname)))
+		default:
+			return int(float64(RequiredTimeM1/10.0) * float64(GetBusstop(to, busname)))
+		}
+	case "205号系統":
+	case "204号系統":
 	}
 	return 0
 }
@@ -172,6 +196,131 @@ func GetBusstop(notritsumei string, busname string) int {
 		case "天神公園前":
 			return 10
 		case "堀川鞍馬口":
+			return 9
+		case "北大路堀川":
+			return 8
+		case "大徳寺前":
+			return 7
+		case "建勲神社前":
+			return 6
+		case "船岡山":
+			return 5
+		case "千本北大路":
+			return 4
+		case "金閣寺道":
+			return 3
+		case "わら天神前":
+			return 2
+		case "桜木町":
+			return 1
+		case "立命館大学前":
+			return 0
+		}
+	case "15号系統":
+		switch notritsumei {
+		case "三条京阪前":
+			return 22
+		case "四条京阪前":
+			return 21
+		case "四条河原町":
+			return 20
+		case "河原町三条":
+			return 19
+		case "京都市役所前":
+			return 18
+		case "堺町御池":
+			return 17
+		case "烏丸御池":
+			return 16
+		case "新町御池":
+			return 15
+		case "堀川御池":
+			return 14
+		case "神泉苑前":
+			return 13
+		case "二条駅前":
+			return 12
+		case "千本旧二条":
+			return 11
+		case "千本丸太町":
+			return 10
+		case "丸太町七本松":
+			return 9
+		case "丸太町御池通":
+			return 8
+		case "西ノ京円町《ＪＲ円町駅》":
+			return 7
+		case "北野中学前":
+			return 6
+		case "大将軍":
+			return 5
+		case "北野白梅町":
+			return 4
+		case "わら天神前":
+			return 3
+		case "衣笠校前":
+			return 2
+		case "桜木町":
+			return 1
+		case "立命館大学前":
+			return 0
+		}
+	case "51号系統":
+		switch notritsumei {
+		case "三条京阪前":
+			return 23
+		case "四条京阪前":
+			return 22
+		case "四条河原町":
+			return 21
+		case "河原町三条":
+			return 20
+		case "京都市役所前":
+			return 19
+		case "堺町御池":
+			return 18
+		case "烏丸二条":
+			return 17
+		case "烏丸御池":
+			return 16
+		case "烏丸丸太町《地下鉄丸太町駅》":
+			return 15
+		case "烏丸下立売":
+			return 14
+		case "烏丸下長者町":
+			return 13
+		case "烏丸一条":
+			return 12
+		case "烏丸今出川《地下鉄今出川駅》":
+			return 11
+		case "上京区総合庁舎前":
+			return 10
+		case "堀川今出川":
+			return 9
+		case "今出川大宮":
+			return 8
+		case "今出川浄福寺":
+			return 7
+		case "千本今出川":
+			return 6
+		case "上七軒":
+			return 5
+		case "北野天満宮前":
+			return 4
+		case "北野白梅町":
+			return 3
+		case "衣笠校前":
+			return 2
+		case "小松原児童公園前":
+			return 1
+		case "立命館大学前":
+			return 0
+		}
+	case "M1号系統":
+		switch notritsumei {
+		case "北大路バスターミナル":
+			return 10
+		case "北大路新町":
 			return 9
 		case "北大路堀川":
 			return 8
