@@ -36,10 +36,8 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 				min, _ := strconv.Atoi(time.Min)
 				if (hour == today.Hour() && min > today.Minute() || hour > today.Hour()) && (hour-2 < today.Hour()) {
 					approachInfos.ApproachInfo = append(approachInfos.ApproachInfo, model.ApproachInfo{
-						MoreMin:         "約n分後に到着",
-						RealArrivalTime: formatHour(strconv.FormatInt(int64(hour), 10)) + ":" +formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
-						Direction:       Via,
-						Via:             time.Via,
+						Direction:       busstop,
+						BusName: 		 time.Via,	
 						ScheduledTime:   formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
 						Delay:           "定時運行",
 						BusStop:         "1",
@@ -54,10 +52,8 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 				min, _ := strconv.Atoi(time.Min)
 				if (hour == today.Hour() && min > today.Minute() || hour > today.Hour()) && (hour-2 < today.Hour())  {
 					approachInfos.ApproachInfo = append(approachInfos.ApproachInfo, model.ApproachInfo{
-						MoreMin:         "約n分後に到着",
-						RealArrivalTime: formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
-						Direction:       Via,
-						Via:             time.Via,
+						Direction:       busstop,
+						BusName: 		 time.Via,		
 						ScheduledTime:   formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
 						Delay:           "定時運行",
 						BusStop:         "1",
@@ -72,10 +68,8 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 				min, _ := strconv.Atoi(time.Min)
 				if (hour == today.Hour() && min > today.Minute() || hour > today.Hour()) && (hour-2 < today.Hour())  {
 					approachInfos.ApproachInfo = append(approachInfos.ApproachInfo, model.ApproachInfo{
-						MoreMin:         "約n分後に到着",
-						RealArrivalTime: formatHour(strconv.FormatInt(int64(hour), 10)) + ":" +formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
-						Direction:       Via,
-						Via:             time.Via,
+						Direction:       busstop,
+						BusName: 		 time.Via,	
 						ScheduledTime:   formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
 						Delay:           "定時運行",
 						BusStop:         "1",
