@@ -85,7 +85,7 @@ func Routing() {
 
 	})
 
-	e.GET("/bus/time/v3", func(c echo.Context) error {
+	e.GET("/nextbus", func(c echo.Context) error {
 		busstop := c.QueryParam("fr")
 		var destination bytes.Buffer
 		destination.WriteString(c.QueryParam("to"))
