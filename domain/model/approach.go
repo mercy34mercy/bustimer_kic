@@ -6,7 +6,6 @@ import (
 )
 
 type ApproachInfo struct {
-	MoreMin 		string `json:"more_min"`
 	RealArrivalTime string `json:"real_arrival_time"`
 	Direction 		string `json:"direction"`
 	ScheduledTime 	string `json:"scheduled_time"`
