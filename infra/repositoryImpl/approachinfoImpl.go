@@ -39,11 +39,11 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 						RealArrivalTime:formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)) ,
 						MoreMin: "約n分後に到着",
 						Direction:       busstop,
-						BusName: 		 time.Via,	
+						BusName: 		 time.BusName,	
 						ScheduledTime:   formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
 						Delay:           "定時運行",
 						BusStop:         "1",
-						RequiredTime:    config.GetRequiredeTime(Via,busstop,time.Via),
+						RequiredTime:    config.GetRequiredeTime(Via,busstop,time.BusName),
 					})
 				}
 			}
@@ -57,11 +57,11 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 						RealArrivalTime:formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)) ,
 						MoreMin: "約n分後に到着",
 						Direction:       busstop,
-						BusName: 		 time.Via,		
+						BusName: 		 time.BusName,		
 						ScheduledTime:   formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
 						Delay:           "定時運行",
 						BusStop:         "1",
-						RequiredTime:    config.GetRequiredeTime(Via,busstop,time.Via),
+						RequiredTime:    config.GetRequiredeTime(Via,busstop,time.BusName),
 					})
 				}
 			}
@@ -75,11 +75,11 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 						RealArrivalTime:formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)) ,
 						MoreMin: "約n分後に到着",
 						Direction:       busstop,
-						BusName: 		 time.Via,	
+						BusName: 		 time.BusName,	
 						ScheduledTime:   formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
 						Delay:           "定時運行",
 						BusStop:         "1",
-						RequiredTime:    config.GetRequiredeTime(Via,busstop,time.Via),
+						RequiredTime:    config.GetRequiredeTime(Via,busstop,time.BusName),
 					})
 				}
 			}
