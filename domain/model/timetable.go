@@ -23,7 +23,7 @@ type TimeTable struct {
 }
 
 type OneBusTime struct {
-	Via     string `json:"via"`
+	BusName     string `json:"bus_name"`
 	Min     string `json:"min"`
 	BusStop string `json:"bus_stop"`
 }
