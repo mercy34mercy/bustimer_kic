@@ -307,7 +307,7 @@ func getTimeTable(timetable model.TimeTable, scrapedata []string, via string, bu
 		for a := 0; a < len(weekdaylist); a++ {
 			if weekdaylist[a] != "" {
 				timetable.Weekdays[i+5] = append(timetable.Weekdays[i+5], model.OneBusTime{
-					Via:     Via,
+					BusName:     Via,
 					Min:     strconv.FormatInt(toInt64(weekdaylist[a]), 10),
 					BusStop: "1番乗り場",
 				})
@@ -318,7 +318,7 @@ func getTimeTable(timetable model.TimeTable, scrapedata []string, via string, bu
 		for b := 0; b < len(holidaylist); b++ {
 			if holidaylist[b] != "" {
 				timetable.Holidays[i+5] = append(timetable.Holidays[i+5], model.OneBusTime{
-					Via:     Via,
+					BusName:     Via,
 					Min:     strconv.FormatInt(toInt64(holidaylist[b]), 10),
 					BusStop: "1番乗り場",
 				})
@@ -329,7 +329,7 @@ func getTimeTable(timetable model.TimeTable, scrapedata []string, via string, bu
 		for c := 0; c < len(saturdaylist); c++ {
 			if saturdaylist[c] != "" {
 				timetable.Saturdays[i+5] = append(timetable.Saturdays[i+5], model.OneBusTime{
-					Via:     Via,
+					BusName:     Via,
 					Min:     strconv.FormatInt(toInt64(saturdaylist[c]), 10),
 					BusStop: "1番乗り場",
 				})
