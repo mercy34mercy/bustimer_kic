@@ -30,7 +30,7 @@ func (impl getUrlFromBusstopUseCaseImpl) FindURLFromBusstop() model.MultiTimeTab
 	timetableanddestination := []model.TimeTableandDestination{}
 	if len(impl.Busstop) == 1 {
 		for _, des := range impl.Destination {
-			if x, found := l.Get(impl.Busstop[0] + des); found {
+			if x, found := l.Get(impl.Busstop[0] + des+"行き"); found {
 				fmt.Println("cache exist")
 				var timetable model.TimeTable = x.(model.TimeTable)
 				timetableanddestination = append(timetableanddestination, model.TimeTableandDestination{
@@ -41,7 +41,7 @@ func (impl getUrlFromBusstopUseCaseImpl) FindURLFromBusstop() model.MultiTimeTab
 				var url []string
 				url = impl.BusstopToTimetableRepository.FindURLFromBusstop(impl.Busstop[0], des)
 				timetable := impl.BusstopToTimetableRepository.FindTimetable(url)
-				localcache.CreateCachefromTimetable(impl.Busstop[0]+"行き", des, timetable)
+				localcache.CreateCachefromTimetable(impl.Busstop[0], des+"行き", timetable)
 				timetableanddestination = append(timetableanddestination, model.TimeTableandDestination{
 					TimeTable:   timetable,
 					Destination: des,
@@ -51,7 +51,7 @@ func (impl getUrlFromBusstopUseCaseImpl) FindURLFromBusstop() model.MultiTimeTab
 
 	} else {
 		for _, bus := range impl.Busstop {
-			if x, found := l.Get(bus + impl.Destination[0]); found {
+			if x, found := l.Get(bus + impl.Destination[0]+"行き"); found {
 				fmt.Println("cache exist")
 				var timetable model.TimeTable = x.(model.TimeTable)
 				timetableanddestination = append(timetableanddestination, model.TimeTableandDestination{
