@@ -89,7 +89,7 @@ func GetBusstop(notritsumei string, busname string) int {
 			return 10
 		case "烏丸七条":
 			return 11
-		case "京都駅":
+		case "京都駅前":
 			return 12
 		}
 	case "50号系統":
@@ -148,7 +148,7 @@ func GetBusstop(notritsumei string, busname string) int {
 			return 25
 		case "七条西洞院":
 			return 26
-		case "京都駅":
+		case "京都駅前":
 			return 27
 		}
 	case "12号系統号":
