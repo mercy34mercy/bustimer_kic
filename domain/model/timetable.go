@@ -18,7 +18,6 @@ type TimeTableandDestination struct {
 
 type TimeTable struct {
 	Weekdays  map[int][]OneBusTime `json:"weekdays"`
-	Saturdays map[int][]OneBusTime `json:"saturdays"`
 	Holidays  map[int][]OneBusTime `json:"holidays"`
 }
 
@@ -56,14 +55,12 @@ func CreateNewTimeTable() TimeTable {
 	// 初期化
 	timetable := TimeTable{
 		Weekdays:  make(map[int][]OneBusTime),
-		Saturdays: make(map[int][]OneBusTime),
 		Holidays:  make(map[int][]OneBusTime),
 	}
 
 	// 時刻表にあるデータを埋める
 	for i := 5; i <= 24; i++ {
 		timetable.Weekdays[i] = make([]OneBusTime, 0)
-		timetable.Saturdays[i] = make([]OneBusTime, 0)
 		timetable.Holidays[i] = make([]OneBusTime, 0)
 	}
 	return timetable
@@ -72,10 +69,6 @@ func CreateNewTimeTable() TimeTable {
 func (timetable TimeTable) SortOneBusTime() {
 	for _, oneBusTimeHolidayList := range timetable.Holidays {
 		sortByMin(oneBusTimeHolidayList)
-	}
-
-	for _, oneBusTImeSaturdayList := range timetable.Saturdays {
-		sortByMin(oneBusTImeSaturdayList)
 	}
 
 	for _, oneBusTimeWeekdaysList := range timetable.Weekdays {

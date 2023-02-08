@@ -115,16 +115,6 @@ func getTimeTable(scrapedata []string, via string, busstop string) {
 			}
 
 		}
-		saturdaylist := strings.Split(timelist[i*3+2], " ")
-		for c := 0; c < len(saturdaylist); c++ {
-			if saturdaylist[c] != "" {
-				timetable.Saturdays[i+5] = append(timetable.Saturdays[i+5], model.OneBusTime{
-					Via:     Via,
-					Min:     saturdaylist[c],
-					BusStop: "1番乗り場",
-				})
-			}
-		}
 	}
 	fmt.Printf("%v\n", timetable)
 }
