@@ -68,15 +68,19 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 				}
 			}
 			return busstopurl
-		} else if busstop == bus && destination == "北大路バスターミナル" {
-			if err = db.Where("destination = ? AND busstop = ?", destination + "行き", busstop).Find(&busstopinfo).Error; err != nil {
-				//エラーハンドリング
-				fmt.Printf("db select Error!!!! err:%v\n", err)
-			}
-			// fmt.Printf("%v",busstopinfo)
-			for _, bus := range busstopinfo {
-				// fmt.Println(bus.URL)
-				busstopurl = append(busstopurl, bus.URL)
+		} else if busstop == bus {
+			for _, des := range config.M1BusstopList {
+				if des == destination {
+					if err = db.Where("destination = ? AND busstop = ?", "北大路バスターミナル行き", busstop).Find(&busstopinfo).Error; err != nil {
+						//エラーハンドリング
+						fmt.Printf("db select Error!!!! err:%v\n", err)
+					}
+					// fmt.Printf("%v",busstopinfo)
+					for _, bus := range busstopinfo {
+						// fmt.Println(bus.URL)
+						busstopurl = append(busstopurl, bus.URL)
+					}
+				}
 			}
 
 			return busstopurl
@@ -307,7 +311,7 @@ func getTimeTable(timetable model.TimeTable, scrapedata []string, via string, bu
 		for a := 0; a < len(weekdaylist); a++ {
 			if weekdaylist[a] != "" {
 				timetable.Weekdays[i+5] = append(timetable.Weekdays[i+5], model.OneBusTime{
-					BusName:     Via,
+					BusName: Via,
 					Min:     strconv.FormatInt(toInt64(weekdaylist[a]), 10),
 					BusStop: "1番乗り場",
 				})
@@ -318,7 +322,7 @@ func getTimeTable(timetable model.TimeTable, scrapedata []string, via string, bu
 		for b := 0; b < len(holidaylist); b++ {
 			if holidaylist[b] != "" {
 				timetable.Holidays[i+5] = append(timetable.Holidays[i+5], model.OneBusTime{
-					BusName:     Via,
+					BusName: Via,
 					Min:     strconv.FormatInt(toInt64(holidaylist[b]), 10),
 					BusStop: "1番乗り場",
 				})

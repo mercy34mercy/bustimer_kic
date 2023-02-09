@@ -12,46 +12,57 @@ func GetRequiredeTime(fr string, to string, busname string) int {
 	case "快速立命館号系統", "快速205号系統":
 		switch to {
 		case "立命館大学":
-			return int(float64(RequiredtimeRitsumei/12.0) * float64(12-GetBusstop(fr, busname)))
+			return int(float64(RequiredtimeRitsumei/12.0) * float64(GetBusstop(fr, busname)))
 		default:
 			return int(float64(RequiredtimeRitsumei/12.0) * float64(GetBusstop(to, busname)))
 		}
-	case "50号系統":
+	case "50号系統", "15・50号系統":
 		switch to {
 		case "立命館大学":
-			return int(float64(Requiredtime50/27.0) * float64(27-GetBusstop(fr, busname)))
+			return int(float64(Requiredtime50/27.0) * float64(GetBusstop(fr, busname)))
 		default:
 			return int(float64(Requiredtime50/27.0) * float64(GetBusstop(to, busname)))
 		}
 	case "12号系統":
 		switch to {
 		case "立命館大学":
-			return int(float64(Requiredtime12/30.0) * float64(30-GetBusstop(fr, busname)))
+			return int(float64(Requiredtime12/30.0) * float64(GetBusstop(fr, busname)))
 		default:
 			return int(float64(Requiredtime12/30.0) * float64(GetBusstop(to, busname)))
 		}
 	case "15号系統":
 		switch to {
 		case "立命館大学":
-			return int(float64(Requiredtime15/22.0) * float64(22-GetBusstop(fr, busname)))
+			return int(float64(Requiredtime15/22.0) * float64(GetBusstop(fr, busname)))
 		default:
 			return int(float64(Requiredtime15/22.0) * float64(GetBusstop(to, busname)))
 		}
 	case "51号系統":
 		switch to {
 		case "立命館大学":
-			return int(float64(Requiredtime51/23.0) * float64(23-GetBusstop(fr, busname)))
+			return int(float64(Requiredtime51/23.0) * float64(GetBusstop(fr, busname)))
 		default:
 			return int(float64(Requiredtime51/23.0) * float64(GetBusstop(to, busname)))
 		}
 	case "59号系統":
+		switch to {
+		case "金閣寺･竜安寺・山越行き","竜安寺・山越行き":
+			return int(float64(RequiredTime59/23.0) * float64(GetBusstop(fr, busname)))
+		default:
+			return int(float64(RequiredTime59/23.0) * float64(GetBusstop(to, busname)))
+		}
 	case "臨号系統":
-	case "52号系統":
-	case "55号系統":
+	case "52号系統", "55号系統":
+		switch to {
+		case "原谷行き", "立命館大学":
+			return int(float64(RequiredTime52/16.0) * float64(GetBusstop(fr, busname)))
+		default:
+			return int(float64(RequiredTime52/16.0) * float64(GetBusstop(to, busname)))
+		}
 	case "M1号系統":
 		switch to {
 		case "原谷行き", "立命館大学":
-			return int(float64(RequiredTimeM1/10.0) * float64(10-GetBusstop(fr, busname)))
+			return int(float64(RequiredTimeM1/10.0) * float64(GetBusstop(fr, busname)))
 		default:
 			return int(float64(RequiredTimeM1/10.0) * float64(GetBusstop(to, busname)))
 		}
@@ -89,10 +100,10 @@ func GetBusstop(notritsumei string, busname string) int {
 			return 10
 		case "烏丸七条":
 			return 11
-		case "京都駅":
+		case "京都駅前":
 			return 12
 		}
-	case "50号系統":
+	case "50号系統", "15・50号系統":
 		switch notritsumei {
 		case "立命館大学":
 			return 0
@@ -148,10 +159,10 @@ func GetBusstop(notritsumei string, busname string) int {
 			return 25
 		case "七条西洞院":
 			return 26
-		case "京都駅":
+		case "京都駅前":
 			return 27
 		}
-	case "12号系統号":
+	case "12号系統":
 		switch notritsumei {
 		case "三条京阪前":
 			return 30
@@ -316,6 +327,77 @@ func GetBusstop(notritsumei string, busname string) int {
 		case "立命館大学前":
 			return 0
 		}
+	case "59号系統":
+		switch notritsumei {
+		case "四条河原町":
+			return 23
+		case "四条京阪前":
+			return 22
+		case "三条京阪前":
+			return 21
+		case "河原町三条":
+			return 20
+		case "京都市役所前":
+			return 19
+		case "河原町丸太町":
+			return 18
+		case "荒神口":
+			return 17
+		case "府立医大病院前":
+			return 16
+		case "河原町今出川":
+			return 15
+		case "同志社前":
+			return 14
+		case "烏丸今出川":
+			return 13
+		case "上京区総合庁舎":
+			return 12
+		case "堀川今出川":
+			return 11
+		case "今出川大宮":
+			return 10
+		case "今出川浄福寺":
+			return 9
+		case "千本今出川":
+			return 8
+		case "千本上立売":
+			return 7
+		case "乾隆校前":
+			return 6
+		case "千本鞍馬口":
+			return 5
+		case "ライトハウス前":
+			return 4
+		case "千本北大路":
+			return 3
+		case "金閣寺道":
+			return 2
+		case "桜木町":
+			return 1
+		case "立命館大学前":
+			return 0
+		case "龍安寺前":
+			return 1
+		case "塔ノ下町御室":
+			return 2
+		case "御室仁和寺":
+			return 3
+		case "福王子":
+			return 4
+		case "鳴滝本町":
+			return 5
+		case "宇多野病院前":
+			return 6
+		case "ユースホステル前":
+			return 7
+		case "山越":
+			return 8
+		case "広沢池・佛大広沢池校前":
+			return 9
+		case "山越中町":
+			return 10
+		}
 	case "M1号系統":
 		switch notritsumei {
 		case "北大路バスターミナル":
@@ -333,6 +415,47 @@ func GetBusstop(notritsumei string, busname string) int {
 		case "千本北大路":
 			return 4
 		case "金閣寺道":
+			return 3
+		case "わら天神前":
+			return 2
+		case "桜木町":
+			return 1
+		case "立命館大学前":
+			return 0
+		}
+	case "55号系統", "52号系統":
+		switch notritsumei {
+		case "四条烏丸《地下鉄四条駅》":
+			return 18
+		case "四条西洞院":
+			return 17
+		case "四条堀川":
+			return 16
+		case "四条大宮":
+			return 15
+		case "壬生操車場前":
+			return 14
+		case "千本三条・朱雀立命館前":
+			return 13
+		case "二条城前":
+			return 12
+		case "千本旧二条":
+			return 11
+		case "千本丸太町":
+			return 10
+		case "丸太町七本松":
+			return 9
+		case "七本松出水":
+			return 8
+		case "七本松仁和寺街道":
+			return 7
+		case "上七軒":
+			return 6
+		case "北野天満宮前":
+			return 5
+		case "北野白梅町":
+			return 4
+		case "衣笠校前":
 			return 3
 		case "わら天神前":
 			return 2
