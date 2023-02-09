@@ -30,30 +30,14 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 	jst := time.FixedZone("Asia/Tokyo", 9*60*60)
 	today := time.Now().In(jst)
 	weekday := today.Weekday()
-	if weekday == 6 {
-		for hour, times := range timeTable.Saturdays {
-			for _, time := range times {
-				min, _ := strconv.Atoi(time.Min)
-				if (hour == today.Hour() && min > today.Minute() || hour > today.Hour()) && (hour-2 < today.Hour()) {
-					approachInfos.ApproachInfo = append(approachInfos.ApproachInfo, model.ApproachInfo{
-						RealArrivalTime:formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)) ,
-						Direction:       busstop,
-						BusName: 		 time.BusName,	
-						ScheduledTime:   formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
-						Delay:           "定時運行",
-						BusStop:         "1",
-						RequiredTime:    config.GetRequiredeTime(Via,busstop,time.BusName),
-					})
-				}
-			}
-		}
-	} else if weekday == 1 {
+	if weekday == 6 || weekday == 6 {
 		for hour, times := range timeTable.Weekdays {
 			for _, time := range times {
 				min, _ := strconv.Atoi(time.Min)
 				if (hour == today.Hour() && min > today.Minute() || hour > today.Hour()) && (hour-2 < today.Hour())  {
 					approachInfos.ApproachInfo = append(approachInfos.ApproachInfo, model.ApproachInfo{
 						RealArrivalTime:formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)) ,
+						MoreMin: "約n分後に到着",
 						Direction:       busstop,
 						BusName: 		 time.BusName,		
 						ScheduledTime:   formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
@@ -71,6 +55,7 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 				if (hour == today.Hour() && min > today.Minute() || hour > today.Hour()) && (hour-2 < today.Hour())  {
 					approachInfos.ApproachInfo = append(approachInfos.ApproachInfo, model.ApproachInfo{
 						RealArrivalTime:formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)) ,
+						MoreMin: "約n分後に到着",
 						Direction:       busstop,
 						BusName: 		 time.BusName,	
 						ScheduledTime:   formatHour(strconv.FormatInt(int64(hour), 10)) + ":" + formatMin(strconv.FormatInt(toInt64(time.Min), 10)),
