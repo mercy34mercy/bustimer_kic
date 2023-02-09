@@ -13,9 +13,9 @@ func Test_toInt64(t *testing.T) {
 	}{
 		{
 			name: "toInt64test",
-			args: "2",
-			want: testStruct{}
-		}
+			args: args{"5"},
+			want: 5,
+		},
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
