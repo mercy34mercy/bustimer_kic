@@ -68,7 +68,7 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 				}
 			}
 			return busstopurl
-		} else if busstop == bus {
+		} else if busstop == "立命館大学前" && destination == bus{
 			for _, des := range config.M1BusstopList {
 				if des == destination {
 					if err = db.Where("destination = ? AND busstop = ?", "北大路バスターミナル行き", busstop).Find(&busstopinfo).Error; err != nil {
