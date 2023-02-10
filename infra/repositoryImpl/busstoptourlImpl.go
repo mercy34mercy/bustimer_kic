@@ -80,10 +80,11 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 						// fmt.Println(bus.URL)
 						busstopurl = append(busstopurl, bus.URL)
 					}
+					return busstopurl
 				}
 			}
 
-			return busstopurl
+			
 		}
 	}
 
