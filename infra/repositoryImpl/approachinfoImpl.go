@@ -30,7 +30,7 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 	jst := time.FixedZone("Asia/Tokyo", 9*60*60)
 	today := time.Now().In(jst)
 	weekday := today.Weekday()
-	if weekday == 6 || weekday == 6 {
+	if weekday == 6 || weekday == 0 {
 		for hour, times := range timeTable.Weekdays {
 			for _, time := range times {
 				min, _ := strconv.Atoi(time.Min)

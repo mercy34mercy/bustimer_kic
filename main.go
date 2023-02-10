@@ -13,7 +13,6 @@ import (
 	"github.com/labstack/echo"
 )
 
-var e = echo.New()
 
 func main() {
 	infra.Init()
@@ -24,15 +23,16 @@ func main() {
 	localcache.Init()
 	// go localcache.CreateTimetableCache()
 
-	Routing()
-	e.Debug = true
-	e.Logger.Fatal(e.Start(":" + port))
+	router := Routing()
+	router.Debug = true
+	router.Logger.Fatal(router.Start(":" + port))
 
 	// dbcreate()
 
 }
 
-func Routing() {
+func Routing() *echo.Echo{
+	var e = echo.New()
 	e.GET("/", func(c echo.Context) error {
 		return c.HTML(http.StatusOK, "<h1>Busdes! Clean Architecture API</h1>")
 	})
@@ -47,7 +47,7 @@ func Routing() {
 	})
 
 	e.GET("/timetable", func(c echo.Context) error {
-	
+
 		busstop := c.QueryParam("fr")
 		var destination bytes.Buffer
 		destination.WriteString(c.QueryParam("to"))
@@ -55,33 +55,44 @@ func Routing() {
 
 		l := localcache.GetGoChache()
 
-		if x, found := l.Get(busstop+destination.String()); found {
+		fmt.Println(destination.String(),busstop)
+
+		if x, found := l.Get(busstop + destination.String()); found {
 			fmt.Println("cache exist")
-			return c.JSON(http.StatusOK,x.(model.TimeTable))
+			return c.JSON(http.StatusOK, x.(model.TimeTable))
 		}
 		timetablecontroller := controller.TimetableController{}
-		timetable := timetablecontroller.FindTimetable(busstop,destination.String())
+		timetable := timetablecontroller.FindTimetable(busstop, destination.String())
 
-		localcache.CreateCachefromTimetable(busstop,destination.String(),timetable);
+		var notFoundCnt = 0
+		for _, time := range timetable.Weekdays {
+			if len(time) > 0 {
+				notFoundCnt += 1
+			}
+		}
+		if notFoundCnt == 0 {
+			return c.HTML(http.StatusNotFound, "<h1>404<h1>")
+		}
+
+		localcache.CreateCachefromTimetable(busstop, destination.String(), timetable)
 
 		return c.JSON(http.StatusOK, timetable)
 	})
 
-	e.GET("/timetable/multi",func(c echo.Context) error {
+	e.GET("/timetable/multi", func(c echo.Context) error {
 		busstop := c.QueryParam("fr")
 		destination := c.QueryParam("to")
 		var query model.Query = model.Query{
 			Destination: destination,
-			Busstop: busstop,
+			Busstop:     busstop,
 		}
 
-		destinationlist,busstoplist := query.SplitDestination()
+		destinationlist, busstoplist := query.SplitDestination()
 
 		timetableCtrl := controller.TimetableFromBusstopController{}
-		timetable := timetableCtrl.FindTimetable(busstoplist,destinationlist)
+		timetable := timetableCtrl.FindTimetable(busstoplist, destinationlist)
 
 		return c.JSON(http.StatusOK, timetable)
-
 
 	})
 
@@ -93,21 +104,22 @@ func Routing() {
 
 		l := localcache.GetGoChache()
 
-		if x, found := l.Get(busstop+destination.String()); found {
+		if x, found := l.Get(busstop + destination.String()); found {
 			fmt.Println("cache exist")
 			var time model.TimeTable = x.(model.TimeTable)
 			approachInfoCtrl := controller.ApproachInfoFromTimeTableController{}
-			approachInfo := approachInfoCtrl.FindApproachInfoFromTimeTable(time,busstop,destination.String())
+			approachInfo := approachInfoCtrl.FindApproachInfoFromTimeTable(time, busstop, destination.String())
 			return c.JSON(http.StatusOK, approachInfo)
 		}
 
 		timetablecontroller := controller.TimetableController{}
 		timetable := timetablecontroller.FindTimetable(busstop, destination.String())
 
-		localcache.CreateCachefromTimetable(busstop,destination.String(),timetable);
+		localcache.CreateCachefromTimetable(busstop, destination.String(), timetable)
 
 		approachInfoCtrl := controller.ApproachInfoFromTimeTableController{}
-		approachinfo := approachInfoCtrl.FindApproachInfoFromTimeTable(timetable,busstop,destination.String())
+		approachinfo := approachInfoCtrl.FindApproachInfoFromTimeTable(timetable, busstop, destination.String())
 		return c.JSON(http.StatusOK, approachinfo)
 	})
+	return e
 }
