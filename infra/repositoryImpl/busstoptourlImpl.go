@@ -69,7 +69,7 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 			}
 			return busstopurl
 		} else if busstop == "立命館大学前" && destination == bus {
-			var destinationList [3]string = [3]string{"原谷行き", "金閣寺・立命館大学行き", "立命館大学行き"}
+			var destinationList [4]string = [4]string{"原谷行き", "金閣寺・立命館大学行き", "立命館大学行き","金閣寺･竜安寺・山越行き"}
 			for _, des := range destinationList {
 				if err = db.Where("destination = ? AND busstop = ?", des, destination).Find(&busstopinfo).Error; err != nil {
 					//エラーハンドリング
@@ -89,6 +89,7 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 			return busstopurl
 		}
 	}
+	
 
 	if destination == "立命館大学" {
 		if err = db.Where("busstop = ? AND destination = ?", busstop, destination+"行き").Find(&busstopinfo).Error; err != nil {
