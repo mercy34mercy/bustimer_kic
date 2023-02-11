@@ -68,23 +68,25 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 				}
 			}
 			return busstopurl
-		} else if busstop == "立命館大学前" && destination == bus{
-			for _, des := range config.M1BusstopList {
-				if des == destination {
-					if err = db.Where("destination = ? AND busstop = ?", "北大路バスターミナル行き", busstop).Find(&busstopinfo).Error; err != nil {
+		} else if busstop == "立命館大学前" && destination == bus {
+			var destinationList [3]string = [3]string{"原谷行き", "金閣寺・立命館大学行き", "立命館大学行き"}
+			for _, des := range destinationList {
+				if err = db.Where("destination = ? AND busstop = ?", des, destination).Find(&busstopinfo).Error; err != nil {
+					//エラーハンドリング
+					fmt.Printf("db select Error!!!! err:%v\n", err)
+				}
+
+				for _, bus := range busstopinfo {
+					if err = db.Where("busname = ? AND busstop = ?", bus.Busname, busstop).Find(&busstopinfo).Error; err != nil {
 						//エラーハンドリング
 						fmt.Printf("db select Error!!!! err:%v\n", err)
 					}
-					// fmt.Printf("%v",busstopinfo)
-					for _, bus := range busstopinfo {
-						// fmt.Println(bus.URL)
-						busstopurl = append(busstopurl, bus.URL)
+					for _, url := range busstopinfo {
+						busstopurl = append(busstopurl, url.URL)
 					}
-					return busstopurl
 				}
 			}
-
-			
+			return busstopurl
 		}
 	}
 

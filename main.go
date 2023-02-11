@@ -9,7 +9,6 @@ import (
 	"practice-colly/domain/model"
 	"practice-colly/infra"
 	"practice-colly/infra/localcache"
-
 	"github.com/labstack/echo"
 )
 
@@ -22,12 +21,12 @@ func main() {
 	}
 	localcache.Init()
 	// go localcache.CreateTimetableCache()
+	// utils.Dbcreate()
 
 	router := Routing()
 	router.Debug = true
 	router.Logger.Fatal(router.Start(":" + port))
-
-	// dbcreate()
+	
 
 }
 
