@@ -2,7 +2,6 @@ package repositoryimpl
 
 import (
 	"fmt"
-	"github.com/gocolly/colly"
 	"practice-colly/config"
 	"practice-colly/domain/model"
 	"practice-colly/domain/repository"
@@ -10,6 +9,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/gocolly/colly"
 )
 
 type BusstopToTimetableRepositoryImpl struct{}
@@ -38,10 +39,30 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 
 	destination = strings.Replace(destination, "行き", "", -1)
 
+	if busstop == "山越中町" && destination == "立命館大学" {
+		if err = db.Where("destination = ? AND busstop = ?", "四条河原町・三条京阪行き", busstop).Find(&busstopinfo).Error; err != nil {
+			//エラーハンドリング
+			fmt.Printf("db select Error!!!! err:%v\n", err)
+		}
+		for _, url := range busstopinfo {
+			busstopurl = append(busstopurl, url.URL)
+		}
+	} else if destination == "山越中町" && busstop == "立命館大学前" {
+		if err = db.Where("destination = ? AND busstop = ?", "宇多野･山越行き", busstop).Find(&busstopinfo).Error; err != nil {
+			//エラーハンドリング
+			fmt.Printf("db select Error!!!! err:%v\n", err)
+		}
+
+		for _, info := range busstopinfo {
+			busstopurl = append(busstopurl, info.URL)
+
+		}
+	}
+
 	//M1と12番のコンフリクト問題解消
-	for _, bus := range config.M1or12BusstopList {
+	for _, bus := range config.M1or12or59busstopList {
 		if busstop == bus && (destination == "立命館大学") {
-			var destinationList [3]string = [3]string{"原谷行き", "金閣寺・立命館大学行き", "立命館大学行き"}
+			var destinationList [7]string = [7]string{"原谷行き", "金閣寺・立命館大学行き", "立命館大学行き", "金閣寺･竜安寺・山越行き", "山越中町行き", "竜安寺・山越行き", "宇多野･山越行き"}
 			for _, des := range destinationList {
 				if err = db.Where("destination = ? AND busstop = ?", des, busstop).Find(&busstopinfo).Error; err != nil {
 					//エラーハンドリング
@@ -69,20 +90,29 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 			}
 			return busstopurl
 		} else if busstop == "立命館大学前" && destination == bus {
-			var destinationList [3]string = [3]string{"原谷行き", "金閣寺・立命館大学行き", "立命館大学行き"}
+			var destinationList [7]string = [7]string{"原谷行き", "金閣寺・立命館大学行き", "立命館大学行き", "金閣寺･竜安寺・山越行き", "山越中町行き", "竜安寺・山越行き", "宇多野･山越行き"}
 			for _, des := range destinationList {
-				if err = db.Where("destination = ? AND busstop = ?", des, destination).Find(&busstopinfo).Error; err != nil {
+				if err = db.Where("destination = ? AND busstop = ?", des, destination).Find(&busstopList).Error; err != nil {
 					//エラーハンドリング
 					fmt.Printf("db select Error!!!! err:%v\n", err)
 				}
 
-				for _, bus := range busstopinfo {
-					if err = db.Where("busname = ? AND busstop = ?", bus.Busname, busstop).Find(&busstopinfo).Error; err != nil {
+				for _, info := range busstopList {
+					if err = db.Where("busname = ? AND busstop = ? ", info.Busname, busstop).Find(&busstopinfo).Error; err != nil {
 						//エラーハンドリング
 						fmt.Printf("db select Error!!!! err:%v\n", err)
 					}
-					for _, url := range busstopinfo {
-						busstopurl = append(busstopurl, url.URL)
+					flag := true
+					for _, businfo := range busstopinfo {
+						for _, des := range destinationList {
+							if des == businfo.Destination {
+								flag = false
+								break
+							}
+						}
+					}
+					if flag {
+						busstopurl = append(busstopurl, info.URL)
 					}
 				}
 			}
@@ -99,6 +129,7 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 			busstopurl = append(busstopurl, url.URL)
 		}
 	} else {
+		var destinationList [7]string = [7]string{"原谷行き", "金閣寺・立命館大学行き", "立命館大学行き", "金閣寺･竜安寺・山越行き", "山越中町行き", "竜安寺・山越行き", "宇多野･山越行き"}
 		if err = db.Where("busstop = ? AND destination = ?", destination, "立命館大学行き").Find(&busstopList).Error; err != nil {
 			//エラーハンドリング
 			fmt.Printf("db select Error!!!! err:%v\n", err)
@@ -117,9 +148,18 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 				//エラーハンドリング
 				fmt.Printf("db select Error!!!! err:%v\n", err)
 			}
-			for _, url := range busstopinfo {
-				fmt.Println(busname)
-				busstopurl = append(busstopurl, url.URL)
+			for _, info := range busstopinfo {
+				flag := true
+				for _, des := range destinationList {
+					if info.Destination == des {
+						flag = false
+						break
+					}
+				}
+
+				if flag {
+					busstopurl = append(busstopurl, info.URL)
+				}
 			}
 		}
 	}
@@ -129,7 +169,7 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 func (repository *BusstopToTimetableRepositoryImpl) EncodeDestination(busstop string, destination string) (wrapdestination string) {
 	//M1と12番のコンフリクト問題解消
 	var destinationList [2]string = [2]string{"原谷行き", "金閣寺・立命館大学行き"}
-	for _, bus := range config.M1or12BusstopList {
+	for _, bus := range config.M1or12or59busstopList {
 		if busstop == bus {
 			for _, des := range destinationList {
 				if destination == des {
@@ -161,7 +201,7 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURL(busstop string, dest
 	var busstopurl []string
 
 	//M1と12番のコンフリクト問題解消
-	for _, bus := range config.M1or12BusstopList {
+	for _, bus := range config.M1or12or59busstopList {
 		if busstop == bus && destination == "立命館大学行き" {
 			var destinationList [3]string = [3]string{"原谷行き", "金閣寺・立命館大学行き", "立命館大学行き"}
 			for _, des := range destinationList {
@@ -210,7 +250,6 @@ func scrapHTML(url string) (scrapData []string, via string, busstop string) {
 
 	Via := ""
 	Busstop := ""
-	Destination := ""
 
 	// Extract title element
 	c.OnHTML("h1", func(e *colly.HTMLElement) {
@@ -225,14 +264,6 @@ func scrapHTML(url string) (scrapData []string, via string, busstop string) {
 				Via = result[i]
 			}
 		}
-
-		for i := 0; i < len(result); i++ {
-			if strings.Contains(result[i], "行き") {
-				Destination = result[i]
-			}
-		}
-
-		fmt.Println("駅名 : ", result[0], "\nバス名 : ", Via, "\n行き先 : ", Destination, "\nURL : ", result[6])
 	})
 
 	c.OnHTML(".tt-time", func(e *colly.HTMLElement) {
@@ -292,7 +323,6 @@ func scrapHTML(url string) (scrapData []string, via string, busstop string) {
 	})
 
 	c.OnRequest(func(r *colly.Request) {
-		fmt.Println("Visiting URL:", r.URL.String())
 	})
 	c.Visit(url)
 	return scrapData, Via, Busstop

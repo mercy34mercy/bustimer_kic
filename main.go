@@ -2,13 +2,11 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"net/http"
 	"os"
 	"practice-colly/controller"
 	"practice-colly/domain/model"
 	"practice-colly/infra"
-	"practice-colly/utils"
 	"practice-colly/infra/localcache"
 	"github.com/labstack/echo"
 )
@@ -22,7 +20,7 @@ func main() {
 	}
 	localcache.Init()
 	// go localcache.CreateTimetableCache()
-	utils.Dbcreate()
+	// utils.Dbcreate()
 
 	router := Routing()
 	router.Debug = true
@@ -55,10 +53,7 @@ func Routing() *echo.Echo{
 
 		l := localcache.GetGoChache()
 
-		fmt.Println(destination.String(),busstop)
-
 		if x, found := l.Get(busstop + destination.String()); found {
-			fmt.Println("cache exist")
 			return c.JSON(http.StatusOK, x.(model.TimeTable))
 		}
 		timetablecontroller := controller.TimetableController{}
@@ -105,7 +100,6 @@ func Routing() *echo.Echo{
 		l := localcache.GetGoChache()
 
 		if x, found := l.Get(busstop + destination.String()); found {
-			fmt.Println("cache exist")
 			var time model.TimeTable = x.(model.TimeTable)
 			approachInfoCtrl := controller.ApproachInfoFromTimeTableController{}
 			approachInfo := approachInfoCtrl.FindApproachInfoFromTimeTable(time, busstop, destination.String())
