@@ -146,7 +146,7 @@ func Dbcreate() {
 	// 	default:
 	// 		idx = idx
 	// 	}
-	idx := "1500411"
+	idx := "4030410"
 		fmt.Println(idx)
 		busname, busstop, destination, url := getViaandBusstops(idx)
 		if len(busname) != 0 {
