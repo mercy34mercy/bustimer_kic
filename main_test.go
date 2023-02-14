@@ -16,7 +16,7 @@ func TestHandler(t *testing.T) {
 	localcache.Init()
 	router := Routing()
 
-	for i, busstoplist := range config.AllBusstopList {
+	for i, busstoplist := range config.BusstoptoRitsList {
 		for _, busstop := range busstoplist {
 			req := httptest.NewRequest("GET", "/timetable?fr="+busstop+"&to=立命館大学", nil)
 			rec := httptest.NewRecorder()
@@ -44,8 +44,19 @@ func TestHandler(t *testing.T) {
 			} else {
 				flag := true
 
-				for _, bustime := range timetable.Holidays {
+				for _, bustime := range timetable.Weekdays {
 					for _, time := range bustime {
+						if(config.BusnameToRits[i] == "52号系統" || config.BusnameToRits[i] == "55号系統"){
+							if time.BusName == config.BusnameToRits[i] || time.BusName == "52・55号系統"{
+								flag = false
+							}
+						}
+						
+						if(config.BusnameToRits[i] == "50号系統" || config.BusnameToRits[i] == "15号系統"){
+							if time.BusName == config.BusnameToRits[i] || time.BusName == "15・50号系統"{
+								flag = false
+							}
+						}
 						if time.BusName == config.BusnameToRits[i] {
 							flag = false
 						}
@@ -62,7 +73,7 @@ func TestHandler(t *testing.T) {
 		}
 	}
 
-	for i, busstoplist := range config.AllBusstopList {
+	for i, busstoplist := range config.BusstopfromRitsList {
 		for _, busstop := range busstoplist {
 			req := httptest.NewRequest("GET", "/timetable?fr=立命館大学前&to="+busstop, nil)
 			rec := httptest.NewRecorder()
@@ -95,7 +106,7 @@ func TestHandler(t *testing.T) {
 				}
 				flag := true
 
-				for _, bustime := range timetable.Holidays {
+				for _, bustime := range timetable.Weekdays {
 					for _, time := range bustime {
 						if time.BusName == config.BusnameFromRits[i] {
 							flag = false
