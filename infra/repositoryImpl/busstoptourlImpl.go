@@ -99,20 +99,59 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 				}
 
 				for _, info := range busstopList {
-					if err = db.Where("busname = ? AND busstop = ? ", info.Busname, busstop).Find(&busstopinfo).Error; err != nil {
-						//エラーハンドリング
-						fmt.Printf("db select Error!!!! err:%v\n", err)
-					}
-					
-					for _, businfo := range busstopinfo {
-						flag := true
-						for _, des := range destinationList {
-							if des == businfo.Destination {
-								flag = false
+					if info.Busname == "52・55号系統" {
+						for _, splitbus := range config.Busname52and55 {
+							if err = db.Where("busname = ? AND busstop = ?", splitbus, busstop).Find(&busstopinfo).Error; err != nil {
+								//エラーハンドリング
+								fmt.Printf("db select Error!!!! err:%v\n", err)
+							}
+							for _, info := range busstopinfo {
+								flag := true
+								for _, des := range destinationList {
+									if info.Destination == des {
+										flag = false
+									}
+								}
+								if flag {
+									busstopurl = append(busstopurl, info.URL)
+								}
 							}
 						}
-						if flag {
-							busstopurl = append(busstopurl, info.URL)
+					} else if info.Busname == "15・50号系統" {
+						for _, splitbus := range config.Busname15and50 {
+							if err = db.Where("busname = ? AND busstop = ?", splitbus, busstop).Find(&busstopinfo).Error; err != nil {
+								//エラーハンドリング
+								fmt.Printf("db select Error!!!! err:%v\n", err)
+							}
+							for _, info := range busstopinfo {
+								flag := true
+								for _, des := range destinationList {
+									if info.Destination == des {
+										flag = false
+									}
+								}
+								if flag {
+									busstopurl = append(busstopurl, info.URL)
+								}
+							}
+						}
+
+					} else {
+						if err = db.Where("busname = ? AND busstop = ? ", info.Busname, busstop).Find(&busstopinfo).Error; err != nil {
+							//エラーハンドリング
+							fmt.Printf("db select Error!!!! err:%v\n", err)
+						}
+
+						for _, businfo := range busstopinfo {
+							flag := true
+							for _, des := range destinationList {
+								if des == businfo.Destination {
+									flag = false
+								}
+							}
+							if flag {
+								busstopurl = append(busstopurl, info.URL)
+							}
 						}
 					}
 
@@ -146,19 +185,58 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 				busname = "快速立命館号系統"
 			}
 
-			if err = db.Where("busname = ? AND busstop = ?", busname, busstop).Find(&busstopinfo).Error; err != nil {
-				//エラーハンドリング
-				fmt.Printf("db select Error!!!! err:%v\n", err)
-			}
-			for _, info := range busstopinfo {
-				flag := true
-				for _, des := range destinationList {
-					if info.Destination == des {
-						flag = false
+			if busname == "52・55号系統" {
+				for _, splitbus := range config.Busname52and55 {
+					if err = db.Where("busname = ? AND busstop = ?", splitbus, busstop).Find(&busstopinfo).Error; err != nil {
+						//エラーハンドリング
+						fmt.Printf("db select Error!!!! err:%v\n", err)
+					}
+					for _, info := range busstopinfo {
+						flag := true
+						for _, des := range destinationList {
+							if info.Destination == des {
+								flag = false
+							}
+						}
+						if flag {
+							busstopurl = append(busstopurl, info.URL)
+						}
 					}
 				}
-				if flag {
-					busstopurl = append(busstopurl, info.URL)
+			} else if busname == "15・50号系統" {
+				for _, splitbus := range config.Busname15and50 {
+					if err = db.Where("busname = ? AND busstop = ?", splitbus, busstop).Find(&busstopinfo).Error; err != nil {
+						//エラーハンドリング
+						fmt.Printf("db select Error!!!! err:%v\n", err)
+					}
+					for _, info := range busstopinfo {
+						flag := true
+						for _, des := range destinationList {
+							if info.Destination == des {
+								flag = false
+							}
+						}
+						if flag {
+							busstopurl = append(busstopurl, info.URL)
+						}
+					}
+				}
+
+			} else {
+				if err = db.Where("busname = ? AND busstop = ?", busname, busstop).Find(&busstopinfo).Error; err != nil {
+					//エラーハンドリング
+					fmt.Printf("db select Error!!!! err:%v\n", err)
+				}
+				for _, info := range busstopinfo {
+					flag := true
+					for _, des := range destinationList {
+						if info.Destination == des {
+							flag = false
+						}
+					}
+					if flag {
+						busstopurl = append(busstopurl, info.URL)
+					}
 				}
 			}
 		}
