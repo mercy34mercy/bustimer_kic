@@ -74,4 +74,4 @@ var Bus12List [30]string = [30]string{"三条京阪前", "四条京阪前", "四
 var Bus50List [28]string = [28]string{"京都駅前", "七条西洞院", "西洞院正面", "西洞院六条", "五条西洞院", "西洞院松原", "西洞院仏光寺", "四条西洞院", "四条堀川", "堀川蛸薬師", "堀川三条", "堀川御池", "二条城前", "堀川丸太町", "堀川下立売", "堀川下長者町", "堀川中立売", "大宮中立売", "智恵光院中立売", "千本中立売", "千本今出川", "上七軒", "北野天満宮前", "北野白梅町", "衣笠校前", "わら天神前", "桜木町", "立命館大学前"}
 
 var AllBusstopList [11][]string = [11][]string{Bus50List[:], Bus12List[:], Bus15List[:], BusRinNishioziList[:], BusRinRisumeiList[:], BusRitsumeiList[:], BusM1List[:], Bus51List[:], Bus59List[:], Bus52List[:], Bus55List[:]}
-var Busname [11]string = [11]string{"50","12","15","臨西大路","臨立","快速立命館","M1","51","59","52","55"}
+var Busname [11]string = [11]string{"50号系統","12号系統","15号系統","臨号系統","臨号系統","快速立命館号系統","M1号系統","51号系統","59号系統","52号系統","55号系統"}
