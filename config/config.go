@@ -17,7 +17,8 @@ const RequiredTime204 = 0
 const RequiredTime205 = 0
 
 var M1BusstopList [8]string = [8]string{"北大路バスターミナル《地下鉄北大路駅》", "北大路新町", "北大路堀川", "大徳寺前", "建勲神社前", "船岡山", "千本北大路", "金閣寺道"}
-var M1or12or59busstopList [61]string = [61]string{
+var M1or12or59busstopList [62]string = [62]string{
+	"河原町三条",
 	"三条京阪前",
 	"四条京阪前",
 	"四条河原町",
@@ -77,3 +78,9 @@ var BusstoptoRitsList [11][]string = [11][]string{Bus50List[:], Bus12List[:], Bu
 var BusstopfromRitsList  [10][]string = [10][]string{Bus50List[:], Bus12List[:], Bus15List[:], BusRinNishioziList[:], BusRitsumeiList[:], BusM1List[:], Bus51List[:], Bus59List[:], Bus52List[:], Bus55List[:]}
 var BusnameToRits [11]string = [11]string{"50号系統","12号系統","15号系統","臨号系統","臨号系統","快速立命館号系統","M1号系統","51号系統","59号系統","52号系統","55号系統"}
 var BusnameFromRits   [10]string = [10]string{"50号系統","12号系統","15号系統","臨号系統","快速205号系統","M1号系統","51号系統","59号系統","52号系統","55号系統"}
+
+var Bus15and50List [3]string = [3]string{"北野白梅町", "衣笠校前", "わら天神前"}
+var Busname15and50 [2]string = [2]string{"15号系統","50号系統"}
+
+var Bus52and55 = "桜木町"
+var Busname52and55 [2]string = [2]string{"52号系統","55号系統"}
