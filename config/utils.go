@@ -1,13 +1,11 @@
 package config
 
 import (
-	"fmt"
 	"strings"
 )
 
 func GetRequiredeTime(fr string, to string, busname string) int {
 	to = strings.Replace(to, "行き", "", -1)
-	fmt.Println(fr, to, busname)
 	switch busname {
 	case "快速立命館号系統", "快速205号系統":
 		switch to {

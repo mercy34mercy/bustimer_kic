@@ -1,7 +1,6 @@
 package createdb
 
 import (
-	"fmt"
 	"practice-colly/domain/model"
 	"practice-colly/infra"
 	"regexp"
@@ -59,16 +58,11 @@ func getViaandBusstop(index string) (busname string, busstop string, destination
 				Destination = result[i]
 			}
 		}
-		
-
 		Busname = result[2]
 		Busstop = result[0]
-
-		fmt.Println("駅名 : ", Busstop, "\nバス名 : ", Busname, "\n行き先 : ", Destination)
 	})
 	// Before making a request print "Visiting URL: https://XXX"
 	c.OnRequest(func(r *colly.Request) {
-		// fmt.Println("Visiting URL:", r.URL.String())
 	})
 	c.Visit(URL)
 
