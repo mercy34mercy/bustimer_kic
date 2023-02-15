@@ -341,6 +341,10 @@ func scrapHTML(url string) (scrapData []string, via string, busstop string) {
 			if strings.Contains(result[i], "号") {
 				Via = result[i]
 			}
+
+			if result[i] == "【快速】"{
+				Via += result[i]
+			}
 		}
 	})
 
