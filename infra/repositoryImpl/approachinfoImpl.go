@@ -31,7 +31,7 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 	today := time.Now().In(jst)
 	weekday := today.Weekday()
 	if weekday == 6 || weekday == 0 {
-		for hour, times := range timeTable.Weekdays {
+		for hour, times := range timeTable.Holidays {
 			for _, time := range times {
 				min, _ := strconv.Atoi(time.Min)
 				if (hour == today.Hour() && min > today.Minute() || hour > today.Hour()) && (hour-2 < today.Hour())  {
@@ -49,7 +49,7 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 			}
 		}
 	} else {
-		for hour, times := range timeTable.Holidays {
+		for hour, times := range timeTable.Weekdays {
 			for _, time := range times {
 				min, _ := strconv.Atoi(time.Min)
 				if (hour == today.Hour() && min > today.Minute() || hour > today.Hour()) && (hour-2 < today.Hour())  {
