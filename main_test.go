@@ -11,6 +11,19 @@ import (
 	"testing"
 )
 
+func TestRequiredTime(t *testing.T) {
+	for i, busstoplist := range config.BusstopAllList {
+		for _, busstop := range busstoplist {
+			requiredTime := config.GetBusstop(busstop, config.AllBusname[i])
+			if busstop != "立命館大学前" {
+				if requiredTime == 0 {
+					t.Errorf("RequiredTime is not accurate %s  %s → %s", config.AllBusname[i], busstop, "立命館大学")
+				}
+			}
+		}
+	}
+}
+
 func TestHandler(t *testing.T) {
 	infra.Init()
 	localcache.Init()
@@ -46,14 +59,14 @@ func TestHandler(t *testing.T) {
 
 				for _, bustime := range timetable.Weekdays {
 					for _, time := range bustime {
-						if(config.BusnameToRits[i] == "52号系統" || config.BusnameToRits[i] == "55号系統"){
-							if time.BusName == config.BusnameToRits[i] || time.BusName == "52・55号系統"{
+						if config.BusnameToRits[i] == "52号系統" || config.BusnameToRits[i] == "55号系統" {
+							if time.BusName == config.BusnameToRits[i] || time.BusName == "52・55号系統" {
 								flag = false
 							}
 						}
-						
-						if(config.BusnameToRits[i] == "50号系統" || config.BusnameToRits[i] == "15号系統"){
-							if time.BusName == config.BusnameToRits[i] || time.BusName == "15・50号系統"{
+
+						if config.BusnameToRits[i] == "50号系統" || config.BusnameToRits[i] == "15号系統" {
+							if time.BusName == config.BusnameToRits[i] || time.BusName == "15・50号系統" {
 								flag = false
 							}
 						}
@@ -62,7 +75,7 @@ func TestHandler(t *testing.T) {
 						}
 					}
 				}
-	
+
 				if flag {
 					t.Errorf("notfound %s  %s → %s", config.BusnameToRits[i], busstop, "立命館大学")
 				}
@@ -94,8 +107,6 @@ func TestHandler(t *testing.T) {
 				t.Errorf("cannot read test response: %v", err)
 			}
 
-
-
 			if busstop == "立命館大学前" {
 				if resp.StatusCode != 404 {
 					t.Errorf("got = %d, want = 404,  %s  %s → %s", resp.StatusCode, config.BusnameFromRits[i], "立命館大学前", busstop)
@@ -113,7 +124,7 @@ func TestHandler(t *testing.T) {
 						}
 					}
 				}
-	
+
 				if flag {
 					t.Errorf("notfound %s  %s → %s", config.BusnameFromRits[i], "立命館大学", busstop)
 				}
