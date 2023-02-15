@@ -7,6 +7,8 @@ import (
 func GetRequiredeTime(fr string, to string, busname string) int {
 	to = strings.Replace(to, "行き", "", -1)
 	switch busname {
+	case "立命館ダイレクト号系統":
+		return GetBusstop(fr, busname)
 	case "快速立命館号系統", "快速205号系統":
 		switch to {
 		case "立命館大学":
@@ -85,6 +87,15 @@ func GetRequiredeTime(fr string, to string, busname string) int {
 
 func GetBusstop(notritsumei string, busname string) int {
 	switch busname {
+	case "立命館ダイレクト号系統":
+		switch notritsumei {
+			case "西大路四条《阪急･嵐電西院駅》":
+				return 15
+			case "西大路御池":
+				return 11
+			case "西ノ京円町《ＪＲ円町駅》":
+				return 8
+		}
 	case "臨号系統":
 		switch notritsumei {
 		case "立命館大学前":
