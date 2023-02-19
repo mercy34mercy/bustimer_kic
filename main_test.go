@@ -24,11 +24,61 @@ func TestRequiredTime(t *testing.T) {
 	}
 }
 
+// func TestLoopBusstop(t *testing.T) {
+// 	infra.Init()
+// 	localcache.Init()
+// 	router := Routing()
+
+// 	for i,busstoplist := range config.LoopBusstopList {
+// 		for _,busstop := range busstoplist{
+// 			req := httptest.NewRequest("GET", "/timetable?fr="+busstop+"&to=衣笠校前", nil)
+// 			rec := httptest.NewRecorder()
+// 			router.ServeHTTP(rec, req)
+// 			resp := rec.Result()
+
+			
+// 			timetable := model.CreateNewTimeTable()
+// 			if resp.StatusCode != 404 {
+// 				if err := json.NewDecoder(rec.Body).Decode(&timetable); err != nil {
+// 					t.Fatal(err)
+// 				}
+// 			}
+
+// 			_, err := ioutil.ReadAll(resp.Body)
+// 			if err != nil {
+// 				t.Errorf("cannot read test response: %v", err)
+// 			}
+
+
+// 			if busstop == "立命館大学前" {
+// 				if resp.StatusCode != 404 {
+// 					t.Errorf("got = %d, want = 404,  %s  %s → %s", resp.StatusCode, config.BusnameToRits[i], busstop, "衣笠校前")
+// 				}
+// 			} else {
+// 				flag := true
+
+// 				for _, bustime := range timetable.Weekdays {
+// 					for _, time := range bustime {
+// 						if time.BusName == config.LoopBusName[i] {
+// 							flag = false
+// 						}
+// 					}
+// 				}
+
+// 				if flag {
+// 					t.Errorf("notfound %s  %s → %s", config.LoopBusName[i], busstop, "衣笠校前")
+// 				}
+// 				if resp.StatusCode != 200 {
+// 					t.Errorf("got = %d, want = 200,  %s  %s → %s", resp.StatusCode, config.LoopBusName[i], busstop, "衣笠校前")
+// 				}
+// 			}
+// 		}
+// 	}
+// }
 func TestHandler(t *testing.T) {
 	infra.Init()
 	localcache.Init()
 	router := Routing()
-
 	for i, busstoplist := range config.BusstoptoRitsList {
 		for _, busstop := range busstoplist {
 			req := httptest.NewRequest("GET", "/timetable?fr="+busstop+"&to=立命館大学", nil)

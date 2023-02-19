@@ -75,6 +75,15 @@ var BusRitsumeiList [13]string = [13]string{"京都駅前", "烏丸七条", "七
 var Bus12List [30]string = [30]string{"三条京阪前", "四条京阪前", "四条河原町", "四条高倉", "四条烏丸《地下鉄四条駅》", "四条西洞院", "四条堀川", "堀川蛸薬師", "堀川三条", "堀川御池", "二条城前", "堀川丸太町", "堀川下立売", "堀川下長者町", "堀川中立売", "一条戻橋・晴明神社前", "堀川今出川", "堀川上立売", "堀川寺ノ内", "天神公園前", "堀川鞍馬口", "北大路堀川", "大徳寺前", "建勲神社前", "船岡山", "千本北大路", "金閣寺道", "わら天神前", "桜木町", "立命館大学前"}
 var Bus50List [28]string = [28]string{"京都駅前", "七条西洞院", "西洞院正面", "西洞院六条", "五条西洞院", "西洞院松原", "西洞院仏光寺", "四条西洞院", "四条堀川", "堀川蛸薬師", "堀川三条", "堀川御池", "二条城前", "堀川丸太町", "堀川下立売", "堀川下長者町", "堀川中立売", "大宮中立売", "智恵光院中立売", "千本中立売", "千本今出川", "上七軒", "北野天満宮前", "北野白梅町", "衣笠校前", "わら天神前", "桜木町", "立命館大学前"}
 var BusRitsumeiDirectList [3]string = [3]string{"西大路四条《阪急･嵐電西院駅》","西大路御池","西ノ京円町《ＪＲ円町駅》"}
+var Bus204list [43]string =  [43]string{"北大路バスターミナル《地下鉄北大路駅》", "北大路新町", "北大路堀川", "大徳寺前", 
+										"建勲神社前", "船岡山", "千本北大路", "金閣寺道", "わら天神前", "衣笠校前","北野白梅町",
+										"大将軍", "北野中学前", "西ノ京円町《ＪＲ円町駅》","丸太町御前通", "丸太町七本松", "千本丸太町", 
+										"裁判所前","河原町丸太町","川端丸太町","丸太町京阪前","熊野神社前","岡崎道","岡崎神社前","東天王町",
+										"真如来堂前","錦林車庫前","浄土寺","銀閣寺道","北白川校前","北白川別当町","上終町・瓜生山学園","伊織町",
+										"高原町","田中大久保町","高野","高野橋東詰","高木町","下鴨東本町","洛北高校前","府立大学前","植物園前",
+										"烏丸北大路"}
+var Bus205List [10]string = [10]string{}
+
 
 var BusstoptoRitsList [12][]string = [12][]string{Bus50List[:], Bus12List[:], Bus15List[:], BusRinNishioziList[:], BusRinRisumeiList[:], BusRitsumeiList[:], BusM1List[:], Bus51List[:], Bus59List[:], Bus52List[:], Bus55List[:],BusRitsumeiDirectList[:]}
 var BusstopfromRitsList  [10][]string = [10][]string{Bus50List[:], Bus12List[:], Bus15List[:], BusRinNishioziList[:], BusRitsumeiList[:], BusM1List[:], Bus51List[:], Bus59List[:], Bus52List[:], Bus55List[:]}
@@ -89,3 +98,6 @@ var Busname15and50 [2]string = [2]string{"15号系統","50号系統"}
 
 var Bus52and55 = "桜木町"
 var Busname52and55 [2]string = [2]string{"52号系統","55号系統"}
+
+var LoopBusName [1]string = [1]string{"204号系統"}
+var LoopBusstopList [1][]string = [1][]string{Bus204list[:]}

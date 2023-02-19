@@ -1,6 +1,8 @@
 package repositoryimpl
 
-import "testing"
+import (
+	"testing"
+)
 
 func Test_toInt64(t *testing.T) {
 	type args struct {
