@@ -52,23 +52,14 @@ func Routing() *echo.Echo{
 		destination.WriteString("行き")
 
 		l := localcache.GetGoChache()
-
 		if x, found := l.Get(busstop + destination.String()); found {
 			return c.JSON(http.StatusOK, x.(model.TimeTable))
 		}
 		timetablecontroller := controller.TimetableController{}
-		timetable := timetablecontroller.FindTimetable(busstop, destination.String())
-
-		var notFoundCnt = 0
-		for _, time := range timetable.Weekdays {
-			if len(time) > 0 {
-				notFoundCnt += 1
-			}
+		timetable,err := timetablecontroller.FindTimetable(busstop, destination.String()); 
+		if err != nil{
+			return c.HTML(http.StatusNotFound,"<h1>404 NOT FOUND<h1>")
 		}
-		if notFoundCnt == 0 {
-			return c.HTML(http.StatusNotFound, "<h1>404<h1>")
-		}
-
 		localcache.CreateCachefromTimetable(busstop, destination.String(), timetable)
 
 		return c.JSON(http.StatusOK, timetable)
@@ -81,14 +72,10 @@ func Routing() *echo.Echo{
 			Destination: destination,
 			Busstop:     busstop,
 		}
-
 		destinationlist, busstoplist := query.SplitDestination()
-
 		timetableCtrl := controller.TimetableFromBusstopController{}
 		timetable := timetableCtrl.FindTimetable(busstoplist, destinationlist)
-
 		return c.JSON(http.StatusOK, timetable)
-
 	})
 
 	e.GET("/nextbus", func(c echo.Context) error {
@@ -107,7 +94,7 @@ func Routing() *echo.Echo{
 		}
 
 		timetablecontroller := controller.TimetableController{}
-		timetable := timetablecontroller.FindTimetable(busstop, destination.String())
+		timetable,_ := timetablecontroller.FindTimetable(busstop, destination.String())
 
 		localcache.CreateCachefromTimetable(busstop, destination.String(), timetable)
 

@@ -1,6 +1,7 @@
 package repositoryimpl
 
 import (
+	"errors"
 	"fmt"
 	"practice-colly/config"
 	"practice-colly/domain/model"
@@ -9,6 +10,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
 	"github.com/gocolly/colly"
 )
 
@@ -307,16 +309,21 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURL(busstop string, dest
 	return busstopurl, err
 }
 
-func (repository *BusstopToTimetableRepositoryImpl) FindTimetable(url []string) model.TimeTable {
+func (repository *BusstopToTimetableRepositoryImpl) FindTimetable(url []string) (model.TimeTable,error) {
 	timetable := model.CreateNewTimeTable()
 
+	var err error
+
+	if(len(url) == 0){
+		return timetable,errors.New("urls not found")
+	}
 	for _, u := range url {
 		scrapdata, via, busstop := scrapHTML(u)
 		getTimeTable(timetable, scrapdata, via, busstop)
 	}
 	timetable.SortOneBusTime()
 
-	return timetable
+	return timetable,err
 }
 
 func scrapHTML(url string) (scrapData []string, via string, busstop string) {

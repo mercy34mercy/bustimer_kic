@@ -24,7 +24,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 	timetablecontroller := controller.TimetableController{}
 	for _,u := range url {
-		timetable := timetablecontroller.FindTimetable(u,destination)
+		timetable,_ := timetablecontroller.FindTimetable(u,destination)
 		fmt.Printf("%v", timetable)
 		fmt.Fprint(w, timetable)
 	}
