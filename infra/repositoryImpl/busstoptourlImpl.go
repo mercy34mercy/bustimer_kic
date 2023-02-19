@@ -9,7 +9,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-
 	"github.com/gocolly/colly"
 )
 
@@ -25,7 +24,6 @@ func (repository *BusstopToTimetableRepositoryImpl) CreateMultiTimetable(timetab
 	for _, time := range timetable {
 		multitimetable.TimeTable[time.Destination] = time.TimeTable
 	}
-
 	return multitimetable
 }
 
@@ -246,7 +244,7 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 
 func (repository *BusstopToTimetableRepositoryImpl) EncodeDestination(busstop string, destination string) (wrapdestination string) {
 	//M1と12番のコンフリクト問題解消
-	var destinationList [2]string = [2]string{"原谷行き", "金閣寺・立命館大学行き"}
+	var destinationList [6]string = [6]string{"原谷行き", "金閣寺・立命館大学行き", "金閣寺･竜安寺・山越行き", "山越中町行き", "竜安寺・山越行き", "宇多野･山越行き"}
 	for _, bus := range config.M1or12or59busstopList {
 		if busstop == bus {
 			for _, des := range destinationList {
