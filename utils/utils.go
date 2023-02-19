@@ -124,37 +124,12 @@ func getTimeTable(scrapedata []string, via string, busstop string) {
 
 func Dbcreate() {
 	db := infra.GetDB()
-	// for i := 700000; i < 999999; i++ {
-	// 	index := strconv.Itoa(i)
-	
-	// 	length := len(index)
-	// 	idx := ""
-
-	// 	switch length {
-	// 	// case 1:
-	// 	// 	idx = "000000" + index
-	// 	// case 2:
-	// 	// 	idx = "00000"  + index
-	// 	// case 3:
-	// 	// 	idx = "0000"   + index
-	// 	// case 4:
-	// 	// 	idx = "000"    + index
-	// 	case 5:
-	// 		idx = "00" + index
-	// 	case 6:
-	// 		idx = "0" + index
-	// 	default:
-	// 		idx = idx
-	// 	}
 	idx := "4030410"
 		fmt.Println(idx)
 		busname, busstop, destination, url := getViaandBusstops(idx)
 		if len(busname) != 0 {
 			db.Create(&model.BusstopUrl{Busstop: busstop, Busname: busname, Destination: destination, URL: url})
 		}
-
-	// }
-
 }
 
 func getViaandBusstops(index string) (busname string, busstop string, destination string, url string) {
