@@ -74,7 +74,10 @@ func Routing() *echo.Echo{
 		}
 		destinationlist, busstoplist := query.SplitDestination()
 		timetableCtrl := controller.TimetableFromBusstopController{}
-		timetable := timetableCtrl.FindTimetable(busstoplist, destinationlist)
+		timetable,err := timetableCtrl.FindTimetable(busstoplist, destinationlist)
+		if err != nil{
+			return c.HTML(http.StatusNotFound,"<h1>404 NOT FOUND<h1>")
+		}
 		return c.JSON(http.StatusOK, timetable)
 	})
 

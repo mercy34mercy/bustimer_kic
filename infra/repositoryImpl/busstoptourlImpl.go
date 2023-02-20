@@ -29,7 +29,7 @@ func (repository *BusstopToTimetableRepositoryImpl) CreateMultiTimetable(timetab
 	return multitimetable
 }
 
-func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop string, destination string) []string {
+func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop string, destination string) ([]string,error) {
 	//立命館大学からどこかへ行くとき
 	var err error
 	db := infra.GetDB()
@@ -56,7 +56,6 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 
 		for _, info := range busstopinfo {
 			busstopurl = append(busstopurl, info.URL)
-
 		}
 	}
 
@@ -75,7 +74,8 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 					busstopurl = append(busstopurl, bus.URL)
 				}
 			}
-			return busstopurl
+			err = urlError(busstopurl)
+			return busstopurl,err
 		} else if busstop == bus && destination == "三条京阪前" {
 			var destinationList [1]string = [1]string{"四条河原町・三条京阪行き"}
 			for _, des := range destinationList {
@@ -89,7 +89,8 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 					busstopurl = append(busstopurl, bus.URL)
 				}
 			}
-			return busstopurl
+			err = urlError(busstopurl)
+			return busstopurl,err
 		} else if busstop == "立命館大学前" && destination == bus {
 			var destinationList [7]string = [7]string{"原谷行き", "金閣寺・立命館大学行き", "立命館大学行き", "金閣寺･竜安寺・山越行き", "山越中町行き", "竜安寺・山越行き", "宇多野･山越行き"}
 			for _, des := range destinationList {
@@ -157,7 +158,8 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 
 				}
 			}
-			return busstopurl
+			err = urlError(busstopurl)
+			return busstopurl,err
 		}
 	}
 
@@ -241,7 +243,8 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 			}
 		}
 	}
-	return busstopurl
+	err = urlError(busstopurl)
+	return busstopurl,err
 }
 
 func (repository *BusstopToTimetableRepositoryImpl) EncodeDestination(destination string) (wrapdestination string) {
@@ -461,4 +464,11 @@ func toInt64(strVal string) int64 {
 		fmt.Println(err)
 	}
 	return intVal
+}
+
+func urlError(url []string) error {
+	if len(url) == 0 {
+		return errors.New("url not found")
+	}
+	return nil
 }
