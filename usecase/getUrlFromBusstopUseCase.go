@@ -26,6 +26,7 @@ func NewGetUrlFromBusstopUseCaseImpl(busstop []string, destination []string, bus
 
 func (impl getUrlFromBusstopUseCaseImpl) FindURLFromBusstop() (model.MultiTimeTable,error) {
 	l := localcache.GetGoChache()
+	var multitimetable model.MultiTimeTable
 	timetableanddestination := []model.TimeTableandDestination{}
 	if impl.Busstop[0] == "立命館大学前" {
 		for _, des := range impl.Destination {
@@ -37,13 +38,19 @@ func (impl getUrlFromBusstopUseCaseImpl) FindURLFromBusstop() (model.MultiTimeTa
 				})
 			} else {
 				url,err := impl.BusstopToTimetableRepository.FindURLFromBusstop(impl.Busstop[0], des)
-				timetable,_ := impl.BusstopToTimetableRepository.FindTimetable(url)
+				if err != nil{
+					return multitimetable,err
+				}
+				timetable,err := impl.BusstopToTimetableRepository.FindTimetable(url)
+				if err != nil{
+					return multitimetable,err
+				}
 				localcache.CreateCachefromTimetable(impl.Busstop[0], des+"行き", timetable)
 				timetableanddestination = append(timetableanddestination, model.TimeTableandDestination{
 					TimeTable:   timetable,
 					Destination: des,
 				})
-				multitimetable := impl.BusstopToTimetableRepository.CreateMultiTimetable(timetableanddestination, impl.Destination)
+				multitimetable = impl.BusstopToTimetableRepository.CreateMultiTimetable(timetableanddestination, impl.Destination)
 				return multitimetable,err
 			}
 		}
@@ -57,18 +64,24 @@ func (impl getUrlFromBusstopUseCaseImpl) FindURLFromBusstop() (model.MultiTimeTa
 				})
 			} else {
 				url,err := impl.BusstopToTimetableRepository.FindURLFromBusstop(bus, impl.Destination[0])
-				timetable,_ := impl.BusstopToTimetableRepository.FindTimetable(url)
+				if err != nil{
+					return multitimetable,err
+				}
+				timetable,err := impl.BusstopToTimetableRepository.FindTimetable(url)
+				if err != nil{
+					return multitimetable,err
+				}
 				localcache.CreateCachefromTimetable(bus, impl.Destination[0]+"行き", timetable)
 				timetableanddestination = append(timetableanddestination, model.TimeTableandDestination{
 					TimeTable:   timetable,
 					Destination: bus,
 				})
-				multitimetable := impl.BusstopToTimetableRepository.CreateMultiTimetable(timetableanddestination, impl.Destination)
+				multitimetable = impl.BusstopToTimetableRepository.CreateMultiTimetable(timetableanddestination, impl.Destination)
 				return multitimetable,err
 			}
 		}
 	}
-	multitimetable := impl.BusstopToTimetableRepository.CreateMultiTimetable(timetableanddestination, impl.Destination)
+	multitimetable = impl.BusstopToTimetableRepository.CreateMultiTimetable(timetableanddestination, impl.Destination)
 	var err error
 	return multitimetable,err
 }

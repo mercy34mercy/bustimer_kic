@@ -74,7 +74,9 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 					busstopurl = append(busstopurl, bus.URL)
 				}
 			}
-			err = urlError(busstopurl)
+			if err = validateUrl(busstopurl); err != nil {
+				return nil,err
+			}
 			return busstopurl,err
 		} else if busstop == bus && destination == "三条京阪前" {
 			var destinationList [1]string = [1]string{"四条河原町・三条京阪行き"}
@@ -89,7 +91,9 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 					busstopurl = append(busstopurl, bus.URL)
 				}
 			}
-			err = urlError(busstopurl)
+			if err = validateUrl(busstopurl); err != nil {
+				return nil,err
+			}
 			return busstopurl,err
 		} else if busstop == "立命館大学前" && destination == bus {
 			var destinationList [7]string = [7]string{"原谷行き", "金閣寺・立命館大学行き", "立命館大学行き", "金閣寺･竜安寺・山越行き", "山越中町行き", "竜安寺・山越行き", "宇多野･山越行き"}
@@ -158,7 +162,9 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 
 				}
 			}
-			err = urlError(busstopurl)
+			if err = validateUrl(busstopurl); err != nil {
+				return nil,err
+			}
 			return busstopurl,err
 		}
 	}
@@ -243,7 +249,9 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 			}
 		}
 	}
-	err = urlError(busstopurl)
+	if err = validateUrl(busstopurl); err != nil {
+		return nil,err
+	}
 	return busstopurl,err
 }
 
@@ -466,9 +474,10 @@ func toInt64(strVal string) int64 {
 	return intVal
 }
 
-func urlError(url []string) error {
-	if len(url) == 0 {
-		return errors.New("url not found")
+func validateUrl(url []string) error {
+	length := len(url)
+	if length == 0 {
+		return fmt.Errorf("length must be greater than 0, length = %d", length)
 	}
 	return nil
 }

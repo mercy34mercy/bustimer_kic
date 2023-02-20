@@ -24,7 +24,11 @@ func NewGetTimetableUseCaseImpl(bussop string,destination string,Timetablereposi
 }
 
 func (impl getTimetableUseCaseImpl)FindTimetable()(model.TimeTable,error){
+	var timetable model.TimeTable
 	url,err := impl.Timetablerepository.FindURLFromBusstop(impl.Busstop,impl.Destination)
-	timetable,err := impl.Timetablerepository.FindTimetable(url)
+	if err != nil{
+		return timetable,err
+	}
+	timetable,err = impl.Timetablerepository.FindTimetable(url)
 	return timetable,err
 }

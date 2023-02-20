@@ -285,7 +285,7 @@ func TestTimetableMultiHandler(t *testing.T) {
 				}
 
 				if flag {
-					t.Errorf("notfound %s  %s → %s", config.BusnameFromRits[i], "立命館大学", busstop)
+					t.Errorf("Not Found %s  %s → %s", config.BusnameFromRits[i], "立命館大学", busstop)
 				}
 			}
 		}
