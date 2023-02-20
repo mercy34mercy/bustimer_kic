@@ -2,6 +2,7 @@ package repositoryimpl
 
 import (
 	"practice-colly/config"
+	"practice-colly/infra"
 	"testing"
 )
 
@@ -35,8 +36,38 @@ func TestBusstopToTimetableRepositoryImpl_EncodeDestination(t *testing.T) {
 		t.Run(tt, func(t *testing.T) {
 			repository := &BusstopToTimetableRepositoryImpl{}
 			if gotWrapdestination := repository.EncodeDestination(tt); gotWrapdestination != "立命館大学行き" {
-				t.Errorf("BusstopToTimetableRepositoryImpl.EncodeDestination() = %v, want %v", gotWrapdestination,"立命館大学行き")
+				t.Errorf("BusstopToTimetableRepositoryImpl.EncodeDestination() = %v, want %v", gotWrapdestination, "立命館大学行き")
 			}
 		})
+	}
+}
+
+func TestFindUrlFromBusstopToRitsumei(t *testing.T) {
+	infra.Init("../../gorm.db")
+	for _, busstoplist := range config.BusstoptoRitsList {
+		for _, busstop := range busstoplist {
+			repository := &BusstopToTimetableRepositoryImpl{}
+			_, err := repository.FindURLFromBusstop(busstop, "立命館大学")
+			if busstop != "立命館大学前" {
+				if err != nil {
+					t.Errorf("BusstopToTimetableRepositoryImpl.FindURLFromBusstop() %s → %s URL Not Found", busstop, "立命館大学")
+				}
+			}
+		}
+	}
+}
+
+func TestFindUrlFromBusstopFromRitsumei(t *testing.T) {
+	infra.Init("../../gorm.db")
+	for _, busstoplist := range config.BusstopfromRitsList {
+		for _, busstop := range busstoplist {
+			repository := &BusstopToTimetableRepositoryImpl{}
+			_, err := repository.FindURLFromBusstop("立命館大学前", busstop)
+			if busstop != "立命館大学前" {
+				if err != nil {
+					t.Errorf("BusstopToTimetableRepositoryImpl.FindURLFromBusstop() %s → %s URL Not Found", "立命館大学前", busstop)
+				}
+			}
+		}
 	}
 }

@@ -13,7 +13,7 @@ import (
 
 
 func main() {
-	infra.Init()
+	infra.Init("gorm.db")
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"

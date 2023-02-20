@@ -12,12 +12,12 @@ var (
 	err error
 )
 
-func Init() *gorm.DB {
+func Init(path string) *gorm.DB {
 	// もし err がnilではないなら、"読み込み出来ませんでした"が出力されます。
 	if err != nil {
 		fmt.Printf("読み込み出来ませんでした: %v", err)
 	}
-	db, err = gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
+	db, err = gorm.Open(sqlite.Open(path), &gorm.Config{})
 	if err != nil {
 		fmt.Println("db init error: ", err)
 	}
