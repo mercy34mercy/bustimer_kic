@@ -52,6 +52,10 @@ func TestFindUrlFromBusstopToRitsumei(t *testing.T) {
 				if err != nil {
 					t.Errorf("BusstopToTimetableRepositoryImpl.FindURLFromBusstop() %s → %s URL Not Found", busstop, "立命館大学")
 				}
+			}else{
+				if err == nil{
+					t.Errorf("BusstopToTimetableRepositoryImpl.FindURLFromBusstop() %s → %s This URL must not exist", busstop, "立命館大学")
+				}
 			}
 		}
 	}
@@ -66,6 +70,10 @@ func TestFindUrlFromBusstopFromRitsumei(t *testing.T) {
 			if busstop != "立命館大学前" {
 				if err != nil {
 					t.Errorf("BusstopToTimetableRepositoryImpl.FindURLFromBusstop() %s → %s URL Not Found", "立命館大学前", busstop)
+				}
+			}else{
+				if err == nil{
+					t.Errorf("BusstopToTimetableRepositoryImpl.FindURLFromBusstop() %s → %s This URL must not exist", busstop, "立命館大学")
 				}
 			}
 		}
