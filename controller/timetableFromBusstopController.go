@@ -8,8 +8,8 @@ import (
 
 type TimetableFromBusstopController struct{}
 
-func (ctrl TimetableFromBusstopController) FindTimetable(busstop []string,destination []string)(model.MultiTimeTable){
+func (ctrl TimetableFromBusstopController) FindTimetable(busstop []string,destination []string)(model.MultiTimeTable,error){
 	busstoptotimetableRepository := repositoryImpl.NewBusstopToUrlRepositoryImpl()
-	timetable := usecase.NewGetUrlFromBusstopUseCaseImpl(busstop,destination,busstoptotimetableRepository).FindURLFromBusstop()
-	return timetable
+	timetable,err := usecase.NewGetUrlFromBusstopUseCaseImpl(busstop,destination,busstoptotimetableRepository).FindURLFromBusstop()
+	return timetable,err
 }

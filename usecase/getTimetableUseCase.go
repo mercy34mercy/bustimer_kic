@@ -12,7 +12,7 @@ type getTimetableUseCaseImpl struct {
 }
 
 type getTimetableUseCase interface {
-	FindTimetable()(model.TimeTable)
+	FindTimetable()(model.TimeTable,error)
 }
 
 func NewGetTimetableUseCaseImpl(bussop string,destination string,Timetablereposiotry repository.BusstopToTimetableRepository) getTimetableUseCase{
@@ -23,8 +23,12 @@ func NewGetTimetableUseCaseImpl(bussop string,destination string,Timetablereposi
 	}
 }
 
-func (impl getTimetableUseCaseImpl)FindTimetable()(model.TimeTable){
-	url := impl.Timetablerepository.FindURLFromBusstop(impl.Busstop,impl.Destination)
-	timetable := impl.Timetablerepository.FindTimetable(url)
-	return timetable
+func (impl getTimetableUseCaseImpl)FindTimetable()(model.TimeTable,error){
+	var timetable model.TimeTable
+	url,err := impl.Timetablerepository.FindURLFromBusstop(impl.Busstop,impl.Destination)
+	if err != nil{
+		return timetable,err
+	}
+	timetable,err = impl.Timetablerepository.FindTimetable(url)
+	return timetable,err
 }

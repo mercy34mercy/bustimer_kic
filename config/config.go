@@ -101,3 +101,7 @@ var Busname52and55 [2]string = [2]string{"52号系統","55号系統"}
 
 var LoopBusName [1]string = [1]string{"204号系統"}
 var LoopBusstopList [1][]string = [1][]string{Bus204list[:]}
+
+
+
+var ChangedestinationList [7]string = [7]string{"原谷行き", "金閣寺・立命館大学行き", "立命館大学行き", "金閣寺･竜安寺・山越行き", "山越中町行き", "竜安寺・山越行き", "宇多野･山越行き"}
