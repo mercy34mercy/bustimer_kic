@@ -1,3 +1,8 @@
+![](https://img.shields.io/github/actions/workflow/status/mercy34mercy/bustimer_kic/prod-deploy.yaml?label=Cloud%20Run%20Deploy)
+
+![](https://img.shields.io/github/actions/workflow/status/mercy34mercy/bustimer_kic/prod-ci.yaml?label=Unit%20Test)
+
+
 # busdes-kic-api(Japanese)
 立命館大学衣笠キャンパスと駅を結ぶバス情報をリアルタイムに表示するアプリケーションです。
 # 概要
