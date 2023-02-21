@@ -1,6 +1,7 @@
 package repositoryimpl
 
 import (
+	"errors"
 	"fmt"
 	"practice-colly/config"
 	"practice-colly/domain/model"
@@ -25,11 +26,10 @@ func (repository *BusstopToTimetableRepositoryImpl) CreateMultiTimetable(timetab
 	for _, time := range timetable {
 		multitimetable.TimeTable[time.Destination] = time.TimeTable
 	}
-
 	return multitimetable
 }
 
-func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop string, destination string) []string {
+func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop string, destination string) ([]string,error) {
 	//立命館大学からどこかへ行くとき
 	var err error
 	db := infra.GetDB()
@@ -42,21 +42,18 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 	//山越中町専用
 	if busstop == "山越中町" && destination == "立命館大学" {
 		if err = db.Where("destination = ? AND busstop = ?", "四条河原町・三条京阪行き", busstop).Find(&busstopinfo).Error; err != nil {
-			//エラーハンドリング
-			fmt.Printf("db select Error!!!! err:%v\n", err)
+			return nil,err
 		}
 		for _, url := range busstopinfo {
 			busstopurl = append(busstopurl, url.URL)
 		}
 	} else if destination == "山越中町" && busstop == "立命館大学前" {
 		if err = db.Where("destination = ? AND busstop = ?", "宇多野･山越行き", busstop).Find(&busstopinfo).Error; err != nil {
-			//エラーハンドリング
-			fmt.Printf("db select Error!!!! err:%v\n", err)
+			return nil,err
 		}
 
 		for _, info := range busstopinfo {
 			busstopurl = append(busstopurl, info.URL)
-
 		}
 	}
 
@@ -66,44 +63,42 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 			var destinationList [7]string = [7]string{"原谷行き", "金閣寺・立命館大学行き", "立命館大学行き", "金閣寺･竜安寺・山越行き", "山越中町行き", "竜安寺・山越行き", "宇多野･山越行き"}
 			for _, des := range destinationList {
 				if err = db.Where("destination = ? AND busstop = ?", des, busstop).Find(&busstopinfo).Error; err != nil {
-					//エラーハンドリング
-					fmt.Printf("db select Error!!!! err:%v\n", err)
+					return nil,err
 				}
-				// fmt.Printf("%v",busstopinfo)
 				for _, bus := range busstopinfo {
-					// fmt.Println(bus.URL)
 					busstopurl = append(busstopurl, bus.URL)
 				}
 			}
-			return busstopurl
+			if err = validateUrl(busstopurl); err != nil {
+				return nil,err
+			}
+			return busstopurl,err
 		} else if busstop == bus && destination == "三条京阪前" {
 			var destinationList [1]string = [1]string{"四条河原町・三条京阪行き"}
 			for _, des := range destinationList {
 				if err = db.Where("destination = ? AND busstop = ?", des, busstop).Find(&busstopinfo).Error; err != nil {
-					//エラーハンドリング
-					fmt.Printf("db select Error!!!! err:%v\n", err)
+					return nil,err
 				}
-				// fmt.Printf("%v",busstopinfo)
 				for _, bus := range busstopinfo {
-					// fmt.Println(bus.URL)
 					busstopurl = append(busstopurl, bus.URL)
 				}
 			}
-			return busstopurl
+			if err = validateUrl(busstopurl); err != nil {
+				return nil,err
+			}
+			return busstopurl,err
 		} else if busstop == "立命館大学前" && destination == bus {
 			var destinationList [7]string = [7]string{"原谷行き", "金閣寺・立命館大学行き", "立命館大学行き", "金閣寺･竜安寺・山越行き", "山越中町行き", "竜安寺・山越行き", "宇多野･山越行き"}
 			for _, des := range destinationList {
 				if err = db.Where("destination = ? AND busstop = ?", des, destination).Find(&busstopList).Error; err != nil {
-					//エラーハンドリング
-					fmt.Printf("db select Error!!!! err:%v\n", err)
+					return nil,err
 				}
 
 				for _, info := range busstopList {
 					if info.Busname == "52・55号系統" {
 						for _, splitbus := range config.Busname52and55 {
 							if err = db.Where("busname = ? AND busstop = ?", splitbus, busstop).Find(&busstopinfo).Error; err != nil {
-								//エラーハンドリング
-								fmt.Printf("db select Error!!!! err:%v\n", err)
+								return nil,err
 							}
 							for _, info := range busstopinfo {
 								flag := true
@@ -138,8 +133,7 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 
 					} else {
 						if err = db.Where("busname = ? AND busstop = ? ", info.Busname, busstop).Find(&busstopinfo).Error; err != nil {
-							//エラーハンドリング
-							fmt.Printf("db select Error!!!! err:%v\n", err)
+							return nil,err
 						}
 
 						for _, businfo := range busstopinfo {
@@ -157,7 +151,10 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 
 				}
 			}
-			return busstopurl
+			if err = validateUrl(busstopurl); err != nil {
+				return nil,err
+			}
+			return busstopurl,err
 		}
 	}
 
@@ -170,10 +167,9 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 			busstopurl = append(busstopurl, url.URL)
 		}
 	} else {
-		var destinationList [7]string = [7]string{"原谷行き", "金閣寺・立命館大学行き", "立命館大学行き", "金閣寺･竜安寺・山越行き", "山越中町行き", "竜安寺・山越行き", "宇多野･山越行き"}
+		destinationList := config.ChangedestinationList
 		if err = db.Where("busstop = ? AND destination = ?", destination, "立命館大学行き").Find(&busstopList).Error; err != nil {
-			//エラーハンドリング
-			fmt.Printf("db select Error!!!! err:%v\n", err)
+			return nil,err
 		}
 
 		for _, bus := range busstopList {
@@ -189,7 +185,7 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 				for _, splitbus := range config.Busname52and55 {
 					if err = db.Where("busname = ? AND busstop = ?", splitbus, busstop).Find(&busstopinfo).Error; err != nil {
 						//エラーハンドリング
-						fmt.Printf("db select Error!!!! err:%v\n", err)
+						return nil,err
 					}
 					for _, info := range busstopinfo {
 						flag := true
@@ -207,7 +203,7 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 				for _, splitbus := range config.Busname15and50 {
 					if err = db.Where("busname = ? AND busstop = ?", splitbus, busstop).Find(&busstopinfo).Error; err != nil {
 						//エラーハンドリング
-						fmt.Printf("db select Error!!!! err:%v\n", err)
+						return nil,err
 					}
 					for _, info := range busstopinfo {
 						flag := true
@@ -225,7 +221,7 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 			} else {
 				if err = db.Where("busname = ? AND busstop = ?", busname, busstop).Find(&busstopinfo).Error; err != nil {
 					//エラーハンドリング
-					fmt.Printf("db select Error!!!! err:%v\n", err)
+					return nil,err
 				}
 				for _, info := range busstopinfo {
 					flag := true
@@ -241,20 +237,23 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 			}
 		}
 	}
-	return busstopurl
+	if err = validateUrl(busstopurl); err != nil {
+		return nil,err
+	}
+	return busstopurl,err
 }
 
-func (repository *BusstopToTimetableRepositoryImpl) EncodeDestination(busstop string, destination string) (wrapdestination string) {
+func (repository *BusstopToTimetableRepositoryImpl) EncodeDestination(destination string) (wrapdestination string) {
 	//M1と12番のコンフリクト問題解消
-	var destinationList [2]string = [2]string{"原谷行き", "金閣寺・立命館大学行き"}
-	for _, bus := range config.M1or12or59busstopList {
-		if busstop == bus {
+	var destinationList [6]string = [6]string{"原谷行き", "金閣寺・立命館大学行き", "金閣寺･竜安寺・山越行き", "山越中町行き", "竜安寺・山越行き", "宇多野･山越行き"}
+	// for _, bus := range config.M1or12or59busstopList {
+	// 	if busstop == bus {
 			for _, des := range destinationList {
 				if destination == des {
 					return "立命館大学行き"
 				}
-			}
-		}
+		// 	}
+		// }
 	}
 	return destination
 }
@@ -309,16 +308,21 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURL(busstop string, dest
 	return busstopurl, err
 }
 
-func (repository *BusstopToTimetableRepositoryImpl) FindTimetable(url []string) model.TimeTable {
+func (repository *BusstopToTimetableRepositoryImpl) FindTimetable(url []string) (model.TimeTable,error) {
 	timetable := model.CreateNewTimeTable()
 
+	var err error
+
+	if(len(url) == 0){
+		return timetable,errors.New("urls not found")
+	}
 	for _, u := range url {
 		scrapdata, via, busstop := scrapHTML(u)
 		getTimeTable(timetable, scrapdata, via, busstop)
 	}
 	timetable.SortOneBusTime()
 
-	return timetable
+	return timetable,err
 }
 
 func scrapHTML(url string) (scrapData []string, via string, busstop string) {
@@ -456,4 +460,12 @@ func toInt64(strVal string) int64 {
 		fmt.Println(err)
 	}
 	return intVal
+}
+
+func validateUrl(url []string) error {
+	length := len(url)
+	if length == 0 {
+		return fmt.Errorf("length must be greater than 0, length = %d", length)
+	}
+	return nil
 }
