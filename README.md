@@ -27,7 +27,7 @@ busdes-kic-apiは、GCPのCloudRun(Google Cloud Plateform)上で動作してい�
 ## CI/CD
 このシステムでは、GithubActionsを使用して継続的なインティグレーションと継続的なデリバリーを実現しています。
 
-![構成図](https://github.com/mercy34mercy/bustimer_kic/.img/busdes-kic-api.png)
+![構成図](.img/busdes-kic-api.png)
 
 
 
@@ -61,4 +61,4 @@ This System is running on GCP's CloudRun(Google Cloud Plateform). And we use Clo
 ## CI/CD
 The system uses GithubActions for continuous intigration and continuous delivery.
 
-![構成図](https://github.com/mercy34mercy/bustimer_kic/.img/busdes-kic-api.png)
+![構成図](.img/busdes-kic-api.png)
