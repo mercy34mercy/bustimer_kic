@@ -1,23 +1,21 @@
 package infra
 
 import (
+	"database/sql"
 	"fmt"
-	"bustimerkic/domain/model"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 )
 
 var (
-	db  *gorm.DB
+	db  *sql.DB
 	err error
 )
 
-func Init(path string) *gorm.DB {
+func Init(path string) *sql.DB {
 	// もし err がnilではないなら、"読み込み出来ませんでした"が出力されます。
 	if err != nil {
 		fmt.Printf("読み込み出来ませんでした: %v", err)
 	}
-	db, err = gorm.Open(sqlite.Open(path), &gorm.Config{})
+	db, err = sql.Open(path, ":memory:")
 	if err != nil {
 		fmt.Println("db init error: ", err)
 	}
@@ -25,10 +23,6 @@ func Init(path string) *gorm.DB {
 	return db
 }
 
-func GetDB() *gorm.DB {
+func GetDB() *sql.DB {
 	return db
-}
-
-func autoMigrate() {
-	db.AutoMigrate(model.BusstopUrl{})
 }
