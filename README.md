@@ -1,11 +1,11 @@
 ![](https://img.shields.io/github/actions/workflow/status/mercy34mercy/bustimer_kic/prod-deploy.yaml?label=Cloud%20Run%20Deploy)
 
 ![](https://img.shields.io/github/actions/workflow/status/mercy34mercy/bustimer_kic/prod-ci.yaml?label=Unit%20Test)
-
-
-# busdes-kic-api(Japanese)
-立命館大学衣笠キャンパスと駅を結ぶバス情報をリアルタイムに表示するアプリケーションです。
 # 概要
+立命館大学衣笠キャンパスと駅を結ぶバス情報をリアルタイムに表示するアプリケーションです。
+## 言語
+* [Go](https://go.dev/)
+    * Supported Versions (Go 1.9 ～) ※このバージョンより古いものに関しては動作確認していません
 ## ライブラリ
 * [echo](https://echo.labstack.com/)
 * [colly](http://go-colly.org/)
@@ -28,6 +28,7 @@
 | /nextbus         | fr(string),to(string) | frからtoに走るバスのfr駅の次に来るバスの情報(最大3個)                | 
 # インフラ
 ## 使用環境
+### 本番環境
 busdes-kic-apiは、GCPのCloudRun(Google Cloud Plateform)上で動作しています。また、DNSにはCloudFlareを使用しています。
 
 * GCP
@@ -35,17 +36,57 @@ busdes-kic-apiは、GCPのCloudRun(Google Cloud Plateform)上で動作してい�
 * Cloud Flare
     * DNS
 
+### 開発環境
+開発環境ではAzureのApp ServiceにDocker ContainerをDeployしています。
+* Azure
+    * App Service
+* Docker Hub
+
 ## CI/CD
 このシステムでは、GithubActionsを使用して継続的なインティグレーションと継続的なデリバリーを実現しています。
 
 ### 本番環境
 ![構成図](.img/busdes-kic-api.png)
 ### 開発環境
+![構成図](.img/busdes-kic-api-dev.png)
 
-# busdes-kic-api(English)
-This application displays real-time bus information between Ritsumeikan University Kinugasa Campus and the station.
+
+# 開発環境
+## Github Repository
+* [Backend Repository(Public)](https://github.com/mercy34mercy/bustimer_kic)
+* [Android Application Repository(Private)](https://github.com/mercy34mercy/bus-des-kic-android)
+* [iOS Application Repository(Public)](https://github.com/kuro48/BusdesKICNativeiOS)
+* [Web Application Repository(Public)](https://github.com/Shunkicreate/busdes-kic-web)
+## Git Flow
+I referred to this [article](https://qiita.com/KosukeSone/items/514dd24828b485c69a05)
+
+* main
+    * develop
+        * feat/***
+        * fix/***
+## contributor
+* Backend
+    * [mercy34mercy](https://github.com/mercy34mercy)
+* Android
+    * [mercy34mercy](https://github.com/mercy34mercy)
+* iOS
+    * [kuro48](https://github.com/kuro48)
+    * [shinpochi2002](https://github.com/shinpochi2002)
+* Web
+    * [Shunkicreate](https://github.com/Shunkicreate)
+    * [Kyororillex](https://github.com/Kyororillex)
+    * [YukaChoco](https://github.com/YukaChoco)
+* Designer
+    * [chell-uoxou](https://github.com/chell-uoxou)
+    * [F-mm1229](https://github.com/F-mm1229)
+
 
 # overview
+This application displays real-time bus information between Ritsumeikan University Kinugasa Campus and the station.
+
+## Languages
+* [Go](https://go.dev/)
+    * Supported Versions (Go 1.9 ～) ※We have not checked the operation of older versions.
 ## Library
 * [echo](https://echo.labstack.com/)
 * [colly](http://go-colly.org/)
@@ -53,7 +94,7 @@ This application displays real-time bus information between Ritsumeikan Universi
 * [sqlite](https://github.com/mattn/go-sqlite3)
 * [gorm](https://github.com/go-gorm/gorm)
 
-# architecture
+## architecture
 * Clean Archtechture
     * Controller
     * Usecase
@@ -69,12 +110,19 @@ This application displays real-time bus information between Ritsumeikan Universi
 
 # Infra
 ## environment
+### Production
 This System is running on GCP's CloudRun(Google Cloud Plateform). And we use CloudFlare for DNS.
 
 * GCP
     * Cloud Run
 * Cloud Flare
     * DNS
+### Development
+In the development environment, Docker Container is Deployed to Azure's App Service.
+
+* Azure
+    * App Service
+* Docker Hub
 
 ## CI/CD
 The system uses GithubActions for continuous intigration and continuous delivery.
@@ -83,3 +131,33 @@ The system uses GithubActions for continuous intigration and continuous delivery
 ![構成図](.img/busdes-kic-api.png)
 
 ### Development
+![構成図](.img/busdes-kic-api-dev.png)
+
+# Development Overview
+## Github Repository
+* [Backend Repository(Public)](https://github.com/mercy34mercy/bustimer_kic)
+* [Android Application Repository(Private)](https://github.com/mercy34mercy/bus-des-kic-android)
+* [iOS Application Repository(Public)](https://github.com/kuro48/BusdesKICNativeiOS)
+* [Web Application Repository(Public)](https://github.com/Shunkicreate/busdes-kic-web)
+## Git Flow
+I referred to this [article](https://qiita.com/KosukeSone/items/514dd24828b485c69a05)
+
+* main
+    * develop
+        * feat/***
+        * fix/***
+## contributor
+* Backend
+    * [mercy34mercy](https://github.com/mercy34mercy)
+* Android
+    * [mercy34mercy](https://github.com/mercy34mercy)
+* iOS
+    * [kuro48](https://github.com/kuro48)
+    * [shinpochi2002](https://github.com/shinpochi2002)
+* Web
+    * [Shunkicreate](https://github.com/Shunkicreate)
+    * [Kyororillex](https://github.com/Kyororillex)
+    * [YukaChoco](https://github.com/YukaChoco)
+* Designer
+    * [chell-uoxou](https://github.com/chell-uoxou)
+    * [F-mm1229](https://github.com/F-mm1229)
