@@ -3,32 +3,88 @@
 //   sqlc v1.17.0
 // source: query.sql
 
-package bustimerkic
+package bustimersqlc
 
 import (
 	"context"
-	"database/sql"
 )
 
-const getBusinfo = `-- name: GetBusinfo :one
+const getBusinfoFromBusname = `-- name: GetBusinfoFromBusname :many
+;
+
+SELECT id, busstop, busname, destination, url FROM busstop_url
+WHERE busname = ? AND busstop  = ?
+`
+
+type GetBusinfoFromBusnameParams struct {
+	Busname string
+	Busstop string
+}
+
+func (q *Queries) GetBusinfoFromBusname(ctx context.Context, arg GetBusinfoFromBusnameParams) ([]BusstopUrl, error) {
+	rows, err := q.db.QueryContext(ctx, getBusinfoFromBusname, arg.Busname, arg.Busstop)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []BusstopUrl
+	for rows.Next() {
+		var i BusstopUrl
+		if err := rows.Scan(
+			&i.ID,
+			&i.Busstop,
+			&i.Busname,
+			&i.Destination,
+			&i.Url,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getBusinfoFromDestination = `-- name: GetBusinfoFromDestination :many
 SELECT id, busstop, busname, destination, url FROM busstop_url
 WHERE destination = ? AND busstop  = ?
 `
 
-type GetBusinfoParams struct {
-	Destination sql.NullString
-	Busstop     sql.NullString
+type GetBusinfoFromDestinationParams struct {
+	Destination string
+	Busstop     string
 }
 
-func (q *Queries) GetBusinfo(ctx context.Context, arg GetBusinfoParams) (BusstopUrl, error) {
-	row := q.db.QueryRowContext(ctx, getBusinfo, arg.Destination, arg.Busstop)
-	var i BusstopUrl
-	err := row.Scan(
-		&i.ID,
-		&i.Busstop,
-		&i.Busname,
-		&i.Destination,
-		&i.Url,
-	)
-	return i, err
+func (q *Queries) GetBusinfoFromDestination(ctx context.Context, arg GetBusinfoFromDestinationParams) ([]BusstopUrl, error) {
+	rows, err := q.db.QueryContext(ctx, getBusinfoFromDestination, arg.Destination, arg.Busstop)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []BusstopUrl
+	for rows.Next() {
+		var i BusstopUrl
+		if err := rows.Scan(
+			&i.ID,
+			&i.Busstop,
+			&i.Busname,
+			&i.Destination,
+			&i.Url,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

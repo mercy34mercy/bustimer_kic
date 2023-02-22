@@ -1,7 +1,7 @@
 CREATE TABLE busstop_url (
   id   INTEGER PRIMARY KEY,
-  busstop VARCHAR(255),
-  busname VARCHAR(255),
-  destination VARCHAR(255),
-  url VARCHAR(255) UNIQUE
+  busstop VARCHAR(255) NOT NUll,
+  busname VARCHAR(255) NOT NUll,
+  destination VARCHAR(255) NOT NUll,
+  url VARCHAR(255) UNIQUE NOT NUll
 );

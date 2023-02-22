@@ -5,5 +5,5 @@ sql:
     queries: "query.sql"
     gen:
       go:
-        package: "bustimerkic"
+        package: "bustimersqlc"
         out: "gen"

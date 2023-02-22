@@ -2,16 +2,14 @@
 // versions:
 //   sqlc v1.17.0
 
-package bustimerkic
+package bustimersqlc
 
-import (
-	"database/sql"
-)
+import ()
 
 type BusstopUrl struct {
 	ID          int64
-	Busstop     sql.NullString
-	Busname     sql.NullString
-	Destination sql.NullString
-	Url         sql.NullString
+	Busstop     string
+	Busname     string
+	Destination string
+	Url         string
 }
