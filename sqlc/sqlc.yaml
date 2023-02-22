@@ -6,4 +6,4 @@ sql:
     gen:
       go:
         package: "bustimerkic"
-        out: "sqlc"
+        out: "gen"
