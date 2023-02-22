@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"practice-colly/domain/model"
-	"practice-colly/domain/repository"
+	"bustimerkic/domain/model"
+	"bustimerkic/domain/repository"
 )
 
 type getBusstopListUseCaseImpl struct {

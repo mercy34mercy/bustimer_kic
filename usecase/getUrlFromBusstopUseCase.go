@@ -1,9 +1,9 @@
 package usecase
 
 import (
-	"practice-colly/domain/model"
-	"practice-colly/domain/repository"
-	"practice-colly/infra/localcache"
+	"bustimerkic/domain/model"
+	"bustimerkic/domain/repository"
+	"bustimerkic/infra/localcache"
 )
 
 type getUrlFromBusstopUseCaseImpl struct {

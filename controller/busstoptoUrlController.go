@@ -1,8 +1,8 @@
 package controller
 
 import (
-	repositoryimpl "practice-colly/infra/repositoryImpl"
-	"practice-colly/usecase"
+	repositoryimpl "bustimerkic/infra/repositoryImpl"
+	"bustimerkic/usecase"
 )
 
 type BusstoToUrlController struct{}

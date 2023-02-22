@@ -1,8 +1,8 @@
 package createdb
 
 import (
-	"practice-colly/domain/model"
-	"practice-colly/infra"
+	"bustimerkic/domain/model"
+	"bustimerkic/infra"
 	"regexp"
 	"strconv"
 	"strings"

@@ -1,6 +1,6 @@
 package repository
 
-import "practice-colly/domain/model"
+import "bustimerkic/domain/model"
 
 type BusstopToTimetableRepository interface {
 	FindURL(busstop string,destination string)([]string,error)

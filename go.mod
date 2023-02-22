@@ -1,4 +1,4 @@
-module practice-colly
+module bustimerkic
 
 go 1.19
 

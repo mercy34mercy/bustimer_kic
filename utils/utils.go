@@ -3,9 +3,9 @@ package utils
 import (
 	"fmt"
 	"net/http"
-	"practice-colly/controller"
-	"practice-colly/domain/model"
-	"practice-colly/infra"
+	"bustimerkic/controller"
+	"bustimerkic/domain/model"
+	"bustimerkic/infra"
 	"regexp"
 	"strings"
 

@@ -2,7 +2,7 @@ package infra
 
 import (
 	"fmt"
-	"practice-colly/domain/model"
+	"bustimerkic/domain/model"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
