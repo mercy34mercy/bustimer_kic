@@ -76,7 +76,7 @@ func TestRequiredTime(t *testing.T) {
 // 	}
 // }
 func TestHandler(t *testing.T) {
-	infra.Init("../gorm.db")
+	infra.Init("gorm.db")
 	localcache.Init()
 	router := Routing()
 	for i, busstoplist := range config.BusstoptoRitsList {
@@ -184,7 +184,7 @@ func TestHandler(t *testing.T) {
 }
 
 func TestTimetableMultiHandler(t *testing.T) {
-	infra.Init("../gorm.db")
+	infra.Init("gorm.db")
 	localcache.Init()
 	router := Routing()
 	for i, busstoplist := range config.BusstoptoRitsList {
