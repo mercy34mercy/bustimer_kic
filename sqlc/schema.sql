@@ -1,5 +1,5 @@
-CREATE TABLE busstop_url (
-  id   INTEGER PRIMARY KEY,
+CREATE TABLE busstop_urls (
+  id   INTEGER PRIMARY KEY AUTOINCREMENT,
   busstop VARCHAR(255) NOT NUll,
   busname VARCHAR(255) NOT NUll,
   destination VARCHAR(255) NOT NUll,

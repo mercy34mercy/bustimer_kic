@@ -9,10 +9,46 @@ import (
 	"context"
 )
 
+const createBusstopUrl = `-- name: CreateBusstopUrl :one
+;
+
+INSERT INTO busstop_urls (
+    busstop,busname,destination,url
+) VALUES (
+    ?,?,?,?
+)
+RETURNING id, busstop, busname, destination, url
+`
+
+type CreateBusstopUrlParams struct {
+	Busstop     string
+	Busname     string
+	Destination string
+	Url         string
+}
+
+func (q *Queries) CreateBusstopUrl(ctx context.Context, arg CreateBusstopUrlParams) (BusstopUrl, error) {
+	row := q.db.QueryRowContext(ctx, createBusstopUrl,
+		arg.Busstop,
+		arg.Busname,
+		arg.Destination,
+		arg.Url,
+	)
+	var i BusstopUrl
+	err := row.Scan(
+		&i.ID,
+		&i.Busstop,
+		&i.Busname,
+		&i.Destination,
+		&i.Url,
+	)
+	return i, err
+}
+
 const getBusinfoFromBusname = `-- name: GetBusinfoFromBusname :many
 ;
 
-SELECT id, busstop, busname, destination, url FROM busstop_url
+SELECT id, busstop, busname, destination, url FROM busstop_urls
 WHERE busname = ? AND busstop  = ?
 `
 
@@ -51,7 +87,7 @@ func (q *Queries) GetBusinfoFromBusname(ctx context.Context, arg GetBusinfoFromB
 }
 
 const getBusinfoFromDestination = `-- name: GetBusinfoFromDestination :many
-SELECT id, busstop, busname, destination, url FROM busstop_url
+SELECT id, busstop, busname, destination, url FROM busstop_urls
 WHERE destination = ? AND busstop  = ?
 `
 
@@ -76,6 +112,41 @@ func (q *Queries) GetBusinfoFromDestination(ctx context.Context, arg GetBusinfoF
 			&i.Destination,
 			&i.Url,
 		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getBusstopAndDestination = `-- name: GetBusstopAndDestination :many
+;
+
+SELECT busstop,destination FROM busstop_urls
+WHERE busname = ?
+`
+
+type GetBusstopAndDestinationRow struct {
+	Busstop     string
+	Destination string
+}
+
+func (q *Queries) GetBusstopAndDestination(ctx context.Context, busname string) ([]GetBusstopAndDestinationRow, error) {
+	rows, err := q.db.QueryContext(ctx, getBusstopAndDestination, busname)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetBusstopAndDestinationRow
+	for rows.Next() {
+		var i GetBusstopAndDestinationRow
+		if err := rows.Scan(&i.Busstop, &i.Destination); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

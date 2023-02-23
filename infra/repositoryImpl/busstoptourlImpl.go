@@ -269,11 +269,15 @@ func (repository *BusstopToTimetableRepositoryImpl) EncodeDestination(destinatio
 	return destination
 }
 
-func (repository *BusstopToTimetableRepositoryImpl) FindBusstopList(busname string) ([]model.Busstop, error) {
+func (repository *BusstopToTimetableRepositoryImpl) FindBusstopList(busname string) ([]bustimersqlc.GetBusstopAndDestinationRow, error) {
 	var err error
+	ctx := context.Background()
 	db := infra.GetDB()
-	busstoplist := []model.Busstop{}
-	if err = db.Model(&model.BusstopUrl{}).Where("busname = ?", busname).Select("busstop", "destination").Scan(&busstoplist).Error; err != nil {
+	queries := bustimersqlc.New(db)
+	// busstoplist := []model.Busstop{}
+
+	busstoplist,err:= queries.GetBusstopAndDestination(ctx,busname)
+	if err != nil {
 		//エラーハンドリング
 		fmt.Printf("db select Error!!!! err:%v\n", err)
 	}

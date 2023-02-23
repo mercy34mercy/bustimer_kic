@@ -1,19 +1,20 @@
 package main
 
 import (
-	"bytes"
-	"net/http"
-	"os"
 	"bustimerkic/controller"
 	"bustimerkic/domain/model"
 	"bustimerkic/infra"
 	"bustimerkic/infra/localcache"
+	"bytes"
+	"net/http"
+	"os"
+
 	"github.com/labstack/echo"
 )
 
 
 func main() {
-	infra.Init("../gorm.db")
+	infra.Init("gorm.db")
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"

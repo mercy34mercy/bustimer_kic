@@ -3,6 +3,7 @@ package infra
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 var (
@@ -15,7 +16,7 @@ func Init(path string) *sql.DB {
 	if err != nil {
 		fmt.Printf("読み込み出来ませんでした: %v", err)
 	}
-	db, err = sql.Open(path, ":memory:")
+	db, err = sql.Open("sqlite3",path)
 	if err != nil {
 		fmt.Println("db init error: ", err)
 	}
