@@ -200,7 +200,7 @@ Five members of watnow are developing backend, iOS, and Android applications fro
 
 # Other Projects
 <img src=".img/busdes_icon.png" width="30%"> \
-Busdes!は立命館大学びわこ草津キャンパスと南草津駅をつなぐバスの時刻表アプリです。\
-このアプリも学生団体watnowで開発し運営しています。
+Busdes! is a bus schedule application connecting Ritsumeikan University Biwako Kusatsu Campus and Minami-Kusatsu Station. \
+This application is also developed and operated by student group watnow.
 * [Android Application](https://play.google.com/store/apps/details?id=busdes.rits.jp&hl=ja&gl=US&pli=1)
 * [iOS Application](https://apps.apple.com/jp/app/busdes-%E3%83%90%E3%82%B9%E3%81%A7%E3%81%99/id1491015874) 
