@@ -43,7 +43,7 @@ func TestBusstopToTimetableRepositoryImpl_EncodeDestination(t *testing.T) {
 }
 
 func TestFindUrlFromBusstopToRitsumei(t *testing.T) {
-	infra.Init("../../app/gorm.db")
+	infra.Init("../../gorm.db")
 	for _, busstoplist := range config.BusstoptoRitsList {
 		for _, busstop := range busstoplist {
 			repository := &BusstopToTimetableRepositoryImpl{}
@@ -62,7 +62,7 @@ func TestFindUrlFromBusstopToRitsumei(t *testing.T) {
 }
 
 func TestFindUrlFromBusstopFromRitsumei(t *testing.T) {
-	infra.Init("../../app/gorm.db")
+	infra.Init("../../gorm.db")
 	for _, busstoplist := range config.BusstopfromRitsList {
 		for _, busstop := range busstoplist {
 			repository := &BusstopToTimetableRepositoryImpl{}
