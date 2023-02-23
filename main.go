@@ -8,7 +8,6 @@ import (
 	"bytes"
 	"net/http"
 	"os"
-
 	"github.com/labstack/echo"
 )
 
