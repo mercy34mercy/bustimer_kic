@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http/httptest"
-	"practice-colly/config"
-	"practice-colly/domain/model"
-	"practice-colly/infra"
-	"practice-colly/infra/localcache"
+	"bustimerkic/config"
+	"bustimerkic/domain/model"
+	"bustimerkic/infra"
+	"bustimerkic/infra/localcache"
 	"testing"
 )
 

@@ -1,13 +1,13 @@
 package main
 
 import (
+	"bustimerkic/controller"
+	"bustimerkic/domain/model"
+	"bustimerkic/infra"
+	"bustimerkic/infra/localcache"
 	"bytes"
 	"net/http"
 	"os"
-	"practice-colly/controller"
-	"practice-colly/domain/model"
-	"practice-colly/infra"
-	"practice-colly/infra/localcache"
 	"github.com/labstack/echo"
 )
 

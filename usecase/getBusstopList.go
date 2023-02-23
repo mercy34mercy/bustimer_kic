@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"practice-colly/domain/model"
-	"practice-colly/domain/repository"
+	"bustimerkic/domain/repository"
+	bustimersqlc "bustimerkic/sqlc/gen"
 )
 
 type getBusstopListUseCaseImpl struct {
@@ -11,7 +11,7 @@ type getBusstopListUseCaseImpl struct {
 }
 
 type getBusstopListUseCase interface{
-	FindBusstopList()([]model.Busstop,error)
+	FindBusstopList()([]bustimersqlc.GetBusstopAndDestinationRow,error)
 }
 
 func NewGetBusstopListUseCaseImpl(Busname string,busstoptotimetablerepository repository.BusstopToTimetableRepository) getBusstopListUseCase {
@@ -21,7 +21,7 @@ func NewGetBusstopListUseCaseImpl(Busname string,busstoptotimetablerepository re
 	}
 }
 
-func (impl getBusstopListUseCaseImpl) FindBusstopList()([]model.Busstop,error){
+func (impl getBusstopListUseCaseImpl) FindBusstopList()([]bustimersqlc.GetBusstopAndDestinationRow,error){
 	busstoplist,err := impl.BusstopToTimetableRepository.FindBusstopList(impl.Busname)
 	return busstoplist,err
 }

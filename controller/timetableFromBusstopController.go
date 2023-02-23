@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"practice-colly/domain/model"
-	repositoryImpl "practice-colly/infra/repositoryImpl"
-	"practice-colly/usecase"
+	"bustimerkic/domain/model"
+	repositoryImpl "bustimerkic/infra/repositoryImpl"
+	"bustimerkic/usecase"
 )
 
 type TimetableFromBusstopController struct{}

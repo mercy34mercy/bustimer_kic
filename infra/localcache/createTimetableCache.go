@@ -1,7 +1,7 @@
 package localcache
 
 import (
-	"practice-colly/domain/model"
+	"bustimerkic/domain/model"
 	"time"
 
 	"github.com/patrickmn/go-cache"

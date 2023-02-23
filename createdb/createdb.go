@@ -1,8 +1,9 @@
 package createdb
 
 import (
-	"practice-colly/domain/model"
-	"practice-colly/infra"
+	"bustimerkic/infra"
+	bustimersqlc "bustimerkic/sqlc/gen"
+	"context"
 	"regexp"
 	"strconv"
 	"strings"
@@ -11,7 +12,9 @@ import (
 )
 
 func dbcreate(){
+	ctx := context.Background()
 	db := infra.GetDB()
+	queries := bustimersqlc.New(db)
 	for i:=3300;i<999999;i++{
 		index := strconv.Itoa(i)
 		length := len(index)
@@ -32,7 +35,7 @@ func dbcreate(){
 			idx = index
 		}
 		busname,busstop,destination,url := getViaandBusstop(idx)
-		db.Create(&model.BusstopUrl{Busstop: busstop,Busname: busname,Destination: destination,URL: url})
+		queries.CreateBusstopUrl(ctx,bustimersqlc.CreateBusstopUrlParams{Busstop: busstop,Busname: busname,Destination: destination,Url: url})
 	}
 
 }
