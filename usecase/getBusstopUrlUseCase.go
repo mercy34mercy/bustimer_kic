@@ -1,6 +1,6 @@
 package usecase
 
-import "practice-colly/domain/repository"
+import "bustimerkic/domain/repository"
 
 type getBusstopUrlUseCaseImpl struct {
 	Busstop string

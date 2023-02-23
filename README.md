@@ -11,7 +11,9 @@
 * [colly](http://go-colly.org/)
 * [go-cache](https://github.com/patrickmn/go-cache)
 * [sqlite](https://github.com/mattn/go-sqlite3)
-* [gorm](https://github.com/go-gorm/gorm)
+
+## ツール
+* [sqlc](https://sqlc.dev/)
 
 ## アーキテクチャ
 * Clean Archtechture
@@ -92,7 +94,9 @@ This application displays real-time bus information between Ritsumeikan Universi
 * [colly](http://go-colly.org/)
 * [go-cache](https://github.com/patrickmn/go-cache)
 * [sqlite](https://github.com/mattn/go-sqlite3)
-* [gorm](https://github.com/go-gorm/gorm)
+
+## tool
+* [sqlc](https://sqlc.dev/)
 
 ## architecture
 * Clean Archtechture

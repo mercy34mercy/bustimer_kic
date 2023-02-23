@@ -1,11 +1,13 @@
 package utils
 
 import (
+	"bustimerkic/controller"
+	"bustimerkic/domain/model"
+	"bustimerkic/infra"
+	bustimersqlc "bustimerkic/sqlc/gen"
+	"context"
 	"fmt"
 	"net/http"
-	"practice-colly/controller"
-	"practice-colly/domain/model"
-	"practice-colly/infra"
 	"regexp"
 	"strings"
 
@@ -123,12 +125,14 @@ func getTimeTable(scrapedata []string, via string, busstop string) {
 }
 
 func Dbcreate() {
+	ctx := context.Background()
 	db := infra.GetDB()
+	queries := bustimersqlc.New(db)
 	idx := "4030410"
 		fmt.Println(idx)
 		busname, busstop, destination, url := getViaandBusstops(idx)
 		if len(busname) != 0 {
-			db.Create(&model.BusstopUrl{Busstop: busstop, Busname: busname, Destination: destination, URL: url})
+			queries.CreateBusstopUrl(ctx,bustimersqlc.CreateBusstopUrlParams{Busstop: busstop, Busname: busname, Destination: destination, Url: url})
 		}
 }
 

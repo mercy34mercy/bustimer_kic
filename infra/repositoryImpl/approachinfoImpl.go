@@ -1,9 +1,9 @@
 package repositoryimpl
 
 import (
-	"practice-colly/config"
-	"practice-colly/domain/model"
-	"practice-colly/domain/repository"
+	"bustimerkic/config"
+	"bustimerkic/domain/model"
+	"bustimerkic/domain/repository"
 	"strconv"
 	"time"
 )

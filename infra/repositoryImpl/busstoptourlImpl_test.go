@@ -1,8 +1,8 @@
 package repositoryimpl
 
 import (
-	"practice-colly/config"
-	"practice-colly/infra"
+	"bustimerkic/config"
+	"bustimerkic/infra"
 	"testing"
 )
 
