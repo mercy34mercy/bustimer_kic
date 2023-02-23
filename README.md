@@ -48,13 +48,18 @@ busdes-kic-apiは、GCPのCloudRun(Google Cloud Plateform)上で動作してい�
 このシステムでは、GithubActionsを使用して継続的なインティグレーションと継続的なデリバリーを実現しています。
 
 ### 本番環境
-![構成図](.img/busdes-kic-api.png)
+<p align="center">
+<img src=".img/busdes-kic-api.png" width="70%" >
+</p>
+
 ### 開発環境
-![構成図](.img/busdes-kic-api-dev.png)
+<p align="center">
+<img src=".img/busdes-kic-api-dev.png" width="70%">
+</p>
 
 
 # 開発環境
-## Github Repository
+## Github レポジトリ
 * [Backend Repository(Public)](https://github.com/mercy34mercy/bustimer_kic)
 * [Android Application Repository(Private)](https://github.com/mercy34mercy/bus-des-kic-android)
 * [iOS Application Repository(Public)](https://github.com/kuro48/BusdesKICNativeiOS)
@@ -82,6 +87,22 @@ I referred to this [article](https://qiita.com/KosukeSone/items/514dd24828b485c6
     * [chell-uoxou](https://github.com/chell-uoxou)
     * [F-mm1229](https://github.com/F-mm1229)
 
+## 組織概要
+私たちは、立命館大学を中心に活動するIT学生団体[watnow](http://www.watnow.jp/)です。\
+watnowのメンバー5名で、2022/9～ backend,iOS,Androidアプリの開発を進めています。また、2022/12～はWeb開発メンバーも加わり計8名でBudes-KICの開発を行っています。
+<p align="center">
+<img src=".img/watnows.png" width="70%" >
+</p>
+
+# 他プロジェクト
+<p align="left">
+<img src=".img/busdes_icon.png" width="30%">
+</p>
+
+Busdes!は立命館大学びわこ草津キャンパスと南草津駅をつなぐバスの時刻表アプリです。\
+このアプリも学生団体watnowで開発し運営しています。
+* [Androidアプリ](https://play.google.com/store/apps/details?id=busdes.rits.jp&hl=ja&gl=US&pli=1)
+* [iOSアプリ](https://apps.apple.com/jp/app/busdes-%E3%83%90%E3%82%B9%E3%81%A7%E3%81%99/id1491015874) 
 
 # overview
 This application displays real-time bus information between Ritsumeikan University Kinugasa Campus and the station.
@@ -132,10 +153,14 @@ In the development environment, Docker Container is Deployed to Azure's App Serv
 The system uses GithubActions for continuous intigration and continuous delivery.
 
 ### Production
-![構成図](.img/busdes-kic-api.png)
+<p align="center">
+<img src=".img/busdes-kic-api.png" width="70%" >
+</p>
 
 ### Development
-![構成図](.img/busdes-kic-api-dev.png)
+<p align="center">
+<img src=".img/busdes-kic-api-dev.png" width="70%">
+</p>
 
 # Development Overview
 ## Github Repository
@@ -165,3 +190,17 @@ I referred to this [article](https://qiita.com/KosukeSone/items/514dd24828b485c6
 * Designer
     * [chell-uoxou](https://github.com/chell-uoxou)
     * [F-mm1229](https://github.com/F-mm1229)
+
+## Organizational Profile
+We are [watnow](http://www.watnow.jp/), an IT student group based in Ritsumeikan University. \
+Five members of watnow are developing backend, iOS, and Android applications from 2022/9. Also, from 2022/12, 3 web app developers will join to develop Budes-KIC with a total of 8 members.
+<p align="center">
+<img src=".img/watnows.png" width="70%" >
+</p>
+
+# Other Projects
+<img src=".img/busdes_icon.png" width="30%"> \
+Busdes! is a bus schedule application connecting Ritsumeikan University Biwako Kusatsu Campus and Minami-Kusatsu Station. \
+This application is also developed and operated by student group watnow.
+* [Android Application](https://play.google.com/store/apps/details?id=busdes.rits.jp&hl=ja&gl=US&pli=1)
+* [iOS Application](https://apps.apple.com/jp/app/busdes-%E3%83%90%E3%82%B9%E3%81%A7%E3%81%99/id1491015874) 
