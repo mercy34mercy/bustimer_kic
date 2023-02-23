@@ -96,7 +96,7 @@ This application displays real-time bus information between Ritsumeikan Universi
 * [sqlite](https://github.com/mattn/go-sqlite3)
 
 ## tool
-* * [sqlc](https://sqlc.dev/)
+* [sqlc](https://sqlc.dev/)
 
 ## architecture
 * Clean Archtechture
