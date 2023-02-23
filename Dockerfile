@@ -9,4 +9,4 @@ WORKDIR /go/src/app
 # ホストのファイルをコンテナの作業ディレクトリに移行
 ADD . /go/src/app
 
-CMD [ "go","run","/main.go" ]
+CMD [ "go","run","main.go" ]
