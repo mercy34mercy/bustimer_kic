@@ -1,19 +1,23 @@
 ![](https://img.shields.io/github/actions/workflow/status/mercy34mercy/bustimer_kic/prod-deploy.yaml?label=Cloud%20Run%20Deploy)
 
 ![](https://img.shields.io/github/actions/workflow/status/mercy34mercy/bustimer_kic/prod-ci.yaml?label=Unit%20Test)
+
+<h1 align="center"> Busdes-KIC</h1>
+
+
 # 概要
 立命館大学衣笠キャンパスと駅を結ぶバス情報をリアルタイムに表示するアプリケーションです。
 ## 言語
 * [Go](https://go.dev/)
     * Supported Versions (Go 1.9 ～) ※このバージョンより古いものに関しては動作確認していません
 ## ライブラリ
-* [echo](https://echo.labstack.com/)
-* [colly](http://go-colly.org/)
-* [go-cache](https://github.com/patrickmn/go-cache)
-* [sqlite](https://github.com/mattn/go-sqlite3)
+* [echo](https://echo.labstack.com/) (Http Client)
+* [colly](http://go-colly.org/) (Scraping)
+* [go-cache](https://github.com/patrickmn/go-cache)(Cache Library)
+* [sqlite](https://github.com/mattn/go-sqlite3) (Database Library)
 
 ## ツール
-* [sqlc](https://sqlc.dev/)
+* [sqlc](https://sqlc.dev/)(SQL Query Builder)
 
 ## アーキテクチャ
 * Clean Archtechture
@@ -28,6 +32,12 @@
 | /timetable       | fr(string),to(string) | frからtoに走っているバスのfr駅時刻表                                 | 
 | /timetable/multi | fr(string),to(string) | frからtoに走っているバスのfr駅時刻表(frかtoに複数のバス停を指定可能) | 
 | /nextbus         | fr(string),to(string) | frからtoに走るバスのfr駅の次に来るバスの情報(最大3個)                | 
+
+## 路線図
+<p align="center">
+<img src=".img/busdes-kic-api-rosen.png" width="70%" >
+</p>
+
 # インフラ
 ## 使用環境
 ### 本番環境
@@ -71,7 +81,7 @@ I referred to this [article](https://qiita.com/KosukeSone/items/514dd24828b485c6
     * develop
         * feat/***
         * fix/***
-## contributor
+## Contributor
 * Backend
     * [mercy34mercy](https://github.com/mercy34mercy)
 * Android
@@ -111,13 +121,13 @@ This application displays real-time bus information between Ritsumeikan Universi
 * [Go](https://go.dev/)
     * Supported Versions (Go 1.9 ～) ※We have not checked the operation of older versions.
 ## Library
-* [echo](https://echo.labstack.com/)
-* [colly](http://go-colly.org/)
-* [go-cache](https://github.com/patrickmn/go-cache)
-* [sqlite](https://github.com/mattn/go-sqlite3)
+* [echo](https://echo.labstack.com/) (Http Client)
+* [colly](http://go-colly.org/) (Scraping)
+* [go-cache](https://github.com/patrickmn/go-cache)(Cache Library)
+* [sqlite](https://github.com/mattn/go-sqlite3) (Database Library)
 
 ## tool
-* [sqlc](https://sqlc.dev/)
+* [sqlc](https://sqlc.dev/) (SQL Query Builder)
 
 ## architecture
 * Clean Archtechture
@@ -132,6 +142,12 @@ This application displays real-time bus information between Ritsumeikan Universi
 | /timetable       | fr(string),to(string) | Bus stop (fr) timetable for buses running from (fr) to (to)                                                              | 
 | /timetable/multi | fr(string),to(string) | Timetable of bus stops (fr) for buses running from (fr) to (to) (multiple bus stops can be specified by either fr or to) | 
 | /nextbus         | fr(string),to(string) | Information on the next bus (max 3 buses) coming to (fr) station for buses from (fr) to (to)                             | 
+
+
+## route map
+<p align="center">
+<img src=".img/busdes-kic-api-rosen.png" width="70%" >
+</p>
 
 # Infra
 ## environment
