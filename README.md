@@ -2,6 +2,8 @@
 
 ![](https://img.shields.io/github/actions/workflow/status/mercy34mercy/bustimer_kic/prod-ci.yaml?label=Unit%20Test)
 
+[![codecov](https://codecov.io/gh/mercy34mercy/bustimer_kic/branch/main/graph/badge.svg?token=61ZXKPOS9E)](https://codecov.io/gh/mercy34mercy/bustimer_kic)
+
 <h1 align="center"> Busdes-KIC</h1>
 
 
