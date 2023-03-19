@@ -69,6 +69,9 @@ busdes-kic-apiは、GCPのCloudRun(Google Cloud Plateform)上で動作してい�
 <img src=".img/busdes-kic-api-dev.png" width="70%">
 </p>
 
+### Test Coverage
+[codecove.io](https://about.codecov.io/)を用いることでTestのcoverageを計測しREADMEに掲載しています。
+
 
 # 開発環境
 ## Github レポジトリ
@@ -179,6 +182,9 @@ The system uses GithubActions for continuous intigration and continuous delivery
 <p align="center">
 <img src=".img/busdes-kic-api-dev.png" width="70%">
 </p>
+
+### Test Coverage
+The Test coverage is measured by using [codecove.io](https://about.codecov.io/) and posted in the README.
 
 # Development Overview
 ## Github Repository
