@@ -10,7 +10,7 @@ env:
   PORT: ${{ secrets.PORT }}
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GCP_REGION: ${{ secrets.GCP_REGION }}
-  IMAGE:  ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/mashikotyan/${{ secrets.SERVICE_NAME }}:${{ github.sha }}
+  IMAGE:  ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/bustimer-kic/${{ secrets.SERVICE_NAME }}:${{ github.sha }}
   SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
 
 jobs:
