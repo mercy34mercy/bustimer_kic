@@ -6,10 +6,6 @@ on:
       - opened
     branches:
       - main 
-  push:
-    branches-ignore:
-      - "main"
-      - "develop"
 
 jobs:
   build:
