@@ -12,6 +12,7 @@ import (
 )
 
 func TestRequiredTime(t *testing.T) {
+	t.Parallel()
 	for i, busstoplist := range config.BusstopAllList {
 		for _, busstop := range busstoplist {
 			requiredTime := config.GetBusstop(busstop, config.AllBusname[i])
@@ -79,6 +80,7 @@ func TestHandler(t *testing.T) {
 	infra.Init("gorm.db")
 	localcache.Init()
 	router := Routing()
+	t.Parallel()
 	for i, busstoplist := range config.BusstoptoRitsList {
 		for _, busstop := range busstoplist {
 			req := httptest.NewRequest("GET", "/timetable?fr="+busstop+"&to=立命館大学", nil)
@@ -187,6 +189,7 @@ func TestTimetableMultiHandler(t *testing.T) {
 	infra.Init("gorm.db")
 	localcache.Init()
 	router := Routing()
+	t.Parallel()
 	for i, busstoplist := range config.BusstoptoRitsList {
 		for _, busstop := range busstoplist {
 			req := httptest.NewRequest("GET", "/timetable/multi?fr="+busstop+"&to=立命館大学", nil)
