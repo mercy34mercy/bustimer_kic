@@ -31,7 +31,6 @@ func Test_toInt64(t *testing.T) {
 }
 
 func TestBusstopToTimetableRepositoryImpl_EncodeDestination(t *testing.T) {
-	t.Parallel()
 	tests := config.ChangedestinationList
 	for _, tt := range tests {
 		t.Run(tt, func(t *testing.T) {
@@ -44,8 +43,8 @@ func TestBusstopToTimetableRepositoryImpl_EncodeDestination(t *testing.T) {
 }
 
 func TestFindUrlFromBusstopToRitsumei(t *testing.T) {
-	infra.Init("../../gorm.db")
 	t.Parallel()
+	infra.Init("../../gorm.db")
 	for _, busstoplist := range config.BusstoptoRitsList {
 		for _, busstop := range busstoplist {
 			repository := &BusstopToTimetableRepositoryImpl{}
@@ -64,8 +63,8 @@ func TestFindUrlFromBusstopToRitsumei(t *testing.T) {
 }
 
 func TestFindUrlFromBusstopFromRitsumei(t *testing.T) {
-	infra.Init("../../gorm.db")
 	t.Parallel()
+	infra.Init("../../gorm.db")
 	for _, busstoplist := range config.BusstopfromRitsList {
 		for _, busstop := range busstoplist {
 			repository := &BusstopToTimetableRepositoryImpl{}
