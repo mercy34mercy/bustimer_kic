@@ -6,6 +6,10 @@ on:
       - opened
     branches:
       - main 
+  push:
+    branches:
+      - "main"
+      - "develop"
 
 jobs:
   build:
