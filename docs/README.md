@@ -37,7 +37,7 @@
 
 ## 路線図
 <p align="center">
-<img src=".img/busdes-kic-api-rosen.png" width="70%" >
+<img src="img/busdes-kic-api-rosen.png" width="70%" >
 </p>
 
 # インフラ
@@ -61,12 +61,12 @@ busdes-kic-apiは、GCPのCloudRun(Google Cloud Plateform)上で動作してい�
 
 ### 本番環境
 <p align="center">
-<img src=".img/busdes-kic-api.png" width="70%" >
+<img src="img/busdes-kic-api.png" width="70%" >
 </p>
 
 ### 開発環境
 <p align="center">
-<img src=".img/busdes-kic-api-dev.png" width="70%">
+<img src="img/busdes-kic-api-dev.png" width="70%">
 </p>
 
 ### Test Coverage
@@ -106,12 +106,12 @@ I referred to this [article](https://qiita.com/KosukeSone/items/514dd24828b485c6
 私たちは、立命館大学を中心に活動するIT学生団体[watnow](http://www.watnow.jp/)です。\
 watnowのメンバー5名で、2022/9～ backend,iOS,Androidアプリの開発を進めています。また、2022/12～はWeb開発メンバーも加わり計8名でBudes-KICの開発を行っています。
 <p align="center">
-<img src=".img/watnows.png" width="70%" >
+<img src="img/watnows.png" width="70%" >
 </p>
 
 # 他プロジェクト
 <p align="left">
-<img src=".img/busdes_icon.png" width="30%">
+<img src="img/busdes_icon.png" width="30%">
 </p>
 
 Busdes!は立命館大学びわこ草津キャンパスと南草津駅をつなぐバスの時刻表アプリです。\
@@ -151,7 +151,7 @@ This application displays real-time bus information between Ritsumeikan Universi
 
 ## route map
 <p align="center">
-<img src=".img/busdes-kic-api-rosen.png" width="70%" >
+<img src="img/busdes-kic-api-rosen.png" width="70%" >
 </p>
 
 # Infra
@@ -175,12 +175,12 @@ The system uses GithubActions for continuous intigration and continuous delivery
 
 ### Production
 <p align="center">
-<img src=".img/busdes-kic-api.png" width="70%" >
+<img src="img/busdes-kic-api.png" width="70%" >
 </p>
 
 ### Development
 <p align="center">
-<img src=".img/busdes-kic-api-dev.png" width="70%">
+<img src="img/busdes-kic-api-dev.png" width="70%">
 </p>
 
 ### Test Coverage
@@ -219,11 +219,11 @@ I referred to this [article](https://qiita.com/KosukeSone/items/514dd24828b485c6
 We are [watnow](http://www.watnow.jp/), an IT student group based in Ritsumeikan University. \
 Five members of watnow are developing backend, iOS, and Android applications from 2022/9. Also, from 2022/12, 3 web app developers will join to develop Budes-KIC with a total of 8 members.
 <p align="center">
-<img src=".img/watnows.png" width="70%" >
+<img src="img/watnows.png" width="70%" >
 </p>
 
 # Other Projects
-<img src=".img/busdes_icon.png" width="30%"> \
+<img src="img/busdes_icon.png" width="30%"> \
 Busdes! is a bus schedule application connecting Ritsumeikan University Biwako Kusatsu Campus and Minami-Kusatsu Station. \
 This application is also developed and operated by student group watnow.
 * [Android Application](https://play.google.com/store/apps/details?id=busdes.rits.jp&hl=ja&gl=US&pli=1)
