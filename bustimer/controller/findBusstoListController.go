@@ -1,15 +1,15 @@
 package controller
 
 import (
-	repositoryimpl "bustimerkic/infra/repositoryImpl"
-	bustimersqlc "bustimerkic/sqlc/gen"
-	"bustimerkic/usecase"
+	repositoryimpl "github.com/mercy34mercy/bustimer_kic/bustimer/infra/repositoryImpl"
+	bustimersqlc "github.com/mercy34mercy/bustimer_kic/bustimer/sqlc/gen"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/usecase"
 )
 
 type FindBusstopListController struct{}
 
-func (ctrl FindBusstopListController) FindBusstopList(busname string)([]bustimersqlc.GetBusstopAndDestinationRow,error){
+func (ctrl FindBusstopListController) FindBusstopList(busname string) ([]bustimersqlc.GetBusstopAndDestinationRow, error) {
 	busstoptotimetableRepository := repositoryimpl.NewBusstopToUrlRepositoryImpl()
-	result,err := usecase.NewGetBusstopListUseCaseImpl(busname,busstoptotimetableRepository).FindBusstopList()
-	return result,err
+	result, err := usecase.NewGetBusstopListUseCaseImpl(busname, busstoptotimetableRepository).FindBusstopList()
+	return result, err
 }

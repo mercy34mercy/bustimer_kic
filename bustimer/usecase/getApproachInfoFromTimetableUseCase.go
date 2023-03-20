@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"bustimerkic/domain/model"
-	"bustimerkic/domain/repository"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/domain/model"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/domain/repository"
 )
 
 type getApproachInfoFromTimetableUseCaseImpl struct {
@@ -16,16 +16,16 @@ type getApproachInfoFromTimetableUseCase interface {
 	FindApproachInfoFromTimeTable() model.ApproachInfos
 }
 
-func NewGetApproachInfoFromTimeTableUseCaseImpl(timetable model.TimeTable, busstop string, via string,ApproachInforepository repository.ApproachInfoRepository) getApproachInfoFromTimetableUseCase {
+func NewGetApproachInfoFromTimeTableUseCaseImpl(timetable model.TimeTable, busstop string, via string, ApproachInforepository repository.ApproachInfoRepository) getApproachInfoFromTimetableUseCase {
 	return getApproachInfoFromTimetableUseCaseImpl{
-		TimeTable: timetable,
-		Bustop:    busstop,
-		Via:       via,
+		TimeTable:              timetable,
+		Bustop:                 busstop,
+		Via:                    via,
 		ApproachInforepository: ApproachInforepository,
 	}
 }
 
 func (impl getApproachInfoFromTimetableUseCaseImpl) FindApproachInfoFromTimeTable() model.ApproachInfos {
-	approachInfo := impl.ApproachInforepository.FindApproachInfoFromTimeTable(impl.TimeTable,impl.Bustop,impl.Via)
+	approachInfo := impl.ApproachInforepository.FindApproachInfoFromTimeTable(impl.TimeTable, impl.Bustop, impl.Via)
 	return approachInfo
 }

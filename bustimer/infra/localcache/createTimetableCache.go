@@ -1,8 +1,9 @@
 package localcache
 
 import (
-	"bustimerkic/domain/model"
 	"time"
+
+	"github.com/mercy34mercy/bustimer_kic/bustimer/domain/model"
 
 	"github.com/patrickmn/go-cache"
 )
@@ -20,7 +21,7 @@ func GetGoChache() *cache.Cache {
 	return c
 }
 
-func CreateCachefromTimetable(busstop string,destination string,timetable model.TimeTable) {
+func CreateCachefromTimetable(busstop string, destination string, timetable model.TimeTable) {
 	c.Set(busstop+destination, timetable, cache.DefaultExpiration)
 }
 

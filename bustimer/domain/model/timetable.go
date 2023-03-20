@@ -17,12 +17,12 @@ type TimeTableandDestination struct {
 }
 
 type TimeTable struct {
-	Weekdays  map[int][]OneBusTime `json:"weekdays"`
-	Holidays  map[int][]OneBusTime `json:"holidays"`
+	Weekdays map[int][]OneBusTime `json:"weekdays"`
+	Holidays map[int][]OneBusTime `json:"holidays"`
 }
 
 type OneBusTime struct {
-	BusName     string `json:"bus_name"`
+	BusName string `json:"bus_name"`
 	Min     string `json:"min"`
 	BusStop string `json:"bus_stop"`
 }
@@ -45,17 +45,17 @@ func CreateNewMultiTimeTable(destinationList []string) MultiTimeTable {
 	return multiTimeTable
 }
 
-func (query Query) SplitDestination() ([]string,[]string) {
+func (query Query) SplitDestination() ([]string, []string) {
 	destinationlist := strings.Split(query.Destination, ",")
-	busstopolist := strings.Split(query.Busstop,",")
-	return destinationlist,busstopolist
+	busstopolist := strings.Split(query.Busstop, ",")
+	return destinationlist, busstopolist
 }
 
 func CreateNewTimeTable() TimeTable {
 	// 初期化
 	timetable := TimeTable{
-		Weekdays:  make(map[int][]OneBusTime),
-		Holidays:  make(map[int][]OneBusTime),
+		Weekdays: make(map[int][]OneBusTime),
+		Holidays: make(map[int][]OneBusTime),
 	}
 
 	// 時刻表にあるデータを埋める

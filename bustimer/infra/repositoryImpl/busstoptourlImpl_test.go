@@ -1,9 +1,10 @@
 package repositoryimpl
 
 import (
-	"bustimerkic/config"
-	"bustimerkic/infra"
 	"testing"
+
+	"github.com/mercy34mercy/bustimer_kic/bustimer/config"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/infra"
 )
 
 func Test_toInt64(t *testing.T) {
@@ -53,8 +54,8 @@ func TestFindUrlFromBusstopToRitsumei(t *testing.T) {
 				if err != nil {
 					t.Errorf("BusstopToTimetableRepositoryImpl.FindURLFromBusstop() %s → %s URL Not Found", busstop, "立命館大学")
 				}
-			}else{
-				if err == nil{
+			} else {
+				if err == nil {
 					t.Errorf("BusstopToTimetableRepositoryImpl.FindURLFromBusstop() %s → %s This URL must not exist", busstop, "立命館大学")
 				}
 			}
@@ -73,8 +74,8 @@ func TestFindUrlFromBusstopFromRitsumei(t *testing.T) {
 				if err != nil {
 					t.Errorf("BusstopToTimetableRepositoryImpl.FindURLFromBusstop() %s → %s URL Not Found", "立命館大学前", busstop)
 				}
-			}else{
-				if err == nil{
+			} else {
+				if err == nil {
 					t.Errorf("BusstopToTimetableRepositoryImpl.FindURLFromBusstop() %s → %s This URL must not exist", busstop, "立命館大学")
 				}
 			}

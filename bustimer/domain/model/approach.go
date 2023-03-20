@@ -6,14 +6,14 @@ import (
 )
 
 type ApproachInfo struct {
-	MoreMin 		string `json:"more_min"`
+	MoreMin         string `json:"more_min"`
 	RealArrivalTime string `json:"real_arrival_time"`
-	Direction 		string `json:"direction"`
-	ScheduledTime 	string `json:"scheduled_time"`
-	Delay 			string `json:"delay"`
-	BusStop 		string `json:"bus_stop"`
-	BusName			string `json:"bus_name"`
-	RequiredTime    int `json:"required_time"`
+	Direction       string `json:"direction"`
+	ScheduledTime   string `json:"scheduled_time"`
+	Delay           string `json:"delay"`
+	BusStop         string `json:"bus_stop"`
+	BusName         string `json:"bus_name"`
+	RequiredTime    int    `json:"required_time"`
 }
 
 type ApproachInfos struct {
@@ -44,18 +44,18 @@ func (infos ApproachInfos) GetFastThree() ApproachInfos {
 	min := 99
 	first := compareFastInfo{
 		index: 0,
-		hour: hour,
-		min: min,
+		hour:  hour,
+		min:   min,
 	}
 	second := compareFastInfo{
 		index: 1,
-		hour: hour,
-		min: min,
+		hour:  hour,
+		min:   min,
 	}
 	third := compareFastInfo{
 		index: 2,
-		hour: hour,
-		min: min,
+		hour:  hour,
+		min:   min,
 	}
 	fmt.Printf("first: %v, %v, %v\n", first.index, first.hour, first.min)
 	fmt.Printf("second: %v, %v, %v\n", second.index, second.hour, second.min)

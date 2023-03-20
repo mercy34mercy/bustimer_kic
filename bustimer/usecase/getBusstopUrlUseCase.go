@@ -1,28 +1,26 @@
 package usecase
 
-import "bustimerkic/domain/repository"
+import "github.com/mercy34mercy/bustimer_kic/bustimer/domain/repository"
 
 type getBusstopUrlUseCaseImpl struct {
-	Busstop string
-	Destination string
+	Busstop                      string
+	Destination                  string
 	BusstopToTimetableRepository repository.BusstopToTimetableRepository
-
 }
 
 type getBusstopUrlUseCase interface {
-	FindURL()([]string,error)
+	FindURL() ([]string, error)
 }
 
-func NewGetBusstopUrlUseCaseImpl(Busstop string,Destination string,busstoptotimetablerepository repository.BusstopToTimetableRepository) getBusstopUrlUseCase {
+func NewGetBusstopUrlUseCaseImpl(Busstop string, Destination string, busstoptotimetablerepository repository.BusstopToTimetableRepository) getBusstopUrlUseCase {
 	return getBusstopUrlUseCaseImpl{
-		Busstop: Busstop,
-		Destination: Destination,
+		Busstop:                      Busstop,
+		Destination:                  Destination,
 		BusstopToTimetableRepository: busstoptotimetablerepository,
 	}
 }
 
-func (impl getBusstopUrlUseCaseImpl) FindURL()([]string,error){
-	url,err := impl.BusstopToTimetableRepository.FindURL(impl.Busstop,impl.Destination)
-	return url,err
+func (impl getBusstopUrlUseCaseImpl) FindURL() ([]string, error) {
+	url, err := impl.BusstopToTimetableRepository.FindURL(impl.Busstop, impl.Destination)
+	return url, err
 }
-

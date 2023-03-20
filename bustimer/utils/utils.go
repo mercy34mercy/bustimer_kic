@@ -1,20 +1,19 @@
 package utils
 
 import (
-	"bustimerkic/controller"
-	"bustimerkic/domain/model"
-	"bustimerkic/infra"
-	bustimersqlc "bustimerkic/sqlc/gen"
 	"context"
 	"fmt"
 	"net/http"
 	"regexp"
 	"strings"
 
+	"github.com/mercy34mercy/bustimer_kic/bustimer/controller"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/domain/model"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/infra"
+	bustimersqlc "github.com/mercy34mercy/bustimer_kic/bustimer/sqlc/gen"
+
 	"github.com/gocolly/colly"
 )
-
-
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	busstop := "円町"
@@ -25,15 +24,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	}
 	timetablecontroller := controller.TimetableController{}
-	for _,u := range url {
-		timetable,_ := timetablecontroller.FindTimetable(u,destination)
+	for _, u := range url {
+		timetable, _ := timetablecontroller.FindTimetable(u, destination)
 		fmt.Printf("%v", timetable)
 		fmt.Fprint(w, timetable)
 	}
-	
 
-
-	
 }
 
 func scrapHTML() (scrapData []string) {
@@ -102,7 +98,7 @@ func getTimeTable(scrapedata []string, via string, busstop string) {
 		for a := 0; a < len(weekdaylist); a++ {
 			if weekdaylist[a] != "" {
 				timetable.Weekdays[i+5] = append(timetable.Weekdays[i+5], model.OneBusTime{
-					BusName:     Via,
+					BusName: Via,
 					Min:     weekdaylist[a],
 					BusStop: "1番乗り場",
 				})
@@ -113,7 +109,7 @@ func getTimeTable(scrapedata []string, via string, busstop string) {
 		for b := 0; b < len(holidaylist); b++ {
 			if holidaylist[b] != "" {
 				timetable.Holidays[i+5] = append(timetable.Holidays[i+5], model.OneBusTime{
-					BusName:     Via,
+					BusName: Via,
 					Min:     holidaylist[b],
 					BusStop: "1番乗り場",
 				})
@@ -129,11 +125,11 @@ func Dbcreate() {
 	db := infra.GetDB()
 	queries := bustimersqlc.New(db)
 	idx := "4030410"
-		fmt.Println(idx)
-		busname, busstop, destination, url := getViaandBusstops(idx)
-		if len(busname) != 0 {
-			queries.CreateBusstopUrl(ctx,bustimersqlc.CreateBusstopUrlParams{Busstop: busstop, Busname: busname, Destination: destination, Url: url})
-		}
+	fmt.Println(idx)
+	busname, busstop, destination, url := getViaandBusstops(idx)
+	if len(busname) != 0 {
+		queries.CreateBusstopUrl(ctx, bustimersqlc.CreateBusstopUrlParams{Busstop: busstop, Busname: busname, Destination: destination, Url: url})
+	}
 }
 
 func getViaandBusstops(index string) (busname string, busstop string, destination string, url string) {

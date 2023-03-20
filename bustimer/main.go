@@ -1,16 +1,16 @@
 package main
 
 import (
-	"bustimerkic/controller"
-	"bustimerkic/domain/model"
-	"bustimerkic/infra"
-	"bustimerkic/infra/localcache"
 	"bytes"
 	"net/http"
 	"os"
-	"github.com/labstack/echo"
-)
 
+	"github.com/labstack/echo"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/controller"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/domain/model"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/infra"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/infra/localcache"
+)
 
 func main() {
 	infra.Init("gorm.db")
@@ -25,11 +25,10 @@ func main() {
 	router := Routing()
 	router.Debug = true
 	router.Logger.Fatal(router.Start(":" + port))
-	
 
 }
 
-func Routing() *echo.Echo{
+func Routing() *echo.Echo {
 	var e = echo.New()
 	e.GET("/", func(c echo.Context) error {
 		return c.HTML(http.StatusOK, "<h1>Busdes! Clean Architecture API</h1>")
@@ -56,9 +55,9 @@ func Routing() *echo.Echo{
 			return c.JSON(http.StatusOK, x.(model.TimeTable))
 		}
 		timetablecontroller := controller.TimetableController{}
-		timetable,err := timetablecontroller.FindTimetable(busstop, destination.String()); 
-		if err != nil{
-			return c.HTML(http.StatusNotFound,"<h1>404 NOT FOUND<h1>")
+		timetable, err := timetablecontroller.FindTimetable(busstop, destination.String())
+		if err != nil {
+			return c.HTML(http.StatusNotFound, "<h1>404 NOT FOUND<h1>")
 		}
 		localcache.CreateCachefromTimetable(busstop, destination.String(), timetable)
 
@@ -74,9 +73,9 @@ func Routing() *echo.Echo{
 		}
 		destinationlist, busstoplist := query.SplitDestination()
 		timetableCtrl := controller.TimetableFromBusstopController{}
-		timetable,err := timetableCtrl.FindTimetable(busstoplist, destinationlist)
-		if err != nil{
-			return c.HTML(http.StatusNotFound,"<h1>404 NOT FOUND<h1>")
+		timetable, err := timetableCtrl.FindTimetable(busstoplist, destinationlist)
+		if err != nil {
+			return c.HTML(http.StatusNotFound, "<h1>404 NOT FOUND<h1>")
 		}
 		return c.JSON(http.StatusOK, timetable)
 	})
@@ -97,7 +96,7 @@ func Routing() *echo.Echo{
 		}
 
 		timetablecontroller := controller.TimetableController{}
-		timetable,_ := timetablecontroller.FindTimetable(busstop, destination.String())
+		timetable, _ := timetablecontroller.FindTimetable(busstop, destination.String())
 
 		localcache.CreateCachefromTimetable(busstop, destination.String(), timetable)
 

@@ -4,11 +4,12 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http/httptest"
-	"bustimerkic/config"
-	"bustimerkic/domain/model"
-	"bustimerkic/infra"
-	"bustimerkic/infra/localcache"
 	"testing"
+
+	"github.com/mercy34mercy/bustimer_kic/bustimer/config"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/domain/model"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/infra"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/infra/localcache"
 )
 
 func TestRequiredTime(t *testing.T) {
@@ -37,7 +38,6 @@ func TestRequiredTime(t *testing.T) {
 // 			router.ServeHTTP(rec, req)
 // 			resp := rec.Result()
 
-			
 // 			timetable := model.CreateNewTimeTable()
 // 			if resp.StatusCode != 404 {
 // 				if err := json.NewDecoder(rec.Body).Decode(&timetable); err != nil {
@@ -49,7 +49,6 @@ func TestRequiredTime(t *testing.T) {
 // 			if err != nil {
 // 				t.Errorf("cannot read test response: %v", err)
 // 			}
-
 
 // 			if busstop == "立命館大学前" {
 // 				if resp.StatusCode != 404 {
@@ -66,16 +65,16 @@ func TestRequiredTime(t *testing.T) {
 // 					}
 // 				}
 
-// 				if flag {
-// 					t.Errorf("notfound %s  %s → %s", config.LoopBusName[i], busstop, "衣笠校前")
-// 				}
-// 				if resp.StatusCode != 200 {
-// 					t.Errorf("got = %d, want = 200,  %s  %s → %s", resp.StatusCode, config.LoopBusName[i], busstop, "衣笠校前")
-// 				}
-// 			}
-// 		}
-// 	}
-// }
+//					if flag {
+//						t.Errorf("notfound %s  %s → %s", config.LoopBusName[i], busstop, "衣笠校前")
+//					}
+//					if resp.StatusCode != 200 {
+//						t.Errorf("got = %d, want = 200,  %s  %s → %s", resp.StatusCode, config.LoopBusName[i], busstop, "衣笠校前")
+//					}
+//				}
+//			}
+//		}
+//	}
 func TestHandler(t *testing.T) {
 	infra.Init("gorm.db")
 	localcache.Init()
@@ -294,4 +293,3 @@ func TestTimetableMultiHandler(t *testing.T) {
 		}
 	}
 }
-

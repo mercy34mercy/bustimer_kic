@@ -1,14 +1,14 @@
 package controller
 
 import (
-	repositoryimpl "bustimerkic/infra/repositoryImpl"
-	"bustimerkic/usecase"
+	repositoryimpl "github.com/mercy34mercy/bustimer_kic/bustimer/infra/repositoryImpl"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/usecase"
 )
 
 type BusstoToUrlController struct{}
 
-func (ctrl BusstoToUrlController) FindURL(busstop string,destination string)([]string,error){
+func (ctrl BusstoToUrlController) FindURL(busstop string, destination string) ([]string, error) {
 	busstoptourlRepository := repositoryimpl.NewBusstopToUrlRepositoryImpl()
-	result,err := usecase.NewGetBusstopUrlUseCaseImpl(busstop,destination,busstoptourlRepository).FindURL()
-	return result,err
+	result, err := usecase.NewGetBusstopUrlUseCaseImpl(busstop, destination, busstoptourlRepository).FindURL()
+	return result, err
 }
