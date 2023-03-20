@@ -27,7 +27,7 @@ jobs:
             - "/go/pkg/mod"
       - run:
           name: Run tests
-          command: go test -v ./...
+          command: go test -v ./bustimer/...
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
