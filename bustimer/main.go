@@ -80,6 +80,25 @@ func Routing() *echo.Echo {
 		return c.JSON(http.StatusOK, timetable)
 	})
 
+	e.GET("/timetable/multi/today", func(c echo.Context) error {
+		busstop := c.QueryParam("fr")
+		destination := c.QueryParam("to")
+		var query model.Query = model.Query{
+			Destination: destination,
+			Busstop:     busstop,
+		}
+		destinationlist, busstoplist := query.SplitDestination()
+		timetableCtrl := controller.TimetableTodayController{}
+		timetable, err := timetableCtrl.Get(busstoplist, destinationlist)
+		if err != nil {
+			return c.HTML(http.StatusNotFound, "<h1>404 NOT FOUND<h1>")
+		}
+
+		
+
+		return c.JSON(http.StatusOK,timetable)
+	})
+
 	e.GET("/nextbus", func(c echo.Context) error {
 		busstop := c.QueryParam("fr")
 		var destination bytes.Buffer
