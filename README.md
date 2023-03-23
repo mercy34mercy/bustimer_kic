@@ -11,7 +11,7 @@
 立命館大学衣笠キャンパスと駅を結ぶバス情報をリアルタイムに表示するアプリケーションです。
 ## 言語
 * [Go](https://go.dev/)
-    * Supported Versions (Go 1.9 ～) ※このバージョンより古いものに関しては動作確認していません
+    
 ## ライブラリ
 * [echo](https://echo.labstack.com/) (Http Client)
 * [colly](http://go-colly.org/) (Scraping)
@@ -38,6 +38,32 @@
 ## 路線図
 <p align="center">
 <img src="./docs/img/busdes-kic-api-rosen.png" width="70%" >
+</p>
+
+# 機能
+## バス停ごとの接近情報
+通学に使用される全てのバスの全てのバス停のバス接近情報(平日/休日)対応
+<p align="center">
+<img src="./docs/img/nextbus.png" width="40%" >
+</p>
+
+## 時刻表  
+通学に使用される全てのバスの全てのバス停の時刻表(平日/休日)対応
+<p align="center">
+<img src="./docs/img/timetable.png" width="40%" >
+</p>
+
+## 大学間シャトルバス情報
+### 時刻表
+大学間シャトルバス情報
+<p align="center">
+<img src="./docs/img/shuttleTimetable.png" width="40%" >
+</p>
+
+### スケジュール
+大学間シャトルバスのスケジュール
+<p align="center">
+<img src="./docs/img/shuttle.png" width="40%" >
 </p>
 
 # インフラ
@@ -124,7 +150,7 @@ This application displays real-time bus information between Ritsumeikan Universi
 
 ## Languages
 * [Go](https://go.dev/)
-    * Supported Versions (Go 1.9 ～) ※We have not checked the operation of older versions.
+
 ## Library
 * [echo](https://echo.labstack.com/) (Http Client)
 * [colly](http://go-colly.org/) (Scraping)
