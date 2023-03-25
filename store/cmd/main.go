@@ -15,5 +15,4 @@ func main() {
 	router := route.Setup()
 	router.Debug = true
 	router.Logger.Fatal(router.Start(":" + port))
-
 }

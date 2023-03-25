@@ -1,0 +1,9 @@
+FROM golang:1.20.2-buster
+
+RUN mkdir /go/src/app
+
+WORKDIR /go/src/app
+
+ADD . /go/src/app
+
+CMD [ "go","run","main.go" ]
