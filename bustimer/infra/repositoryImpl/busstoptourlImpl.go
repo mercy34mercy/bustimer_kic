@@ -154,7 +154,7 @@ func (repository *BusstopToTimetableRepositoryImpl) FindURLFromBusstop(busstop s
 								}
 							}
 							if flag {
-								busstopurl = append(busstopurl, info.Url)
+								busstopurl = append(busstopurl, businfo.Url)
 							}
 						}
 					}
