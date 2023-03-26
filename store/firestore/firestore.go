@@ -3,6 +3,7 @@ package firestore
 import (
 	"context"
 	"fmt"
+	"google.golang.org/api/option"
 	"os"
 
 	"cloud.google.com/go/firestore"
@@ -17,24 +18,24 @@ type Database interface {
 }
 
 type Collection interface {
-	Find(echo.Context, string,string)(domain.Busstop,error)
-	Delete(echo.Context, string,string)(error)
-	Fetch(echo.Context, string,domain.Busstop)error
+	Find(echo.Context, string, string) (domain.Busstop, error)
+	Delete(echo.Context, string, string) error
+	Fetch(echo.Context, string, domain.Busstop) error
 }
 
 type firestoreClient struct {
 	fl firestore.Client
 }
 
-func NewClient()(firestore.Client,error){
+func NewClient() (*firestore.Client, error) {
 	ctx := context.Background()
 	err := godotenv.Load(fmt.Sprintf("../env/%s.env", os.Getenv("GO_ENV")))
-    if err != nil {
-        // .env読めなかった場合の処理
-    }
-	// opt := option.WithCredentialsFile("key.json")
-	client,err := firestore.NewClient(ctx,"")
+
+	opt := option.WithCredentialsFile("../credential/busdes-firestore.json")
+	client, err := firestore.NewClient(ctx, os.Getenv("GOOGLE_PROJECT_CODE"), opt)
 	if err != nil {
-		fmt.Printf("error get data: %v", err)
+		return client, fmt.Errorf("error get data: %v", err)
 	}
+
+	return client, nil
 }
