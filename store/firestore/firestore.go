@@ -23,19 +23,43 @@ type Collection interface {
 	Fetch(echo.Context, string, domain.Busstop) error
 }
 
-type firestoreClient struct {
-	fl firestore.Client
+type firebaseCollection struct {
+	fc firestore.CollectionRef
 }
 
-func NewClient() (*firestore.Client, error) {
+func NewCollection() (*firestore.CollectionRef, error) {
 	ctx := context.Background()
 	err := godotenv.Load(fmt.Sprintf("../env/%s.env", os.Getenv("GO_ENV")))
+	if err != nil {
+		return nil, fmt.Errorf("faild open envfile: %v", err)
+	}
 
 	opt := option.WithCredentialsFile("../credential/busdes-firestore.json")
 	client, err := firestore.NewClient(ctx, os.Getenv("GOOGLE_PROJECT_CODE"), opt)
 	if err != nil {
-		return client, fmt.Errorf("error get data: %v", err)
+		return nil, fmt.Errorf("error get data: %v", err)
 	}
 
-	return client, nil
+	collection := client.Collection("busstop")
+	return collection, nil
+}
+
+func (fc *firebaseCollection) GetDoc(ctx context.Context, path string) (*firestore.DocumentSnapshot, error) {
+	datasnap, err := fc.fc.Doc(path).Get(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("do not find %s : %v", path, err)
+	}
+	return datasnap, nil
+}
+
+func (fc *firebaseCollection) Get(ctx context.Context, path string) ([]domain.Busstop, error) {
+	var busStops []domain.Busstop
+	datasnap, err := fc.fc.Doc(path).Get(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("do not find %s : %v", path, err)
+	}
+	if err := datasnap.DataTo(&busStops); err != nil {
+		return nil, fmt.Errorf("faild parse to bussstop : %v", err)
+	}
+	return busStops, nil
 }
