@@ -1,13 +1,9 @@
 package firestore
 
 import (
+	"cloud.google.com/go/firestore"
 	"context"
 	"fmt"
-	"google.golang.org/api/option"
-	"os"
-
-	"cloud.google.com/go/firestore"
-	"github.com/joho/godotenv"
 	"github.com/labstack/echo"
 	"github.com/mercy34mercy/bustimer_kic/store/domain"
 )
@@ -25,23 +21,6 @@ type Collection interface {
 
 type firebaseCollection struct {
 	fc firestore.CollectionRef
-}
-
-func NewCollection() (*firestore.CollectionRef, error) {
-	ctx := context.Background()
-	err := godotenv.Load(fmt.Sprintf("../env/%s.env", os.Getenv("GO_ENV")))
-	if err != nil {
-		return nil, fmt.Errorf("faild open envfile: %v", err)
-	}
-
-	opt := option.WithCredentialsFile("../credential/busdes-firestore.json")
-	client, err := firestore.NewClient(ctx, os.Getenv("GOOGLE_PROJECT_CODE"), opt)
-	if err != nil {
-		return nil, fmt.Errorf("error get data: %v", err)
-	}
-
-	collection := client.Collection("busstop")
-	return collection, nil
 }
 
 func (fc *firebaseCollection) GetDoc(ctx context.Context, path string) (*firestore.DocumentSnapshot, error) {
