@@ -1,4 +1,4 @@
-package boostrap
+package bootstrap
 
 import (
 	"fmt"
