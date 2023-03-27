@@ -1,25 +1,31 @@
 package repository
 
 import (
+	"fmt"
 	"github.com/labstack/echo"
 	"github.com/mercy34mercy/bustimer_kic/store/domain"
 	"github.com/mercy34mercy/bustimer_kic/store/firestore"
 )
 
 type busstopRepository struct {
-	client     firestore.Database
+	database   firestore.Database
 	collection string
 }
 
-func NewBusstopRespository(client firestore.Database, collection string) domain.BusstopRepository {
+func NewBusstopRespository(database firestore.Database, collection string) domain.BusstopRepository {
 	return &busstopRepository{
-		client:     client,
+		database:   database,
 		collection: collection,
 	}
 }
 
 func (ur *busstopRepository) GetByID(c echo.Context, userID string) ([]domain.Busstop, error) {
-	return
+	collection := ur.database.Collection("busstop")
+	busstops, err := collection.FindByID(c, userID)
+	if err != nil {
+		return nil, fmt.Errorf("%v", err)
+	}
+	return busstops, nil
 }
 
 func (ur *busstopRepository) Fetch(c echo.Context, userID string, busstop string) error {

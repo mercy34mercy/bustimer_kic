@@ -15,7 +15,7 @@ type Database interface {
 }
 
 type Collection interface {
-	Find(echo.Context, string, string) (domain.Busstop, error)
+	FindByID(echo.Context, string) ([]domain.Busstop, error)
 	Delete(echo.Context, string, string) error
 	Fetch(echo.Context, string, domain.Busstop) error
 }
@@ -24,8 +24,8 @@ type Client interface {
 	Database(string) Database
 }
 
-type firestoreDoc struct {
-	fd firestore.DocumentSnapshot
+type firestoreDatabase struct {
+	fd firestore.Client
 }
 
 type firebaseCollection struct {
@@ -40,20 +40,17 @@ func NewClient(ctx context.Context, projectID string, opt option.ClientOption) (
 	return client, nil
 }
 
-func (fc *firebaseCollection) GetDoc(ctx context.Context, path string) (*firestore.DocumentSnapshot, error) {
-	datasnap, err := fc.fc.Doc(path).Get(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("do not find %s : %v", path, err)
-	}
-	return datasnap, nil
+func (fd *firestoreDatabase) Collection(ctx context.Context, path string) (*firestore.CollectionRef, error) {
+	collectionRef := fd.fd.Collection(path)
+	return collectionRef, nil
 }
 
-func (fc *firebaseCollection) Get(ctx context.Context, path string) ([]domain.Busstop, error) {
-	var busStops []domain.Busstop
-	datasnap, err := fc.fc.Doc(path).Get(ctx)
+func (fc *firebaseCollection) FindByID(ctx echo.Context, userID string) ([]domain.Busstop, error) {
+	datasnap, err := fc.fc.Doc(userID).Get(ctx.Request().Context())
 	if err != nil {
-		return nil, fmt.Errorf("do not find %s : %v", path, err)
+		return nil, fmt.Errorf("do not find %s : %v", userID, err)
 	}
+	var busStops []domain.Busstop
 	if err := datasnap.DataTo(&busStops); err != nil {
 		return nil, fmt.Errorf("faild parse to bussstop : %v", err)
 	}
