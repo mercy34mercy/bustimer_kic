@@ -1,9 +1,17 @@
-FROM golang:1.19.3-buster
+FROM golang:1.20.2-buster as builder
 
-RUN mkdir /go/src/app
+WORKDIR /app
 
-WORKDIR /go/src/app
+COPY go.mod go.sum ./
+RUN go mod download
 
-ADD . /go/src/app
+COPY . .
+RUN CGO_ENABLED=0 go build -o main
 
-CMD [ "go","run","main.go" ]
+FROM alpine
+RUN mkdir /app
+WORKDIR /app
+
+COPY --from=builder /app/main ./main
+
+CMD ["./main"]
