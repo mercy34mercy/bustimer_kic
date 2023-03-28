@@ -36,9 +36,10 @@ jobs:
 
       - name: Deploy to Cloud Run
         run: |
-            gcloud run deploy $SERVICE_NAME \
+            gcloud beta run deploy $SERVICE_NAME \
               --image $IMAGE \
               --port $PORT \
               --service-account $SERVICE_ACCOUNT \
               --region $GCP_REGION \
-              --memory 1024Mi
+              --memory 512Mi
+              --cpu-boost
