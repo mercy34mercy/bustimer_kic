@@ -1,6 +1,7 @@
 package repositoryimpl
 
 import (
+	"os"
 	"strconv"
 	"time"
 
@@ -67,6 +68,11 @@ func getApproachInfoFromTimetable(approachInfos model.ApproachInfos, timeTable m
 			}
 		}
 	}
+
+	if (len(approachInfos.ApproachInfo) < 1 && os.Getenv("GO_ENV") == "dev"){
+		return getMockdata(today)
+	}
+
 	return approachInfos
 }
 
@@ -84,4 +90,47 @@ func formatHour(hour string) string {
 		mmHour = "0" + hour
 	}
 	return mmHour
+}
+
+func getMockdata(t time.Time) model.ApproachInfos {
+	t1 := t.Add(10 * time.Minute)
+	t2 := t.Add(15 * time.Minute)
+	t3 := t.Add(20 * time.Minute)
+	approachinfo := []model.ApproachInfo{
+		{
+			RealArrivalTime: formatHour(strconv.FormatInt(int64(t1.Hour()), 10)) + ":" + formatMin(strconv.FormatInt(int64(t1.Minute()), 10)),
+			MoreMin:         "約n分後に到着",
+			Direction:       "mock1停留所",
+			BusName:         "mock1号系統",
+			ScheduledTime:   formatHour(strconv.FormatInt(int64(t1.Hour()), 10)) + ":" + formatMin(strconv.FormatInt(int64(t1.Minute()), 10)),
+			Delay:           "定時運行",
+			BusStop:         "1",
+			RequiredTime:    10,
+		},
+		{
+			RealArrivalTime: formatHour(strconv.FormatInt(int64(t2.Hour()), 10)) + ":" + formatMin(strconv.FormatInt(int64(t2.Minute()), 10)),
+			MoreMin:         "約n分後に到着",
+			Direction:       "mock2停留所",
+			BusName:         "mock2号系統",
+			ScheduledTime:   formatHour(strconv.FormatInt(int64(t2.Hour()), 10)) + ":" + formatMin(strconv.FormatInt(int64(t2.Minute()), 10)),
+			Delay:           "定時運行",
+			BusStop:         "1",
+			RequiredTime:    10,
+		},
+		{
+			RealArrivalTime: formatHour(strconv.FormatInt(int64(t3.Hour()), 10)) + ":" + formatMin(strconv.FormatInt(int64(t3.Minute()), 10)),
+			MoreMin:         "約n分後に到着",
+			Direction:       "mock3停留所",
+			BusName:         "mock3号系統",
+			ScheduledTime:   formatHour(strconv.FormatInt(int64(t3.Hour()), 10)) + ":" + formatMin(strconv.FormatInt(int64(t3.Minute()), 10)),
+			Delay:           "定時運行",
+			BusStop:         "1",
+			RequiredTime:    10,
+		},
+	}
+
+	approachinfos := model.ApproachInfos{
+		ApproachInfo: approachinfo,
+	}
+	return approachinfos
 }
