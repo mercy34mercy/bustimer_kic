@@ -8,11 +8,11 @@ import (
 )
 
 type busstopRepository struct {
-	database   firestore.Database
+	database   firestore.Client
 	collection string
 }
 
-func NewBusstopRespository(database firestore.Database, collection string) domain.BusstopRepository {
+func NewBusstopRespository(database firestore.Client, collection string) domain.BusstopRepository {
 	return &busstopRepository{
 		database:   database,
 		collection: collection,
@@ -20,7 +20,7 @@ func NewBusstopRespository(database firestore.Database, collection string) domai
 }
 
 func (ur *busstopRepository) GetByID(c echo.Context, userID string) ([]domain.Busstop, error) {
-	collection := ur.database.Collection("busstop")
+	collection := ur.database.Collection(ur.collection)
 	busstops, err := collection.FindByID(c, userID)
 	if err != nil {
 		return nil, fmt.Errorf("%v", err)
@@ -28,10 +28,18 @@ func (ur *busstopRepository) GetByID(c echo.Context, userID string) ([]domain.Bu
 	return busstops, nil
 }
 
-func (ur *busstopRepository) Fetch(c echo.Context, userID string, busstop string) error {
-	return
+func (ur *busstopRepository) Fetch(c echo.Context, userID string, busstop domain.Busstop) error {
+	collection := ur.database.Collection(ur.collection)
+	if err := collection.Fetch(c, userID, busstop); err != nil {
+		return err
+	}
+	return nil
 }
 
-func (ur *busstopRepository) Delete(c echo.Context, userID string, busstop string) error {
-	return
+func (ur *busstopRepository) Delete(c echo.Context, userID string, busstop domain.Busstop) error {
+	collection := ur.database.Collection(ur.collection)
+	if err := collection.Delete(c, userID, busstop); err != nil {
+		return err
+	}
+	return nil
 }

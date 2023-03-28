@@ -1,8 +1,11 @@
 package domain
 
 import (
-
 	"github.com/labstack/echo"
+)
+
+const (
+	CollectionBusstop = "busstop"
 )
 
 type Busstop struct {
@@ -10,13 +13,13 @@ type Busstop struct {
 }
 
 type BusstopUsecase interface {
-	GetByID(c echo.Context, userID string)
-	Fetch(c echo.Context, userID string, busstop string)
-	Delete(c echo.Context, userID string, busstop string)
+	GetByID(c echo.Context, userID string) ([]Busstop, error)
+	Fetch(c echo.Context, userID string, busstop Busstop) error
+	Delete(c echo.Context, userID string, busstop Busstop) error
 }
 
 type BusstopRepository interface {
-	GetByID(c echo.Context, userID string)([]Busstop,error)
-	Fetch(c echo.Context, userID string, busstop string) error
-	Delete(c echo.Context, userID string, busstop string) error
+	GetByID(c echo.Context, userID string) ([]Busstop, error)
+	Fetch(c echo.Context, userID string, busstop Busstop) error
+	Delete(c echo.Context, userID string, busstop Busstop) error
 }
