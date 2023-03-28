@@ -41,4 +41,4 @@ jobs:
               --port $PORT \
               --service-account $SERVICE_ACCOUNT \
               --region $GCP_REGION \
-              --memory 512Mi
+              --memory 700Mi
