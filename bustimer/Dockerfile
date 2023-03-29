@@ -1,25 +1,21 @@
-FROM golang:1.20.2-buster as builder
+FROM golang:1.20.2-alpine as builder
 
 WORKDIR /app
 
-FROM golang:1.20.2-buster as builder
-
-WORKDIR /app
-ENV CGO_ENABLED=1
 COPY go.mod go.sum ./
 RUN go mod download
-
-RUN apt-get update && apt-get install build-essential -y
+RUN apk add --no-cache git sqlite-dev gcc musl-dev
 
 COPY . .
-RUN go build -a -ldflags '-linkmode external -extldflags "-static"'
+RUN go build -o main .
+
+
 FROM alpine
+RUN apk update && apk upgrade
 RUN mkdir /app
 WORKDIR /app
 
 COPY --from=builder /app/main ./main
-COPY --from=builder /app/main ./gorm.db
-
-RUN chmod 777 ./gorm.db
+COPY ./gorm.db ./gorm.db
 
 CMD ["./main"]
