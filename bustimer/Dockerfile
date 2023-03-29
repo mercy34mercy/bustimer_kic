@@ -1,16 +1,21 @@
-FROM golang:1.20.2-buster as builder
+FROM golang:1.20.2-alpine as builder
 
 WORKDIR /app
 
 COPY go.mod go.sum ./
 RUN go mod download
+RUN apk add --no-cache git sqlite-dev gcc musl-dev
 
 COPY . .
-RUN CGO_ENABLED=0 go build main.go
+RUN go build -o main .
+
+
 FROM alpine
+RUN apk update && apk upgrade
 RUN mkdir /app
 WORKDIR /app
 
 COPY --from=builder /app/main ./main
+COPY ./gorm.db ./gorm.db
 
 CMD ["./main"]
