@@ -42,5 +42,5 @@ jobs:
               --port $PORT \
               --service-account $SERVICE_ACCOUNT \
               --region $GCP_REGION \
-              --memory 128Mi
-              --set-env-vars REDIS_DATABASE_URL=$REDIS_DATABASE_URL
+              --memory 128Mi \
+              --set-env-vars REDIS_DATABASE_URL=$REDIS_DAaTABASE_URL
