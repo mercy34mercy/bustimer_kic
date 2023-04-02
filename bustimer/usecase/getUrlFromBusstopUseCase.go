@@ -4,6 +4,7 @@ import (
 	"github.com/mercy34mercy/bustimer_kic/bustimer/domain/model"
 	"github.com/mercy34mercy/bustimer_kic/bustimer/domain/repository"
 	"github.com/mercy34mercy/bustimer_kic/bustimer/infra/localcache"
+	redisclient "github.com/mercy34mercy/bustimer_kic/bustimer/redis"
 )
 
 type getUrlFromBusstopUseCaseImpl struct {
@@ -31,6 +32,13 @@ func (impl getUrlFromBusstopUseCaseImpl) FindURLFromBusstop() (model.MultiTimeTa
 	if impl.Busstop[0] == "立命館大学前" {
 
 		for _, des := range impl.Destination {
+			t,err :=  redisclient.Get(impl.Busstop[0] + des + "行き")
+			if err != nil {
+				var timetable = t.(model.TimeTable)
+				timetableanddestination = append(timetableanddestination, model.TimeTableandDestination{
+					TimeTable:   t.(model.TimeTable)
+				}
+			}
 			if x, found := l.Get(impl.Busstop[0] + des + "行き"); found {
 				var timetable model.TimeTable = x.(model.TimeTable)
 				timetableanddestination = append(timetableanddestination, model.TimeTableandDestination{
