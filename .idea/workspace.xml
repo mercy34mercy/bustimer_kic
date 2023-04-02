@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ff3ae625-f820-4ef9-a656-bbd43c15012f" name="Changes" comment="" />
+    <list default="true" id="ff3ae625-f820-4ef9-a656-bbd43c15012f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/docs/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/README.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -73,11 +75,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs/img" />
       <recent name="$PROJECT_DIR$/docs/shuttle" />
       <recent name="$PROJECT_DIR$/bustimer" />
       <recent name="$PROJECT_DIR$/bustimer/utils" />
       <recent name="$PROJECT_DIR$/store/credential" />
-      <recent name="$PROJECT_DIR$/store/env" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
