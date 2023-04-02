@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/booststrap"
 	redisclient "github.com/mercy34mercy/bustimer_kic/bustimer/redis"
 	"net/http"
 	"os"
@@ -20,7 +21,9 @@ func main() {
 		port = "8080"
 	}
 	localcache.Init()
+	booststrap.NewEnv()
 	redisclient.NewClient()
+
 	// go localcache.CreateTimetableCache()
 	// utils.Dbcreate()
 

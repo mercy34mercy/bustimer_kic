@@ -2,7 +2,12 @@ package redisclient
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/booststrap"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/domain/model"
 	redis "github.com/redis/go-redis/v9"
+	"time"
 )
 
 var (
@@ -11,22 +16,29 @@ var (
 )
 
 func NewClient() {
-	opt, _ := redis.ParseURL("redis://default:********@apn1-fun-slug-35150.upstash.io:35150")
+	opt, _ := redis.ParseURL(booststrap.RedisDatabaseURL)
 	Client = redis.NewClient(opt)
 }
 
-func Set(key, value string) error {
-	err := Client.Set(ctx, key, value, 0).Err()
+func Set(key string, value model.TimeTable) error {
+	serialized, _ := json.Marshal(value)
+	err := Client.Set(ctx, key, serialized, time.Hour*24).Err()
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func Get(key string) (string, error) {
-	val, err := Client.Get(ctx, key).Result()
+func Get(key string) (*model.TimeTable, bool) {
+	val, err := Client.Get(ctx, key).Bytes()
 	if err != nil {
-		return "", err
+		fmt.Errorf("error: %v", err)
 	}
-	return val, nil
+	if val == nil {
+		return nil, false
+	}
+	deserialized := &model.TimeTable{}
+	json.Unmarshal(val, deserialized)
+	fmt.Printf("key : %s data found", key)
+	return deserialized, true
 }
