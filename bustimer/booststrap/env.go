@@ -12,7 +12,7 @@ var (
 )
 
 func NewEnv() {
-	if os.Getenv("GO_ENV") == "dev" {
+	if os.Getenv("GO_ENV") == "local" {
 		err := godotenv.Load(fmt.Sprintf("./env/%s.env", os.Getenv("GO_ENV")))
 		if err != nil {
 			log.Fatal("Environment can't be loaded", err)
