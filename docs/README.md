@@ -17,6 +17,7 @@
 * [colly](http://go-colly.org/) (Scraping)
 * [go-cache](https://github.com/patrickmn/go-cache)(Cache Library)
 * [sqlite](https://github.com/mattn/go-sqlite3) (Database Library)
+* [go-redis](https://github.com/redis/go-redis) (Redis Client)
 
 ## ツール
 * [sqlc](https://sqlc.dev/)(SQL Query Builder)
@@ -49,6 +50,8 @@ busdes-kic-apiは、GCPのCloudRun(Google Cloud Plateform)上で動作してい�
     * Cloud Run
 * Cloud Flare
     * DNS
+* upstash
+    * Redis
 
 ### 開発環境
 開発環境ではAzureのApp ServiceにDocker ContainerをDeployしています。
@@ -130,6 +133,7 @@ This application displays real-time bus information between Ritsumeikan Universi
 * [colly](http://go-colly.org/) (Scraping)
 * [go-cache](https://github.com/patrickmn/go-cache)(Cache Library)
 * [sqlite](https://github.com/mattn/go-sqlite3) (Database Library)
+* [go-redis](https://github.com/redis/go-redis) (Redis Client)
 
 ## tool
 * [sqlc](https://sqlc.dev/) (SQL Query Builder)
@@ -163,6 +167,9 @@ This System is running on GCP's CloudRun(Google Cloud Plateform). And we use Clo
     * Cloud Run
 * Cloud Flare
     * DNS
+* upstash
+  * Redis
+
 ### Development
 In the development environment, Docker Container is Deployed to Azure's App Service.
 
