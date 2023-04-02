@@ -27,6 +27,8 @@ jobs:
         run: cd bustimer && go build -v ./...
 
       - name: Test
+        env:
+          REDIS_DATABASE_URL: ${{ secrets.REDIS_DATABASE_URL }}
         run: cd bustimer && GO_ENV=dev go test -v ./... -coverprofile=coverage.txt -covermode=atomic -v ./...
 
       - name: Upload coverage reports to Codecov
