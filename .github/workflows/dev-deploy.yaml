@@ -22,5 +22,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./bustimer/
+          file: ./bustimer/Dockerfile.dev
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/bustimer:latest
