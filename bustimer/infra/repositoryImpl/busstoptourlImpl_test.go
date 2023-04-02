@@ -82,3 +82,37 @@ func TestFindUrlFromBusstopFromRitsumei(t *testing.T) {
 		}
 	}
 }
+
+func BenchmarkFindTimetable(b *testing.B) {
+	infra.Init("../../gorm.db")
+	for i := 0; i < b.N; i++ {
+		repository := &BusstopToTimetableRepositoryImpl{}
+		urls, err := repository.FindURLFromBusstop("立命館大学前", "京都駅前")
+		if err != nil {
+			b.Errorf("BusstopToTimetableRepositoryImpl.FindURLFromBusstop() %s → %s URL Not Found", "立命館大学前", "京都駅前")
+		}
+
+		_, err = repository.FindTimetable(urls)
+		if err != nil {
+			b.Errorf("BusstopToTimetableRepositoryImpl.FindTimetable() %s Timetable Not Found", urls)
+		}
+	}
+}
+
+func BenchmarkFindTimetableParallel(b *testing.B) {
+	infra.Init("../../gorm.db")
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			repository := &BusstopToTimetableRepositoryImpl{}
+			urls, err := repository.FindURLFromBusstop("立命館大学前", "京都駅前")
+			if err != nil {
+				b.Errorf("BusstopToTimetableRepositoryImpl.FindURLFromBusstop() %s → %s URL Not Found", "立命館大学前", "京都駅前")
+			}
+
+			_, err = repository.FindTimetableParallel(urls)
+			if err != nil {
+				b.Errorf("BusstopToTimetableRepositoryImpl.FindTimetable() %s Timetable Not Found", urls)
+			}
+		}
+	})
+}
