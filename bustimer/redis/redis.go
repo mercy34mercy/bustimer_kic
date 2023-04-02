@@ -23,7 +23,7 @@ func NewClient() {
 
 func Set(key string, value model.TimeTable) error {
 	serialized, _ := json.Marshal(value)
-	if os.Getenv("GO_ENV") == "dev" {
+	if os.Getenv("GO_LOCATE") == "local" {
 		err := Client.Set(ctx, key, serialized, time.Hour*24).Err()
 		if err != nil {
 			return err
