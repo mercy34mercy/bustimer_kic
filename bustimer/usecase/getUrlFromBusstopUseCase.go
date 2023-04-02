@@ -29,6 +29,7 @@ func (impl getUrlFromBusstopUseCaseImpl) FindURLFromBusstop() (model.MultiTimeTa
 	var multitimetable model.MultiTimeTable
 	timetableanddestination := []model.TimeTableandDestination{}
 	if impl.Busstop[0] == "立命館大学前" {
+
 		for _, des := range impl.Destination {
 			if x, found := l.Get(impl.Busstop[0] + des + "行き"); found {
 				var timetable model.TimeTable = x.(model.TimeTable)
@@ -41,7 +42,7 @@ func (impl getUrlFromBusstopUseCaseImpl) FindURLFromBusstop() (model.MultiTimeTa
 				if err != nil {
 					return multitimetable, err
 				}
-				timetable, err := impl.BusstopToTimetableRepository.FindTimetable(url)
+				timetable, err := impl.BusstopToTimetableRepository.FindTimetableParallel(url)
 				if err != nil {
 					return multitimetable, err
 				}
@@ -67,7 +68,7 @@ func (impl getUrlFromBusstopUseCaseImpl) FindURLFromBusstop() (model.MultiTimeTa
 				if err != nil {
 					return multitimetable, err
 				}
-				timetable, err := impl.BusstopToTimetableRepository.FindTimetable(url)
+				timetable, err := impl.BusstopToTimetableRepository.FindTimetableParallel(url)
 				if err != nil {
 					return multitimetable, err
 				}

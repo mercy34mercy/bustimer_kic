@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/mercy34mercy/bustimer_kic/bustimer/config"
 	"github.com/mercy34mercy/bustimer_kic/bustimer/domain/model"
@@ -330,7 +331,32 @@ func (repository *BusstopToTimetableRepositoryImpl) FindTimetable(url []string) 
 	}
 	for _, u := range url {
 		scrapdata, via, busstop := scrapHTML(u)
-		getTimeTable(timetable, scrapdata, via, busstop)
+		getTimeTable(&timetable, scrapdata, via, busstop)
+
+	}
+	timetable.SortOneBusTime()
+
+	return timetable, err
+}
+
+func (repository *BusstopToTimetableRepositoryImpl) FindTimetableParallel(url []string) (model.TimeTable, error) {
+	timetable := model.CreateNewTimeTable()
+
+	var err error
+
+	if len(url) == 0 {
+		return timetable, errors.New("urls not found")
+	}
+	var wg sync.WaitGroup
+	for _, u := range url {
+		i := u
+		wg.Add(1)
+		go func(wg *sync.WaitGroup) {
+			defer wg.Done()
+			scrapdata, via, busstop := scrapHTML(i)
+			getTimeTable(&timetable, scrapdata, via, busstop)
+		}(&wg)
+		wg.Wait()
 	}
 	timetable.SortOneBusTime()
 
@@ -426,7 +452,7 @@ func scrapHTML(url string) (scrapData []string, via string, busstop string) {
 	return scrapData, Via, Busstop
 }
 
-func getTimeTable(timetable model.TimeTable, scrapedata []string, via string, busstop string) model.TimeTable {
+func getTimeTable(timetable *model.TimeTable, scrapedata []string, via string, busstop string) *model.TimeTable {
 
 	timelist := []string{}
 

@@ -29,6 +29,6 @@ func (impl getTimetableUseCaseImpl) FindTimetable() (model.TimeTable, error) {
 	if err != nil {
 		return timetable, err
 	}
-	timetable, err = impl.Timetablerepository.FindTimetable(url)
+	timetable, err = impl.Timetablerepository.FindTimetableParallel(url)
 	return timetable, err
 }
