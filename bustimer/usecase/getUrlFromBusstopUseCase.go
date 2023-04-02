@@ -4,6 +4,7 @@ import (
 	"github.com/mercy34mercy/bustimer_kic/bustimer/domain/model"
 	"github.com/mercy34mercy/bustimer_kic/bustimer/domain/repository"
 	"github.com/mercy34mercy/bustimer_kic/bustimer/infra/localcache"
+	redisclient "github.com/mercy34mercy/bustimer_kic/bustimer/redis"
 )
 
 type getUrlFromBusstopUseCaseImpl struct {
@@ -38,21 +39,32 @@ func (impl getUrlFromBusstopUseCaseImpl) FindURLFromBusstop() (model.MultiTimeTa
 					Destination: des,
 				})
 			} else {
-				url, err := impl.BusstopToTimetableRepository.FindURLFromBusstop(impl.Busstop[0], des)
-				if err != nil {
+				t, found := redisclient.Get(impl.Busstop[0] + des + "行き")
+				if found {
+					localcache.CreateCachefromTimetable(impl.Busstop[0], des+"行き", *t)
+					timetableanddestination = append(timetableanddestination, model.TimeTableandDestination{
+						TimeTable:   *t,
+						Destination: des,
+					})
+				} else {
+
+					url, err := impl.BusstopToTimetableRepository.FindURLFromBusstop(impl.Busstop[0], des)
+					if err != nil {
+						return multitimetable, err
+					}
+					timetable, err := impl.BusstopToTimetableRepository.FindTimetableParallel(url)
+					if err != nil {
+						return multitimetable, err
+					}
+					localcache.CreateCachefromTimetable(impl.Busstop[0], des+"行き", timetable)
+					redisclient.Set(impl.Busstop[0]+des+"行き", timetable)
+					timetableanddestination = append(timetableanddestination, model.TimeTableandDestination{
+						TimeTable:   timetable,
+						Destination: des,
+					})
+					multitimetable = impl.BusstopToTimetableRepository.CreateMultiTimetable(timetableanddestination, impl.Destination)
 					return multitimetable, err
 				}
-				timetable, err := impl.BusstopToTimetableRepository.FindTimetableParallel(url)
-				if err != nil {
-					return multitimetable, err
-				}
-				localcache.CreateCachefromTimetable(impl.Busstop[0], des+"行き", timetable)
-				timetableanddestination = append(timetableanddestination, model.TimeTableandDestination{
-					TimeTable:   timetable,
-					Destination: des,
-				})
-				multitimetable = impl.BusstopToTimetableRepository.CreateMultiTimetable(timetableanddestination, impl.Destination)
-				return multitimetable, err
 			}
 		}
 	} else {
@@ -64,21 +76,33 @@ func (impl getUrlFromBusstopUseCaseImpl) FindURLFromBusstop() (model.MultiTimeTa
 					Destination: bus,
 				})
 			} else {
-				url, err := impl.BusstopToTimetableRepository.FindURLFromBusstop(bus, impl.Destination[0])
-				if err != nil {
+				t, found := redisclient.Get(bus + impl.Destination[0] + "行き")
+				if found {
+					localcache.CreateCachefromTimetable(bus, impl.Destination[0]+"行き", *t)
+					timetableanddestination = append(timetableanddestination, model.TimeTableandDestination{
+						TimeTable:   *t,
+						Destination: bus,
+					})
+				} else {
+					url, err := impl.BusstopToTimetableRepository.FindURLFromBusstop(bus, impl.Destination[0])
+					if err != nil {
+						return multitimetable, err
+					}
+					timetable, err := impl.BusstopToTimetableRepository.FindTimetableParallel(url)
+					if err != nil {
+						return multitimetable, err
+					}
+					localcache.CreateCachefromTimetable(bus, impl.Destination[0]+"行き", timetable)
+					if err := redisclient.Set(bus+impl.Destination[0]+"行き", timetable); err != nil {
+						return multitimetable, err
+					}
+					timetableanddestination = append(timetableanddestination, model.TimeTableandDestination{
+						TimeTable:   timetable,
+						Destination: bus,
+					})
+					multitimetable = impl.BusstopToTimetableRepository.CreateMultiTimetable(timetableanddestination, impl.Destination)
 					return multitimetable, err
 				}
-				timetable, err := impl.BusstopToTimetableRepository.FindTimetableParallel(url)
-				if err != nil {
-					return multitimetable, err
-				}
-				localcache.CreateCachefromTimetable(bus, impl.Destination[0]+"行き", timetable)
-				timetableanddestination = append(timetableanddestination, model.TimeTableandDestination{
-					TimeTable:   timetable,
-					Destination: bus,
-				})
-				multitimetable = impl.BusstopToTimetableRepository.CreateMultiTimetable(timetableanddestination, impl.Destination)
-				return multitimetable, err
 			}
 		}
 	}

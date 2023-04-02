@@ -2,6 +2,8 @@ package main
 
 import (
 	"bytes"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/booststrap"
+	redisclient "github.com/mercy34mercy/bustimer_kic/bustimer/redis"
 	"net/http"
 	"os"
 
@@ -19,6 +21,9 @@ func main() {
 		port = "8080"
 	}
 	localcache.Init()
+	booststrap.NewEnv()
+	redisclient.NewClient()
+
 	// go localcache.CreateTimetableCache()
 	// utils.Dbcreate()
 
@@ -94,9 +99,7 @@ func Routing() *echo.Echo {
 			return c.HTML(http.StatusNotFound, "<h1>404 NOT FOUND<h1>")
 		}
 
-		
-
-		return c.JSON(http.StatusOK,timetable)
+		return c.JSON(http.StatusOK, timetable)
 	})
 
 	e.GET("/nextbus", func(c echo.Context) error {

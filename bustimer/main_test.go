@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/mercy34mercy/bustimer_kic/bustimer/booststrap"
+	redisclient "github.com/mercy34mercy/bustimer_kic/bustimer/redis"
 	"io/ioutil"
 	"net/http/httptest"
 	"testing"
@@ -78,6 +80,8 @@ func TestRequiredTime(t *testing.T) {
 func TestHandler(t *testing.T) {
 	infra.Init("gorm.db")
 	localcache.Init()
+	booststrap.NewEnv()
+	redisclient.NewClient()
 	router := Routing()
 	t.Parallel()
 	for i, busstoplist := range config.BusstoptoRitsList {
@@ -187,6 +191,8 @@ func TestHandler(t *testing.T) {
 func TestTimetableMultiHandler(t *testing.T) {
 	infra.Init("gorm.db")
 	localcache.Init()
+	booststrap.NewEnv()
+	redisclient.NewClient()
 	router := Routing()
 	t.Parallel()
 	for i, busstoplist := range config.BusstoptoRitsList {
@@ -297,6 +303,8 @@ func TestTimetableMultiHandler(t *testing.T) {
 func BenchmarkRouting(b *testing.B) {
 	infra.Init("gorm.db")
 	localcache.Init()
+	booststrap.NewEnv()
+	redisclient.NewClient()
 	router := Routing()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
