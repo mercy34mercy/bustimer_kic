@@ -43,7 +43,8 @@ func (impl getUrlFromBusstopUseCaseImpl) FindURLFromBusstop() (model.MultiTimeTa
 				if found {
 					localcache.CreateCachefromTimetable(impl.Busstop[0], des+"行き", *t)
 					timetableanddestination = append(timetableanddestination, model.TimeTableandDestination{
-						TimeTable: *t,
+						TimeTable:   *t,
+						Destination: des,
 					})
 				} else {
 
@@ -79,7 +80,8 @@ func (impl getUrlFromBusstopUseCaseImpl) FindURLFromBusstop() (model.MultiTimeTa
 				if found {
 					localcache.CreateCachefromTimetable(bus, impl.Destination[0]+"行き", *t)
 					timetableanddestination = append(timetableanddestination, model.TimeTableandDestination{
-						TimeTable: *t,
+						TimeTable:   *t,
+						Destination: bus,
 					})
 				} else {
 					url, err := impl.BusstopToTimetableRepository.FindURLFromBusstop(bus, impl.Destination[0])
