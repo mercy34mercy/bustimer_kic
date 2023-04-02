@@ -11,6 +11,7 @@ on:
       - "main"
       - "develop"
 
+
 jobs:
   build:
 
@@ -27,4 +28,6 @@ jobs:
         run: cd bustimer && go build -v ./...
 
       - name: Test
-        run: cd bustimer && go test -v ./...
+        env:
+          REDIS_DATABASE_URL: ${{ secrets.REDIS_DATABASE_URL }}
+        run: cd bustimer && GO_ENV=dev go test -v ./...

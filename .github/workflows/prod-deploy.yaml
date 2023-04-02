@@ -12,6 +12,7 @@ env:
   GCP_REGION: ${{ secrets.GCP_REGION }}
   IMAGE:  ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.SERVICE_NAME }}/${{ secrets.SERVICE_NAME }}:${{ github.sha }}
   SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+  REDIS_DATABASE_URL: ${{ secrets.REDIS_DATABASE_URL }}
 
 jobs:
   deploy-to-cloud-run:
@@ -29,7 +30,7 @@ jobs:
         run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet 
 
       - name: Build a docker image
-        run: docker build -t ${{ env.IMAGE }} ./bustimer/
+        run: docker build -f ./bustimer/Dockerfile.prod -t ${{ env.IMAGE }} ./bustimer/
 
       - name: Push the docker image
         run: docker push ${{ env.IMAGE }}
@@ -41,4 +42,5 @@ jobs:
               --port $PORT \
               --service-account $SERVICE_ACCOUNT \
               --region $GCP_REGION \
-              --memory 700Mi
+              --memory 128Mi
+              --set-env-vars REDIS_DATABASE_URL=$REDIS_DATABASE_URL
