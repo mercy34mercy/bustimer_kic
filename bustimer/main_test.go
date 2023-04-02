@@ -293,3 +293,26 @@ func TestTimetableMultiHandler(t *testing.T) {
 		}
 	}
 }
+
+func BenchmarkRouting(b *testing.B) {
+	infra.Init("gorm.db")
+	localcache.Init()
+	router := Routing()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		req := httptest.NewRequest("GET", "/timetable/multi?fr="+config.MultiTimetableQuery+"&to=立命館大学", nil)
+		rec := httptest.NewRecorder()
+
+		router.ServeHTTP(rec, req)
+
+		resp := rec.Result()
+
+		timetable := model.CreateNewMultiTimeTable(config.MultiTImetableBusstopList[:])
+		if resp.StatusCode != 404 {
+			if err := json.NewDecoder(rec.Body).Decode(&timetable); err != nil {
+				b.Fatal(err)
+			}
+		}
+
+	}
+}
