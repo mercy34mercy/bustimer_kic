@@ -17,6 +17,7 @@
 * [colly](http://go-colly.org/) (Scraping)
 * [go-cache](https://github.com/patrickmn/go-cache)(Cache Library)
 * [sqlite](https://github.com/mattn/go-sqlite3) (Database Library)
+* [go-redis](https://github.com/redis/go-redis) (Redis Client)
 
 ## ツール
 * [sqlc](https://sqlc.dev/)(SQL Query Builder)
@@ -156,6 +157,7 @@ This application displays real-time bus information between Ritsumeikan Universi
 * [colly](http://go-colly.org/) (Scraping)
 * [go-cache](https://github.com/patrickmn/go-cache)(Cache Library)
 * [sqlite](https://github.com/mattn/go-sqlite3) (Database Library)
+* [go-redis](https://github.com/redis/go-redis) (Redis Client)
 
 ## tool
 * [sqlc](https://sqlc.dev/) (SQL Query Builder)
