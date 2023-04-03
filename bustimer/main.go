@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"github.com/labstack/echo/middleware"
 	"github.com/mercy34mercy/bustimer_kic/bustimer/booststrap"
 	redisclient "github.com/mercy34mercy/bustimer_kic/bustimer/redis"
 	"net/http"
@@ -35,6 +36,7 @@ func main() {
 
 func Routing() *echo.Echo {
 	var e = echo.New()
+	e.Use(middleware.CORS())
 	e.GET("/", func(c echo.Context) error {
 		return c.HTML(http.StatusOK, "<h1>Busdes! Clean Architecture API</h1>")
 	})
