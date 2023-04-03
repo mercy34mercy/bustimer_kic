@@ -503,7 +503,7 @@ func toInt64(strVal string) int64 {
 func validateUrl(url []string) error {
 	length := len(url)
 	if length == 0 {
-		return fmt.Errorf("length must be greater than 0, length = %d", length)
+		return fmt.Errorf("length must be greater than 0")
 	}
 	return nil
 }

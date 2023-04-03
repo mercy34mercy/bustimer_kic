@@ -1,6 +1,7 @@
 package repositoryimpl
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/mercy34mercy/bustimer_kic/bustimer/config"
@@ -115,4 +116,39 @@ func BenchmarkFindTimetableParallel(b *testing.B) {
 			}
 		}
 	})
+}
+
+func TestValidateURL(t *testing.T) {
+	type args struct {
+		url []string
+	}
+	tests := []struct {
+		name string
+		args args
+		want error
+	}{
+		{
+			name: "ValidateURLTest OK",
+			args: args{
+				url: []string{"https://www.kotsu.city.kyoto.lg.jp/kyotobus/timetable/2020/2020_01_01_01.html", "https://www.kotsu.city.kyoto.lg.jp/kyotobus/timetable/2020/2020_01_01_02.html"},
+			},
+			want: nil,
+		},
+		{
+			name: "ValidateURL Error",
+			args: args{
+				url: []string{},
+			},
+			want: errors.New("length must be greater than 0"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := validateUrl(tt.args.url); got != tt.want {
+				if tt.want == nil {
+					t.Errorf("ValidateURL() = %v, want %v", got, tt.want)
+				}
+			}
+		})
+	}
 }
