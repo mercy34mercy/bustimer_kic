@@ -46,20 +46,20 @@ func GetRequiredeTime(fr string, to string, busname string) int {
 		}
 	case "59号系統":
 		switch to {
-		case "金閣寺･竜安寺・山越行き","竜安寺・山越行き":
+		case "金閣寺･竜安寺・山越", "竜安寺・山越", "立命館大学":
 			return int(float64(RequiredTime59/23.0) * float64(GetBusstop(fr, busname)))
 		default:
 			return int(float64(RequiredTime59/23.0) * float64(GetBusstop(to, busname)))
 		}
 	case "臨号系統":
-		switch to{
+		switch to {
 		case "立命館大学":
 			return int(float64(RequiredTimeRin/8.0) * float64(GetBusstop(fr, busname)))
 		default:
 			return int(float64(RequiredTimeRin/8.0) * float64(GetBusstop(to, busname)))
 		}
 	case "臨号系統【快速】":
-		switch to{
+		switch to {
 		case "立命館大学":
 			return int(float64(RequiredTimeRinRapid/4.0) * float64(GetBusstop(fr, busname)))
 		default:
@@ -89,12 +89,12 @@ func GetBusstop(notritsumei string, busname string) int {
 	switch busname {
 	case "立命館ダイレクト号系統":
 		switch notritsumei {
-			case "西大路四条《阪急･嵐電西院駅》":
-				return 15
-			case "西大路御池":
-				return 11
-			case "西ノ京円町《ＪＲ円町駅》":
-				return 8
+		case "西大路四条《阪急･嵐電西院駅》":
+			return 15
+		case "西大路御池":
+			return 11
+		case "西ノ京円町《ＪＲ円町駅》":
+			return 8
 		}
 	case "臨号系統":
 		switch notritsumei {
