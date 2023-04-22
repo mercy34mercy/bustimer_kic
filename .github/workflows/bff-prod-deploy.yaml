@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'bff/**'
 
 env:
   SERVICE_NAME: "bustimer-bff"
