@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - './bustimer/**'
+      - '../../bustimer/**'
 
 env:
   SERVICE_NAME: ${{ secrets.SERVICE_NAME }}

@@ -7,13 +7,13 @@ on:
     branches:
       - main
     paths:
-      - './bustimer/**'
+      - '../../bustimer/**'
   push:
     branches:
       - "main"
       - "develop"
     paths:
-      - './bustimer/**'
+      - '../../bustimer/**'
 
 
 jobs:
