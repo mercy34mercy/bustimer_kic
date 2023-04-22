@@ -1,0 +1,46 @@
+name: bff Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  SERVICE_NAME: "bustimer-bff"
+  PORT: ${{ secrets.PORT }}
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GCP_REGION: ${{ secrets.GCP_REGION }}
+  IMAGE:  ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.SERVICE_NAME }}/${{ secrets.SERVICE_NAME }}:${{ github.sha }}
+  SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+  REDIS_DATABASE_URL: ${{ secrets.REDIS_DATABASE_URL }}
+
+jobs:
+  deploy-to-cloud-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+
+      - id: "auth"
+        uses: "google-github-actions/auth@v0"
+        with:
+          credentials_json: "${{ secrets.GCP_SA_KEY }}"
+
+      - name: Configure docker to use the gcloud cli
+        run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
+
+      - name: Build a docker image
+        run: docker build -f ./bff/Dockerfile -t ${{ env.IMAGE }} ./bff/
+
+      - name: Push the docker image
+        run: docker push ${{ env.IMAGE }}
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy $SERVICE_NAME \
+            --image $IMAGE \
+            --port $PORT \
+            --service-account $SERVICE_ACCOUNT \
+            --region $GCP_REGION \
+            --memory 128Mi \
+            --set-env-vars REDIS_DATABASE_URL=$REDIS_DATABASE_URL
