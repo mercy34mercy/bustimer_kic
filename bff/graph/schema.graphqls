@@ -1,0 +1,46 @@
+type MultiTimeTable {
+  TimeTable : [MultiTimeTableMap!]!
+}
+
+type MultiTimeTableMap {
+  key: String!
+  value: TimeTable!
+}
+
+type TimeTable {
+  TimeTable : [TimeTable!]!
+}
+
+type TimetableMap {
+  key: Int!
+  value: OneBusTime!
+}
+
+type OneBusTime {
+  BusName : String!
+  Min : String!
+  BusStop : String!
+}
+
+type ApproachInfos {
+  ApproachInfo : [ApproachInfo!]!
+}
+
+type ApproachInfo {
+  MoreMin : String!
+  RealARivalTime : String!
+  Direction : String!
+  ScheduledTime : String!
+  Delay : String!
+  BusStop : String!
+  BusName : String!
+  RequiredTime : Int!
+}
+
+
+type Query {
+  TimeTable(fr : String!, to : String!) : TimeTable!
+  ApproachInfo(fr : String!, to : String!) : ApproachInfos!
+}
+
+
