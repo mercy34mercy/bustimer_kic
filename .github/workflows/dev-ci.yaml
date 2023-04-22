@@ -6,10 +6,14 @@ on:
       - opened
     branches:
       - develop
+    paths:
+      - './bustimer/**'
   push:
     branches-ignore:
       - "main"
       - "develop"
+    paths:
+      - './bustimer/**'
 
 jobs:
   build:

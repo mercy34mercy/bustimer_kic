@@ -6,10 +6,14 @@ on:
       - opened
     branches:
       - develop
+    paths:
+      - './bff/**'
   push:
     branches-ignore:
       - "main"
       - "develop"
+    paths:
+      - './bff/**'
 
 jobs:
   build:
