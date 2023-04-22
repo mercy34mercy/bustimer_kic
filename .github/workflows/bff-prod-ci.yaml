@@ -7,13 +7,13 @@ on:
     branches:
       - main
     paths:
-      - '../../bff/**'
+      - 'bff/**'
   push:
     branches:
       - "main"
       - "develop"
     paths:
-      - '../../bff/**'
+      - 'bff/**'
 
 
 jobs:
