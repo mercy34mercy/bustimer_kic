@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'bustimer/**'
 
 env:
   SERVICE_NAME: ${{ secrets.SERVICE_NAME }}

@@ -5,11 +5,15 @@ on:
     types:
       - opened
     branches:
-      - main 
+      - main
+    paths:
+      - 'bustimer/**'
   push:
     branches:
       - "main"
       - "develop"
+    paths:
+      - 'bustimer/**'
 
 
 jobs:
