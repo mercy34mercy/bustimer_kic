@@ -1,19 +1,17 @@
-type MultiTimeTable {
-  TimeTable : [MultiTimeTableMap!]!
-}
+scalar Map
 
-type MultiTimeTableMap {
-  key: String!
-  value: TimeTable!
+type MultiTimeTable {
+  TimeTable : [Map!]!
 }
 
 type TimeTable {
-  TimeTable : [TimeTable!]!
+  Weekdays : [HourBusTime]
+  Holidays : [HourBusTime]
 }
 
-type TimetableMap {
-  key: Int!
-  value: OneBusTime!
+type HourBusTime {
+  Bus : [OneBusTime]
+  Hour : Int!
 }
 
 type OneBusTime {

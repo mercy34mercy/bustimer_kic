@@ -1,13 +1,14 @@
 package main
 
 import (
+	"github.com/mercy34mercy/bustimer_kic/bff/graph"
+
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/mercy34mercy/bustimer_kic/bff/graph"
 )
 
 const defaultPort = "8080"

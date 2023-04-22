@@ -6,23 +6,35 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
-	graph "github.com/mercy34mercy/bustimer_kic/bff/graph/genarated"
 	"github.com/mercy34mercy/bustimer_kic/bff/graph/model"
+	"github.com/mercy34mercy/bustimer_kic/bff/repository"
 )
 
 // TimeTable is the resolver for the TimeTable field.
 func (r *queryResolver) TimeTable(ctx context.Context, fr string, to string) (*model.TimeTable, error) {
-	panic(fmt.Errorf("not implemented: TimeTable - TimeTable"))
+	tRepository := repository.NewTimetableRepository()
+
+	timetable, err := tRepository.FindTimetable(fr, to)
+	if err != nil {
+		return nil, err
+	}
+	return timetable, err
 }
 
 // ApproachInfo is the resolver for the ApproachInfo field.
 func (r *queryResolver) ApproachInfo(ctx context.Context, fr string, to string) (*model.ApproachInfos, error) {
-	panic(fmt.Errorf("not implemented: ApproachInfo - ApproachInfo"))
+	aRepository := repository.NewApproachInfoRepository()
+
+	approachInfos, err := aRepository.FindApproachInfo(fr, to)
+
+	if err != nil {
+		return nil, err
+	}
+	return approachInfos, err
 }
 
-// Query returns graph.QueryResolver implementation.
-func (r *Resolver) Query() graph.QueryResolver { return &queryResolver{r} }
+// Query returns QueryResolver implementation.
+func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type queryResolver struct{ *Resolver }

@@ -17,13 +17,13 @@ type ApproachInfos struct {
 	ApproachInfo []*ApproachInfo `json:"ApproachInfo"`
 }
 
-type MultiTimeTable struct {
-	TimeTable []*MultiTimeTableMap `json:"TimeTable"`
+type HourBusTime struct {
+	Bus  []*OneBusTime `json:"Bus,omitempty"`
+	Hour int           `json:"Hour"`
 }
 
-type MultiTimeTableMap struct {
-	Key   string     `json:"key"`
-	Value *TimeTable `json:"value"`
+type MultiTimeTable struct {
+	TimeTable []map[string]interface{} `json:"TimeTable"`
 }
 
 type OneBusTime struct {
@@ -33,10 +33,6 @@ type OneBusTime struct {
 }
 
 type TimeTable struct {
-	TimeTable []*TimeTable `json:"TimeTable"`
-}
-
-type TimetableMap struct {
-	Key   int         `json:"key"`
-	Value *OneBusTime `json:"value"`
+	Weekdays []*HourBusTime `json:"Weekdays,omitempty"`
+	Holidays []*HourBusTime `json:"Holidays,omitempty"`
 }

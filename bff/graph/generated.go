@@ -5,6 +5,7 @@ package graph
 import (
 	"bytes"
 	"context"
+	"embed"
 	"errors"
 	"fmt"
 	"strconv"
@@ -58,13 +59,13 @@ type ComplexityRoot struct {
 		ApproachInfo func(childComplexity int) int
 	}
 
-	MultiTimeTable struct {
-		TimeTable func(childComplexity int) int
+	HourBusTime struct {
+		Bus  func(childComplexity int) int
+		Hour func(childComplexity int) int
 	}
 
-	MultiTimeTableMap struct {
-		Key   func(childComplexity int) int
-		Value func(childComplexity int) int
+	MultiTimeTable struct {
+		TimeTable func(childComplexity int) int
 	}
 
 	OneBusTime struct {
@@ -79,12 +80,8 @@ type ComplexityRoot struct {
 	}
 
 	TimeTable struct {
-		TimeTable func(childComplexity int) int
-	}
-
-	TimetableMap struct {
-		Key   func(childComplexity int) int
-		Value func(childComplexity int) int
+		Holidays func(childComplexity int) int
+		Weekdays func(childComplexity int) int
 	}
 }
 
@@ -171,26 +168,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ApproachInfos.ApproachInfo(childComplexity), true
 
+	case "HourBusTime.Bus":
+		if e.complexity.HourBusTime.Bus == nil {
+			break
+		}
+
+		return e.complexity.HourBusTime.Bus(childComplexity), true
+
+	case "HourBusTime.Hour":
+		if e.complexity.HourBusTime.Hour == nil {
+			break
+		}
+
+		return e.complexity.HourBusTime.Hour(childComplexity), true
+
 	case "MultiTimeTable.TimeTable":
 		if e.complexity.MultiTimeTable.TimeTable == nil {
 			break
 		}
 
 		return e.complexity.MultiTimeTable.TimeTable(childComplexity), true
-
-	case "MultiTimeTableMap.key":
-		if e.complexity.MultiTimeTableMap.Key == nil {
-			break
-		}
-
-		return e.complexity.MultiTimeTableMap.Key(childComplexity), true
-
-	case "MultiTimeTableMap.value":
-		if e.complexity.MultiTimeTableMap.Value == nil {
-			break
-		}
-
-		return e.complexity.MultiTimeTableMap.Value(childComplexity), true
 
 	case "OneBusTime.BusName":
 		if e.complexity.OneBusTime.BusName == nil {
@@ -237,26 +234,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.TimeTable(childComplexity, args["fr"].(string), args["to"].(string)), true
 
-	case "TimeTable.TimeTable":
-		if e.complexity.TimeTable.TimeTable == nil {
+	case "TimeTable.Holidays":
+		if e.complexity.TimeTable.Holidays == nil {
 			break
 		}
 
-		return e.complexity.TimeTable.TimeTable(childComplexity), true
+		return e.complexity.TimeTable.Holidays(childComplexity), true
 
-	case "TimetableMap.key":
-		if e.complexity.TimetableMap.Key == nil {
+	case "TimeTable.Weekdays":
+		if e.complexity.TimeTable.Weekdays == nil {
 			break
 		}
 
-		return e.complexity.TimetableMap.Key(childComplexity), true
-
-	case "TimetableMap.value":
-		if e.complexity.TimetableMap.Value == nil {
-			break
-		}
-
-		return e.complexity.TimetableMap.Value(childComplexity), true
+		return e.complexity.TimeTable.Weekdays(childComplexity), true
 
 	}
 	return 0, false
@@ -309,54 +299,19 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(parsedSchema, parsedSchema.Types[name]), nil
 }
 
+//go:embed "schema.graphqls"
+var sourcesFS embed.FS
+
+func sourceData(filename string) string {
+	data, err := sourcesFS.ReadFile(filename)
+	if err != nil {
+		panic(fmt.Sprintf("codegen problem: %s not available", filename))
+	}
+	return string(data)
+}
+
 var sources = []*ast.Source{
-	{Name: "../schema.graphqls", Input: `type MultiTimeTable {
-  TimeTable : [MultiTimeTableMap!]!
-}
-
-type MultiTimeTableMap {
-  key: String!
-  value: TimeTable!
-}
-
-type TimeTable {
-  TimeTable : [TimeTable!]!
-}
-
-type TimetableMap {
-  key: Int!
-  value: OneBusTime!
-}
-
-type OneBusTime {
-  BusName : String!
-  Min : String!
-  BusStop : String!
-}
-
-type ApproachInfos {
-  ApproachInfo : [ApproachInfo!]!
-}
-
-type ApproachInfo {
-  MoreMin : String!
-  RealARivalTime : String!
-  Direction : String!
-  ScheduledTime : String!
-  Delay : String!
-  BusStop : String!
-  BusName : String!
-  RequiredTime : Int!
-}
-
-
-type Query {
-  TimeTable(fr : String!, to : String!) : TimeTable!
-  ApproachInfo(fr : String!, to : String!) : ApproachInfos!
-}
-
-
-`, BuiltIn: false},
+	{Name: "schema.graphqls", Input: sourceData("schema.graphqls"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -879,6 +834,99 @@ func (ec *executionContext) fieldContext_ApproachInfos_ApproachInfo(ctx context.
 	return fc, nil
 }
 
+func (ec *executionContext) _HourBusTime_Bus(ctx context.Context, field graphql.CollectedField, obj *model.HourBusTime) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_HourBusTime_Bus(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Bus, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.OneBusTime)
+	fc.Result = res
+	return ec.marshalOOneBusTime2ᚕᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐOneBusTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_HourBusTime_Bus(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "HourBusTime",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "BusName":
+				return ec.fieldContext_OneBusTime_BusName(ctx, field)
+			case "Min":
+				return ec.fieldContext_OneBusTime_Min(ctx, field)
+			case "BusStop":
+				return ec.fieldContext_OneBusTime_BusStop(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type OneBusTime", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _HourBusTime_Hour(ctx context.Context, field graphql.CollectedField, obj *model.HourBusTime) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_HourBusTime_Hour(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Hour, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_HourBusTime_Hour(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "HourBusTime",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _MultiTimeTable_TimeTable(ctx context.Context, field graphql.CollectedField, obj *model.MultiTimeTable) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MultiTimeTable_TimeTable(ctx, field)
 	if err != nil {
@@ -905,9 +953,9 @@ func (ec *executionContext) _MultiTimeTable_TimeTable(ctx context.Context, field
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.MultiTimeTableMap)
+	res := resTmp.([]map[string]interface{})
 	fc.Result = res
-	return ec.marshalNMultiTimeTableMap2ᚕᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐMultiTimeTableMapᚄ(ctx, field.Selections, res)
+	return ec.marshalNMap2ᚕmapᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_MultiTimeTable_TimeTable(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -917,105 +965,7 @@ func (ec *executionContext) fieldContext_MultiTimeTable_TimeTable(ctx context.Co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "key":
-				return ec.fieldContext_MultiTimeTableMap_key(ctx, field)
-			case "value":
-				return ec.fieldContext_MultiTimeTableMap_value(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type MultiTimeTableMap", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _MultiTimeTableMap_key(ctx context.Context, field graphql.CollectedField, obj *model.MultiTimeTableMap) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MultiTimeTableMap_key(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Key, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_MultiTimeTableMap_key(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MultiTimeTableMap",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _MultiTimeTableMap_value(ctx context.Context, field graphql.CollectedField, obj *model.MultiTimeTableMap) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MultiTimeTableMap_value(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Value, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.TimeTable)
-	fc.Result = res
-	return ec.marshalNTimeTable2ᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐTimeTable(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_MultiTimeTableMap_value(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MultiTimeTableMap",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "TimeTable":
-				return ec.fieldContext_TimeTable_TimeTable(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TimeTable", field.Name)
+			return nil, errors.New("field of type Map does not have child fields")
 		},
 	}
 	return fc, nil
@@ -1192,8 +1142,10 @@ func (ec *executionContext) fieldContext_Query_TimeTable(ctx context.Context, fi
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "TimeTable":
-				return ec.fieldContext_TimeTable_TimeTable(ctx, field)
+			case "Weekdays":
+				return ec.fieldContext_TimeTable_Weekdays(ctx, field)
+			case "Holidays":
+				return ec.fieldContext_TimeTable_Holidays(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TimeTable", field.Name)
 		},
@@ -1400,8 +1352,8 @@ func (ec *executionContext) fieldContext_Query___schema(ctx context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _TimeTable_TimeTable(ctx context.Context, field graphql.CollectedField, obj *model.TimeTable) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TimeTable_TimeTable(ctx, field)
+func (ec *executionContext) _TimeTable_Weekdays(ctx context.Context, field graphql.CollectedField, obj *model.TimeTable) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TimeTable_Weekdays(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1414,24 +1366,21 @@ func (ec *executionContext) _TimeTable_TimeTable(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.TimeTable, nil
+		return obj.Weekdays, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.TimeTable)
+	res := resTmp.([]*model.HourBusTime)
 	fc.Result = res
-	return ec.marshalNTimeTable2ᚕᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐTimeTableᚄ(ctx, field.Selections, res)
+	return ec.marshalOHourBusTime2ᚕᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐHourBusTime(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_TimeTable_TimeTable(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_TimeTable_Weekdays(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TimeTable",
 		Field:      field,
@@ -1439,17 +1388,19 @@ func (ec *executionContext) fieldContext_TimeTable_TimeTable(ctx context.Context
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "TimeTable":
-				return ec.fieldContext_TimeTable_TimeTable(ctx, field)
+			case "Bus":
+				return ec.fieldContext_HourBusTime_Bus(ctx, field)
+			case "Hour":
+				return ec.fieldContext_HourBusTime_Hour(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type TimeTable", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type HourBusTime", field.Name)
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _TimetableMap_key(ctx context.Context, field graphql.CollectedField, obj *model.TimetableMap) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TimetableMap_key(ctx, field)
+func (ec *executionContext) _TimeTable_Holidays(ctx context.Context, field graphql.CollectedField, obj *model.TimeTable) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TimeTable_Holidays(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1462,83 +1413,34 @@ func (ec *executionContext) _TimetableMap_key(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Key, nil
+		return obj.Holidays, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(int)
+	res := resTmp.([]*model.HourBusTime)
 	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
+	return ec.marshalOHourBusTime2ᚕᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐHourBusTime(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_TimetableMap_key(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_TimeTable_Holidays(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "TimetableMap",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _TimetableMap_value(ctx context.Context, field graphql.CollectedField, obj *model.TimetableMap) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TimetableMap_value(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Value, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.OneBusTime)
-	fc.Result = res
-	return ec.marshalNOneBusTime2ᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐOneBusTime(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_TimetableMap_value(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TimetableMap",
+		Object:     "TimeTable",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "BusName":
-				return ec.fieldContext_OneBusTime_BusName(ctx, field)
-			case "Min":
-				return ec.fieldContext_OneBusTime_Min(ctx, field)
-			case "BusStop":
-				return ec.fieldContext_OneBusTime_BusStop(ctx, field)
+			case "Bus":
+				return ec.fieldContext_HourBusTime_Bus(ctx, field)
+			case "Hour":
+				return ec.fieldContext_HourBusTime_Hour(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type OneBusTime", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type HourBusTime", field.Name)
 		},
 	}
 	return fc, nil
@@ -3430,19 +3332,23 @@ func (ec *executionContext) _ApproachInfos(ctx context.Context, sel ast.Selectio
 	return out
 }
 
-var multiTimeTableImplementors = []string{"MultiTimeTable"}
+var hourBusTimeImplementors = []string{"HourBusTime"}
 
-func (ec *executionContext) _MultiTimeTable(ctx context.Context, sel ast.SelectionSet, obj *model.MultiTimeTable) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, multiTimeTableImplementors)
+func (ec *executionContext) _HourBusTime(ctx context.Context, sel ast.SelectionSet, obj *model.HourBusTime) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, hourBusTimeImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("MultiTimeTable")
-		case "TimeTable":
+			out.Values[i] = graphql.MarshalString("HourBusTime")
+		case "Bus":
 
-			out.Values[i] = ec._MultiTimeTable_TimeTable(ctx, field, obj)
+			out.Values[i] = ec._HourBusTime_Bus(ctx, field, obj)
+
+		case "Hour":
+
+			out.Values[i] = ec._HourBusTime_Hour(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -3458,26 +3364,19 @@ func (ec *executionContext) _MultiTimeTable(ctx context.Context, sel ast.Selecti
 	return out
 }
 
-var multiTimeTableMapImplementors = []string{"MultiTimeTableMap"}
+var multiTimeTableImplementors = []string{"MultiTimeTable"}
 
-func (ec *executionContext) _MultiTimeTableMap(ctx context.Context, sel ast.SelectionSet, obj *model.MultiTimeTableMap) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, multiTimeTableMapImplementors)
+func (ec *executionContext) _MultiTimeTable(ctx context.Context, sel ast.SelectionSet, obj *model.MultiTimeTable) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, multiTimeTableImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("MultiTimeTableMap")
-		case "key":
+			out.Values[i] = graphql.MarshalString("MultiTimeTable")
+		case "TimeTable":
 
-			out.Values[i] = ec._MultiTimeTableMap_key(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "value":
-
-			out.Values[i] = ec._MultiTimeTableMap_value(ctx, field, obj)
+			out.Values[i] = ec._MultiTimeTable_TimeTable(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -3633,48 +3532,14 @@ func (ec *executionContext) _TimeTable(ctx context.Context, sel ast.SelectionSet
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("TimeTable")
-		case "TimeTable":
+		case "Weekdays":
 
-			out.Values[i] = ec._TimeTable_TimeTable(ctx, field, obj)
+			out.Values[i] = ec._TimeTable_Weekdays(ctx, field, obj)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
+		case "Holidays":
 
-var timetableMapImplementors = []string{"TimetableMap"}
+			out.Values[i] = ec._TimeTable_Holidays(ctx, field, obj)
 
-func (ec *executionContext) _TimetableMap(ctx context.Context, sel ast.SelectionSet, obj *model.TimetableMap) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, timetableMapImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("TimetableMap")
-		case "key":
-
-			out.Values[i] = ec._TimetableMap_key(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "value":
-
-			out.Values[i] = ec._TimetableMap_value(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -4102,40 +3967,49 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) marshalNMultiTimeTableMap2ᚕᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐMultiTimeTableMapᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.MultiTimeTableMap) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalNMultiTimeTableMap2ᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐMultiTimeTableMap(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
+func (ec *executionContext) unmarshalNMap2map(ctx context.Context, v interface{}) (map[string]interface{}, error) {
+	res, err := graphql.UnmarshalMap(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
 
+func (ec *executionContext) marshalNMap2map(ctx context.Context, sel ast.SelectionSet, v map[string]interface{}) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
 	}
-	wg.Wait()
+	res := graphql.MarshalMap(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNMap2ᚕmapᚄ(ctx context.Context, v interface{}) ([]map[string]interface{}, error) {
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]map[string]interface{}, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNMap2map(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalNMap2ᚕmapᚄ(ctx context.Context, sel ast.SelectionSet, v []map[string]interface{}) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNMap2map(ctx, sel, v[i])
+	}
 
 	for _, e := range ret {
 		if e == graphql.Null {
@@ -4144,26 +4018,6 @@ func (ec *executionContext) marshalNMultiTimeTableMap2ᚕᚖgithubᚗcomᚋmercy
 	}
 
 	return ret
-}
-
-func (ec *executionContext) marshalNMultiTimeTableMap2ᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐMultiTimeTableMap(ctx context.Context, sel ast.SelectionSet, v *model.MultiTimeTableMap) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._MultiTimeTableMap(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNOneBusTime2ᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐOneBusTime(ctx context.Context, sel ast.SelectionSet, v *model.OneBusTime) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._OneBusTime(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
@@ -4183,50 +4037,6 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 
 func (ec *executionContext) marshalNTimeTable2githubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐTimeTable(ctx context.Context, sel ast.SelectionSet, v model.TimeTable) graphql.Marshaler {
 	return ec._TimeTable(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNTimeTable2ᚕᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐTimeTableᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.TimeTable) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalNTimeTable2ᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐTimeTable(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
-	return ret
 }
 
 func (ec *executionContext) marshalNTimeTable2ᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐTimeTable(ctx context.Context, sel ast.SelectionSet, v *model.TimeTable) graphql.Marshaler {
@@ -4516,6 +4326,102 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	}
 	res := graphql.MarshalBoolean(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOHourBusTime2ᚕᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐHourBusTime(ctx context.Context, sel ast.SelectionSet, v []*model.HourBusTime) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOHourBusTime2ᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐHourBusTime(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOHourBusTime2ᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐHourBusTime(ctx context.Context, sel ast.SelectionSet, v *model.HourBusTime) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._HourBusTime(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOOneBusTime2ᚕᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐOneBusTime(ctx context.Context, sel ast.SelectionSet, v []*model.OneBusTime) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOOneBusTime2ᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐOneBusTime(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOOneBusTime2ᚖgithubᚗcomᚋmercy34mercyᚋbustimer_kicᚋbffᚋgraphᚋmodelᚐOneBusTime(ctx context.Context, sel ast.SelectionSet, v *model.OneBusTime) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._OneBusTime(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
