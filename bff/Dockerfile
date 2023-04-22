@@ -16,6 +16,5 @@ WORKDIR /app
 
 ENV GO_ENV=prod
 COPY --from=builder /app/main ./main
-COPY ./gorm.db ./gorm.db
 
 CMD ["./main"]
