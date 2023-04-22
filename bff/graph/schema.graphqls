@@ -1,0 +1,44 @@
+scalar Map
+
+type MultiTimeTable {
+  TimeTable : [Map!]!
+}
+
+type TimeTable {
+  Weekdays : [HourBusTime]
+  Holidays : [HourBusTime]
+}
+
+type HourBusTime {
+  Bus : [OneBusTime]
+  Hour : Int!
+}
+
+type OneBusTime {
+  BusName : String!
+  Min : String!
+  BusStop : String!
+}
+
+type ApproachInfos {
+  ApproachInfo : [ApproachInfo!]!
+}
+
+type ApproachInfo {
+  MoreMin : String!
+  RealARivalTime : String!
+  Direction : String!
+  ScheduledTime : String!
+  Delay : String!
+  BusStop : String!
+  BusName : String!
+  RequiredTime : Int!
+}
+
+
+type Query {
+  TimeTable(fr : String!, to : String!) : TimeTable!
+  ApproachInfo(fr : String!, to : String!) : ApproachInfos!
+}
+
+

@@ -1,0 +1,31 @@
+name: bff build and test
+
+on:
+  pull_request:
+    types:
+      - opened
+    branches:
+      - main
+  push:
+    branches:
+      - "main"
+      - "develop"
+
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.20'
+
+      - name: Build
+        run: cd bff && go build -v ./...
+
+      - name: Test
+        run: cd bff && GO_ENV=dev go test -v ./...
