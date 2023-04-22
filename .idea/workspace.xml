@@ -4,27 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a6dd662c-124b-4c10-b0d7-63832eaa6359" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.github/workflows/bff/prod-ci.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.github/workflows/bff/prod-deploy.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bff/domain/approachInfo.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bff/domain/dto/dto.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bff/domain/timetable.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bff/graph/scalar/scalar.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bff/repository/approachInfoRepository.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bff/repository/timetableRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/dev-ci.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/bustimer/dev-ci.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/dev-deploy.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/bustimer/dev-deploy.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/prod-ci.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/bustimer/prod-ci.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/prod-deploy.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/bustimer/prod-deploy.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bff/gqlgen.yml" beforeDir="false" afterPath="$PROJECT_DIR$/bff/gqlgen.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bff/graph/genarated/generated.go" beforeDir="false" afterPath="$PROJECT_DIR$/bff/graph/generated.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bff/graph/model/models_gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/bff/graph/model/models_gen.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bff/graph/schema.graphqls" beforeDir="false" afterPath="$PROJECT_DIR$/bff/graph/schema.graphqls" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bff/graph/schema.resolvers.go" beforeDir="false" afterPath="$PROJECT_DIR$/bff/graph/schema.resolvers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bff/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/bff/main.go" afterDir="false" />
-    </list>
+    <list default="true" id="a6dd662c-124b-4c10-b0d7-63832eaa6359" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
