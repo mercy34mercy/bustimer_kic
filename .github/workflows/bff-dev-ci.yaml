@@ -27,6 +27,5 @@ jobs:
         run: cd bustimer && go build -v ./...
 
       - name: Test
-        env:
         run: cd bff && GO_ENV=dev go test -v ./... -coverprofile=coverage.txt -covermode=atomic -v ./...
 
