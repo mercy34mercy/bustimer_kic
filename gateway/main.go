@@ -3,14 +3,14 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
-	"net/http/httputil"
-	"net/url"
-	"time"
-
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"log"
+	"net/http/httputil"
+	"net/url"
+	"strings"
+	"time"
 )
 
 // MongoDB接続情報
@@ -60,22 +60,24 @@ func main() {
 
 		// リクエストをリバースプロキシに転送
 		proxy.ServeHTTP(c.Writer, c.Request)
+		// 指定されたパスのみMongoDBにリクエストデータを保存
+		if shouldSaveToMongoDB(c.Request.URL.Path) {
+			// Queryからフィールド値を取得
+			from := c.Query("fr")
+			to := c.Query("to")
 
-		// Queryからフィールド値を取得
-		from := c.Query("fr")
-		to := c.Query("to")
-
-		// MongoDBにリクエストデータを保存
-		collection := client.Database(DatabaseName).Collection(CollectionName)
-		requestData := RequestModel{
-			Path:      c.Request.URL.Path,
-			From:      from,
-			To:        to,
-			Timestamp: time.Now(),
-		}
-		_, err := collection.InsertOne(context.Background(), requestData)
-		if err != nil {
-			fmt.Println(err)
+			// MongoDBにリクエストデータを保存
+			collection := client.Database(DatabaseName).Collection(CollectionName)
+			requestData := RequestModel{
+				Path:      c.Request.URL.Path,
+				From:      from,
+				To:        to,
+				Timestamp: time.Now(),
+			}
+			_, err := collection.InsertOne(context.Background(), requestData)
+			if err != nil {
+				fmt.Println(err)
+			}
 		}
 	})
 
@@ -83,4 +85,16 @@ func main() {
 	if err := router.Run(":8080"); err != nil {
 		fmt.Println(err)
 	}
+}
+
+// shouldSaveToMongoDBは指定されたパスが保存対象かどうかを判定します
+func shouldSaveToMongoDB(path string) bool {
+	allowedPaths := []string{"/nextbus", "/timetable", "/timetable/multi"}
+
+	for _, allowedPath := range allowedPaths {
+		if strings.HasPrefix(path, allowedPath) {
+			return true
+		}
+	}
+	return false
 }
