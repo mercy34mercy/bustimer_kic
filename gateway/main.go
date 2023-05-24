@@ -60,7 +60,6 @@ func main() {
 
 		// リクエストをリバースプロキシに転送
 		proxy.ServeHTTP(c.Writer, c.Request)
-
 		// 指定されたパスのみMongoDBにリクエストデータを保存
 		if shouldSaveToMongoDB(c.Request.URL.Path) {
 			// Queryからフィールド値を取得
