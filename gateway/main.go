@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
+	"net/http"
 	"net/http/httputil"
 	"net/url"
 	"strings"
@@ -22,10 +23,15 @@ const (
 
 // RequestModelはMongoDBに保存するリクエストのデータモデルです
 type RequestModel struct {
-	Path      string    `bson:"path"`
-	From      string    `bson:"from"`
-	To        string    `bson:"to"`
-	Timestamp time.Time `bson:"timestamp"`
+	Path        string    `bson:"path"`
+	From        string    `bson:"from"`
+	To          string    `bson:"to"`
+	Timestamp   time.Time `bson:"timestamp"`
+	IPAddress   string    `bson:"ip_address"`
+	UserAgent   string    `bson:"user_agent"`
+	DeviceType  string    `bson:"device_type"`
+	AppPlatform string    `bson:"app_platform"`
+	IsPWA       bool      `bson:"is_pwa"`
 }
 
 func main() {
@@ -62,18 +68,33 @@ func main() {
 		proxy.ServeHTTP(c.Writer, c.Request)
 
 		// 指定されたパスのみMongoDBにリクエストデータを保存
-		if shouldSaveToMongoDB(c.Request.URL.Path) {
+		if shouldSaveToMongoDB(c.Request.URL.Path) && !isLocalhostRequest(c.Request) {
 			// Queryからフィールド値を取得
 			from := c.Query("fr")
 			to := c.Query("to")
 
+			// ユーザのIPアドレスを取得
+			ipAddress := c.ClientIP()
+
+			// ユーザーエージェントからデバイスタイプとアプリプラットフォームを取得
+			userAgent := c.Request.UserAgent()
+			deviceType, appPlatform := parseUserAgent(userAgent)
+
+			// PWAかどうかを判定
+			isPWA := isRequestPWA(c.Request)
+
 			// MongoDBにリクエストデータを保存
 			collection := client.Database(DatabaseName).Collection(CollectionName)
 			requestData := RequestModel{
-				Path:      c.Request.URL.Path,
-				From:      from,
-				To:        to,
-				Timestamp: time.Now(),
+				Path:        c.Request.URL.Path,
+				From:        from,
+				To:          to,
+				Timestamp:   time.Now(),
+				IPAddress:   ipAddress,
+				UserAgent:   userAgent,
+				DeviceType:  deviceType,
+				AppPlatform: appPlatform,
+				IsPWA:       isPWA,
 			}
 			_, err := collection.InsertOne(context.Background(), requestData)
 			if err != nil {
@@ -96,6 +117,56 @@ func shouldSaveToMongoDB(path string) bool {
 		if strings.HasPrefix(path, allowedPath) {
 			return true
 		}
+	}
+	return false
+}
+
+// parseUserAgentはユーザーエージェントを解析してデバイスタイプとアプリプラットフォームを返します
+func parseUserAgent(userAgent string) (string, string) {
+	deviceType := ""
+	appPlatform := ""
+
+	if strings.Contains(userAgent, "Android") {
+		deviceType = "Android"
+		appPlatform = "Native App"
+	} else if strings.Contains(userAgent, "iOS") {
+		deviceType = "iOS"
+		appPlatform = "Native App"
+	} else {
+		deviceType = "Web"
+		appPlatform = "Web"
+	}
+
+	return deviceType, appPlatform
+}
+
+// isRequestPWAはリクエストがPWAかどうかを判定します
+func isRequestPWA(r *http.Request) bool {
+	// ユーザーエージェントにPWAを示す文字列が含まれるかどうかを判定
+	userAgent := r.UserAgent()
+	if strings.Contains(userAgent, "wv") {
+		return true
+	}
+
+	// リクエストヘッダーに"Service-Worker"が含まれるかどうかを判定
+	if r.Header.Get("Service-Worker") != "" {
+		return true
+	}
+
+	// Web App Manifestの存在を判定
+	linkHeader := r.Header.Get("Link")
+	if strings.Contains(linkHeader, "rel=\"manifest\"") {
+		return true
+	}
+
+	return false
+}
+
+// isLocalhostRequestはリクエストがlocalhostからのアクセスかどうかを判定します
+func isLocalhostRequest(r *http.Request) bool {
+	remoteAddr := r.RemoteAddr
+	if strings.HasPrefix(remoteAddr, "[::1]") || strings.HasPrefix(remoteAddr, "127.0.0.1") {
+		return true
 	}
 	return false
 }
