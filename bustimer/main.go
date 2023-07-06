@@ -21,6 +21,7 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
+
 	localcache.Init()
 	booststrap.NewEnv()
 	redisclient.NewClient()
@@ -31,7 +32,6 @@ func main() {
 	router := Routing()
 	router.Debug = true
 	router.Logger.Fatal(router.Start(":" + port))
-
 }
 
 func Routing() *echo.Echo {
