@@ -32,8 +32,6 @@ func main() {
 	router := Routing()
 	router.Debug = true
 	router.Logger.Fatal(router.Start(":" + port))
-	router.se
-
 }
 
 func Routing() *echo.Echo {
